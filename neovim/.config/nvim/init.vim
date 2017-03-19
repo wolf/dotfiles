@@ -1,4 +1,4 @@
-" .vimrc
+" init.vim
 
 set nocompatible    " this is Vim, not vi, so act like it
 
@@ -6,7 +6,7 @@ set nocompatible    " this is Vim, not vi, so act like it
 filetype off        " required by Vundle
 
 " set the runtime path to include Vundle and intitialize
-set rtp+=~/.vim/bundle/Vundle.vim
+set rtp+=~/.config/nvim/bundle/Vundle.vim
 call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
@@ -40,11 +40,9 @@ Plugin 'editorconfig/editorconfig-vim'
 Plugin 'bronson/vim-visual-star-search'
 Plugin 'mbbill/undotree'
 
-if !has('nvim')
-    Plugin 'Valloric/YouCompleteMe'
-    let g:ycm_collect_identifiers_from_tags_files = 1
-    let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
-endif
+Plugin 'Valloric/YouCompleteMe'
+let g:ycm_collect_identifiers_from_tags_files = 1
+let g:ycm_global_ycm_extra_conf = '~/.config/nvim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 
 set background=light
 set t_Co=256
@@ -56,7 +54,7 @@ Plugin 'tpope/vim-markdown'
 
 "let g:yankring_min_element_length = 2
 "let g:yankring_manage_numbered_reg = 1
-"let g:yankring_history_dir = '~/.vim,~/vimfiles,$HOME'
+"let g:yankring_history_dir = '~/.config/nvim,$HOME'
 "Plugin 'vim-scripts/YankRing.vim'
 
 let NERDTreeSortOrder=[]
@@ -187,7 +185,7 @@ iabbrev ework Wolf@learninga-z.com
 let mapleader = "\<space>"
 let maplocalleader = "\\"
 
-" Edit my ~/.vimrc in a new vertical split, source it
+" Edit my nvim config in a new vertical split, source it
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 if has('gui')
@@ -253,6 +251,6 @@ endif
 " }}}
 
 if has('persistent_undo')
-    set undodir=~/.vim/undo/
+    set undodir=~/.config/nvim/undo/
     set undofile
 endif
