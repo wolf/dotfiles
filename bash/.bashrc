@@ -14,7 +14,7 @@ fi
 
 alias ls="command ls ${colorflag}"
 alias ll="ls -Falh ${colorflag}"
-alias tree='tree -C'
+alias tree='tree -C -I .git'
 alias grep='grep --color'
 
 if [[ -d .bash_topics.d ]]; then
