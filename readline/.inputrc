@@ -1,0 +1,5 @@
+set editing-mode vi
+
+set blink-matching-paren on
+set colored-stats on
+set enable-bracketed-paste on
