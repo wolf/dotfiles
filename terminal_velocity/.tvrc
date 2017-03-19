@@ -1,0 +1,3 @@
+[DEFAULT]
+extension = .md
+notes_dir = ~/Dropbox/nvNotes
