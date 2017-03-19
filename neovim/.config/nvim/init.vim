@@ -63,6 +63,10 @@ Plugin 'scrooloose/nerdtree'
 
 let g:ctrlp_map = '<c-t>'
 let g:ctrlp_cmd = 'CtrlPMixed'
+let g:ctrlp_match_window = 'bottom,order:ttb'
+let g:ctrlp_switch_buffer = 0
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_user_command = 'ag %s -1 --nocolor -g ""'
 Plugin 'ctrlpvim/ctrlp.vim'
 
 if executable('ag')
