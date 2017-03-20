@@ -28,9 +28,6 @@ Plugin 'StanAngeloff/php.vim'
 Plugin 'tweekmonster/braceless.vim'
 Plugin 'chikamichi/mediawiki.vim'
 Plugin 'tmux-plugins/vim-tmux'
-Plugin 'file:///Users/wolf/Builds/nginx', {'rtp': 'contrib/vim/', 'name': 'NGINX-Syntax'}
-
-Plugin 'file:///Users/wolf/Builds/swift', {'rtp': 'utils/vim/', 'name': 'Swift-Syntax'}
 
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'jiangmiao/auto-pairs'
@@ -39,12 +36,6 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'bronson/vim-visual-star-search'
 Plugin 'mbbill/undotree'
-
-if !has('nvim')
-    Plugin 'Valloric/YouCompleteMe'
-    let g:ycm_collect_identifiers_from_tags_files = 1
-    let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
-endif
 
 set background=light
 set t_Co=256

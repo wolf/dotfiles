@@ -31,6 +31,8 @@ else
     export EDITOR='vim'
 fi
 
+umask go-wx
+
 if [ $(uname) = 'Darwin' ] ; then
     # if I'm on MacOS X...
 
