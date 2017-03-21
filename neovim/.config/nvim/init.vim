@@ -128,9 +128,7 @@ set mouse=a
 set notimeout ttimeout ttimeoutlen=200
 "set pastetoggle=<F11>
 set sessionoptions+=resize,unix,slash
-if !has('nvim')
-    set clipboard=unnamed,autoselect
-endif
+set clipboard=unnamedplus
 set guioptions+=a
 set cursorline
 
