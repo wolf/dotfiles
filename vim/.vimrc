@@ -58,10 +58,10 @@ let g:ctrlp_map = '<c-t>'
 let g:ctrlp_cmd = 'CtrlPMixed'
 Plugin 'ctrlpvim/ctrlp.vim'
 
-if executable('ag')
-    let g:ackprg = 'ag --vimgrep'
-endif
-Plugin 'mileszs/ack.vim'
+"if executable('ag')
+    "let g:ackprg = 'ag --vimgrep'
+"endif
+"Plugin 'mileszs/ack.vim'
 
 "Plugin 'scrooloose/syntastic'
 "let g:syntastic_always_populate_loc_list = 1
@@ -75,11 +75,6 @@ call vundle#end()   " required
 " }}}
 
 " Settings {{{
-if has('nvim')
-    let g:python_host_prog = '/usr/local/bin/python2' 
-    let g:python3_host_prog = '/usr/local/bin/python3' 
-endif
-
 set hidden
 set showcmd
 set hlsearch
@@ -236,7 +231,7 @@ else
     colorscheme peachpuff
 endif
 
-if &term !~ 'builtin_gui' && !has('nvim')
+if &term !~ 'builtin_gui'
     set ttymouse=xterm2
 endif
 " }}}
