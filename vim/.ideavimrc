@@ -6,16 +6,7 @@ set scrolloff=3
 let mapleader="\<space>"
 let localmapleader="\\"
 
+nnoremap <leader>r :set relativenumber!<cr>
 nnoremap <leader>l :set list!<cr>
 
 inoremap jk <Esc>
-
-inoremap <Left> <nop>
-inoremap <Right> <nop>
-inoremap <Up> <nop>
-inoremap <Down> <nop>
-nnoremap <Left> <nop>
-nnoremap <Right> <nop>
-nnoremap <Up> <nop>
-nnoremap <Down> <nop>
-
