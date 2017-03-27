@@ -7,19 +7,15 @@ filetype off        " required by Vundle
 
 " set the runtime path to include Vundle and intitialize
 set rtp+=~/.config/nvim/bundle/Vundle.vim
-call vundle#begin()
+call vundle#begin('~/.config/nvim/bundle')
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-"Plugin 'tpope/vim-sensible'
-"Plugin 'tpope/vim-abolish'
 Plugin 'tpope/vim-characterize'
-"Plugin 'tpope/vim-eunuch'
 Plugin 'tpope/vim-fugitive'
-"Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
 
@@ -28,9 +24,6 @@ Plugin 'StanAngeloff/php.vim'
 Plugin 'tweekmonster/braceless.vim'
 Plugin 'chikamichi/mediawiki.vim'
 Plugin 'tmux-plugins/vim-tmux'
-Plugin 'file:///Users/wolf/Builds/nginx', {'rtp': 'contrib/vim/', 'name': 'NGINX-Syntax'}
-
-Plugin 'file:///Users/wolf/Builds/swift', {'rtp': 'utils/vim/', 'name': 'Swift-Syntax'}
 
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'jiangmiao/auto-pairs'
@@ -52,11 +45,6 @@ Plugin 'NLKNguyen/papercolor-theme'
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
 Plugin 'tpope/vim-markdown'
 
-"let g:yankring_min_element_length = 2
-"let g:yankring_manage_numbered_reg = 1
-"let g:yankring_history_dir = '~/.config/nvim,$HOME'
-"Plugin 'vim-scripts/YankRing.vim'
-
 let NERDTreeSortOrder=[]
 let NERDTreeIgnore=['\.o$[[file]]', '\.pyc$[[file]]']
 Plugin 'scrooloose/nerdtree'
@@ -73,12 +61,6 @@ if executable('ag')
     let g:ackprg = 'ag --vimgrep'
 endif
 Plugin 'mileszs/ack.vim'
-
-"Plugin 'scrooloose/syntastic'
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
 
 Plugin 'mattn/calendar-vim'
 
@@ -108,10 +90,6 @@ set statusline=%<                           " where to break
 set statusline+=%f%M%R                      " leafname, modified, read-only
 set statusline+=\ %{fugitive#statusline()}  " if in git repo, git info
 set statusline+=%=                          " switch to the right side
-
-"set statusline+=%#warningmsg#               " Syntastic
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
 
 set statusline+=%y                          " file type, e.g., [markdown]
 set statusline+=\ %-14.(%l,%c%)             " like ruler, line, column
@@ -211,15 +189,6 @@ set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+,eol:$
 " Force saving files that require root permission 
 cnoremap w!! w !sudo tee > /dev/null %
 
-" move the current line down (takes a count of distance to move)
-"nnoremap - @='ddp'<cr>
-" move the current line up (takes a count of distance to move)
-"nnoremap _ @='ddkP'<cr>
-
-" <F11> toggles the YankRing window
-"nnoremap <silent> <F11> :YRShow<cr>
-
-" <F5> toggles the Undotree window
 nnoremap <F5> :UndotreeToggle<cr>
 nnoremap <F1> :NERDTreeToggle<cr>
 
@@ -245,10 +214,6 @@ if has('mac') || &term !~? '^screen'
     colorscheme PaperColor
 else
     colorscheme peachpuff
-endif
-
-if &term !~ 'builtin_gui' && !has('nvim')
-    set ttymouse=xterm2
 endif
 " }}}
 

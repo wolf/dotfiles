@@ -15,11 +15,8 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 Plugin 'tpope/vim-sensible'
-"Plugin 'tpope/vim-abolish'
 Plugin 'tpope/vim-characterize'
-"Plugin 'tpope/vim-eunuch'
 Plugin 'tpope/vim-fugitive'
-"Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
 
@@ -45,11 +42,6 @@ Plugin 'NLKNguyen/papercolor-theme'
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
 Plugin 'tpope/vim-markdown'
 
-"let g:yankring_min_element_length = 2
-"let g:yankring_manage_numbered_reg = 1
-"let g:yankring_history_dir = '~/.vim,~/vimfiles,$HOME'
-"Plugin 'vim-scripts/YankRing.vim'
-
 let NERDTreeSortOrder=[]
 let NERDTreeIgnore=['\.o$[[file]]', '\.pyc$[[file]]']
 Plugin 'scrooloose/nerdtree'
@@ -62,12 +54,6 @@ Plugin 'ctrlpvim/ctrlp.vim'
     "let g:ackprg = 'ag --vimgrep'
 "endif
 "Plugin 'mileszs/ack.vim'
-
-"Plugin 'scrooloose/syntastic'
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
 
 Plugin 'mattn/calendar-vim'
 
@@ -195,15 +181,6 @@ set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+,eol:$
 " Force saving files that require root permission 
 cnoremap w!! w !sudo tee > /dev/null %
 
-" move the current line down (takes a count of distance to move)
-"nnoremap - @='ddp'<cr>
-" move the current line up (takes a count of distance to move)
-"nnoremap _ @='ddkP'<cr>
-
-" <F11> toggles the YankRing window
-"nnoremap <silent> <F11> :YRShow<cr>
-
-" <F5> toggles the Undotree window
 nnoremap <F5> :UndotreeToggle<cr>
 nnoremap <F1> :NERDTreeToggle<cr>
 
