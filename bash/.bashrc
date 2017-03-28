@@ -107,7 +107,7 @@ function fcd() {
 function en()   { $EDITOR "$(find . -name "$1" -type f 2>/dev/null)"; }
 function ew()   { $EDITOR "$(which "$1")"; }
 function lw()   { ll "$(which "$1")"; }
-function psg()  { ps ax | grep "$1"; }
+function psg()  { ps ax | grep -v grep | grep "$1"; }
 
 export XML_CATALOG_FILES=/usr/local/etc/xml/catalog
 
