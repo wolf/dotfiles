@@ -79,10 +79,6 @@ set statusline+=%f%M%R                      " leafname, modified, read-only
 set statusline+=\ %{fugitive#statusline()}  " if in git repo, git info
 set statusline+=%=                          " switch to the right side
 
-"set statusline+=%#warningmsg#               " Syntastic
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-
 set statusline+=%y                          " file type, e.g., [markdown]
 set statusline+=\ %-14.(%l,%c%)             " like ruler, line, column
 set statusline+=\ %P                        " percentage of file shown
