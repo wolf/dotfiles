@@ -17,18 +17,18 @@ alias ll="ls -Falh ${colorflag}"
 alias tree='tree -C -I .git'
 alias grep='grep --color'
 
+if command -v nvim >/dev/null; then
+    export EDITOR='nvim'
+else
+    export EDITOR='vim'
+fi
+
 if [[ -d .bash_topics.d ]]; then
     for topic in .bash_topics.d/*; do
         if [[ ! ${topic} =~ .bash_topics.d/~.* ]] ; then
             source ${topic}
         fi
     done
-fi
-
-if command -v nvim >/dev/null; then
-    export EDITOR='nvim'
-else
-    export EDITOR='vim'
 fi
 
 umask go-wx
