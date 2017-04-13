@@ -14,7 +14,7 @@ fi
 
 alias ls="command ls ${colorflag}"
 alias ll="ls -Falh ${colorflag}"
-alias tree='tree -C -I .git'
+alias tree='tree -lC -I .git'
 alias grep='grep --color'
 
 if command -v nvim >/dev/null; then
