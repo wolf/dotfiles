@@ -34,6 +34,13 @@ Plugin 'editorconfig/editorconfig-vim'
 Plugin 'bronson/vim-visual-star-search'
 Plugin 'mbbill/undotree'
 
+Plugin 'SirVer/ultisnips'
+let g:UltiSnipsSnippetsDir = '~/.vim/ultisnips'
+
+Plugin 'Valloric/YouCompleteMe'
+let g:ycm_collect_identifiers_from_tags_files = 1
+let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+
 set background=light
 set t_Co=256
 Plugin 'vim-scripts/CycleColor'
