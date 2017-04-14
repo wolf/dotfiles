@@ -34,7 +34,7 @@ Plugin 'bronson/vim-visual-star-search'
 Plugin 'mbbill/undotree'
 
 Plugin 'SirVer/ultisnips'
-g:UltiSnipsSnippetDir = '~/.config/nvim/ultisnips'
+let g:UltiSnipsSnippetDir = '~/.config/nvim/ultisnips'
 
 Plugin 'Valloric/YouCompleteMe'
 let g:ycm_collect_identifiers_from_tags_files = 1
