@@ -24,6 +24,7 @@ Plugin 'StanAngeloff/php.vim'
 Plugin 'tweekmonster/braceless.vim'
 Plugin 'chikamichi/mediawiki.vim'
 Plugin 'tmux-plugins/vim-tmux'
+Plugin 'docker/docker', {'rtp': 'contrib/syntax/vim/'}
 
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'jiangmiao/auto-pairs'

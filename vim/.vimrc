@@ -25,6 +25,10 @@ Plugin 'StanAngeloff/php.vim'
 Plugin 'tweekmonster/braceless.vim'
 Plugin 'chikamichi/mediawiki.vim'
 Plugin 'tmux-plugins/vim-tmux'
+Plugin 'docker/docker', {'rtp': 'contrib/syntax/vim/'}
+
+Plugin 'file:///Users/wolf/Builds/nginx', {'rtp': 'contrib/vim/', 'name': 'NGINX-Syntax'}
+Plugin 'file:///Users/wolf/Builds/swift', {'rtp': 'utils/vim/', 'name': 'Swift-Syntax'}
 
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'jiangmiao/auto-pairs'
