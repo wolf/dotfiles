@@ -206,6 +206,10 @@ nnoremap g^ ^
 nnoremap g$ $
 nnoremap g0 0
 
+" Keep the visual selection after in|out-denting
+vnoremap > >gv
+vnoremap < <gv
+
 " Get out of insert mode without stretching for <Esc>
 inoremap jk <Esc>
 " Don't remap <Esc> as that breaks mouse input
