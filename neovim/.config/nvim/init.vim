@@ -28,11 +28,12 @@ Plugin 'docker/docker', {'rtp': 'contrib/syntax/vim/'}
 
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'jiangmiao/auto-pairs'
-"Plugin 'easymotion/vim-easymotion'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'editorconfig/editorconfig-vim'
 Plugin 'bronson/vim-visual-star-search'
 Plugin 'mbbill/undotree'
+
+Plugin 'editorconfig/editorconfig-vim'
+let gEditor_Config_exclude_patterns = ['fugitive://.*', 'scp://.*']
 
 Plugin 'SirVer/ultisnips'
 let g:UltiSnipsSnippetDir = '~/.config/nvim/ultisnips'
@@ -44,8 +45,8 @@ let g:ycm_global_ycm_extra_conf = '~/.config/nvim/bundle/YouCompleteMe/third_par
 
 set background=light
 set t_Co=256
-Plugin 'vim-scripts/CycleColor'
 Plugin 'NLKNguyen/papercolor-theme'
+Plugin 'vim-scripts/CycleColor'
 
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
 Plugin 'tpope/vim-markdown'
@@ -54,20 +55,18 @@ let NERDTreeSortOrder=[]
 let NERDTreeIgnore=['\.o$[[file]]', '\.pyc$[[file]]']
 Plugin 'scrooloose/nerdtree'
 
-let g:ctrlp_map = '<c-t>'
-let g:ctrlp_cmd = 'CtrlPMixed'
-let g:ctrlp_match_window = 'bottom,order:ttb'
-let g:ctrlp_switch_buffer = 0
-let g:ctrlp_working_path_mode = 0
-let g:ctrlp_user_command = 'ag %s -1 --nocolor -g ""'
-Plugin 'ctrlpvim/ctrlp.vim'
+"let g:ctrlp_map = '<c-t>'
+"let g:ctrlp_cmd = 'CtrlPMixed'
+"let g:ctrlp_match_window = 'bottom,order:ttb'
+"let g:ctrlp_switch_buffer = 0
+"let g:ctrlp_working_path_mode = 0
+"let g:ctrlp_user_command = 'ag %s -1 --nocolor -g ""'
+"Plugin 'ctrlpvim/ctrlp.vim'
 
 if executable('ag')
     let g:ackprg = 'ag --vimgrep'
 endif
 Plugin 'mileszs/ack.vim'
-
-Plugin 'mattn/calendar-vim'
 
 call vundle#end()   " required
 " }}}
