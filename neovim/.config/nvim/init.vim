@@ -36,6 +36,7 @@ Plugin 'mbbill/undotree'
 
 Plugin 'SirVer/ultisnips'
 let g:UltiSnipsSnippetDir = '~/.config/nvim/ultisnips'
+Plugin 'honza/vim-snippets'
 
 Plugin 'Valloric/YouCompleteMe'
 let g:ycm_collect_identifiers_from_tags_files = 1
