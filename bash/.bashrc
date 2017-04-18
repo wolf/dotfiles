@@ -74,7 +74,7 @@ function refresh_ssh() {
 if command -v __git_ps1 >/dev/null; then
     export PS1='\n\! \u@\h:\[\e[35m\]\W\[\e[0m\]$(virtualenv_info) $(__git_ps1 "\[\e[32m\][$(time_since_last_commit) %s $(tip)]\[\e[0m\]")\$ '
 else
-    export PS1='\n\! \u@\h:\[\e[35m\]\W\[\e[0m\]$(virtualenv_info)\$ '
+    export PS1='\n\! \u@\h:\[\e[35m\]\W\[\e[0m\]$(virtualenv_info) \$ '
 fi
 
 export HISTSIZE=10000
