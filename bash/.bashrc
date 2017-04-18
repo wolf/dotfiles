@@ -33,16 +33,10 @@ fi
 
 umask go-wx
 
-if [ $(uname) = 'Darwin' ] ; then
-    # if I'm on MacOS X...
-
-    if [ -z "${SSH_CONNECTION}" ] ; then
-        alias fixopenwith='/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user'
-    fi
-
-    if [ -f $(brew --prefix)/etc/bash_completion ]; then
-        source $(brew --prefix)/etc/bash_completion
-    fi
+if command -v brew >/dev/null && test -f $(brew --prefix)/etc/bash_completion ; then
+    source $(brew --prefix)/etc/bash_completion
+elif [ -f /etc/bash_completion ] ; then
+    source /etc/bash_completion
 else
     if [ -f ~/.git-completion.bash ] ; then
         source ~/.git-completion.bash
@@ -50,8 +44,14 @@ else
     if [ -f ~/.git-prompt.sh ] ; then
         source ~/.git-prompt.sh
     fi
+fi
 
-    export PATH=$PATH:/usr/local/sbin:~/bin
+if [ $(uname) = 'Darwin' ] ; then # if I'm on MacOS X...
+
+    if [ -z "${SSH_CONNECTION}" ] ; then
+        alias fixopenwith='/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user'
+    fi
+
 fi
 
 export VIRTUAL_ENV_DISABLE_PROMPT=1
