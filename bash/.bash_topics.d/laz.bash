@@ -1,6 +1,6 @@
 if [[ $(uname) =~ CYGWIN.* ]] ; then
     export WORKSPACE=/cygdrive/c/kepler/workspace
-    export WINDOWSHOME=/cygdrive/c/Users/wolfe
+    export WINDOWSHOME=/cygdrive/c/Users/wolf
     alias make-tags="$WORKSPACE/tools/scripts/shell/make-tags.sh"
     alias fix-wrapping='kill -WINCH $$'
 
