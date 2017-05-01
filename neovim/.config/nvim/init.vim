@@ -178,6 +178,9 @@ if has('gui')
     nnoremap <leader>sg :source $MYGVIMRC<cr>
 endif
 
+" Insert Time/Date-stamp
+inoremap <F2> <C-r>=strftime('%c')<cr>
+
 " Highlight whitespace errors, clear highlighting
 nnoremap <leader>w :2match Error /\v\s+$/<cr>
 nnoremap <leader>W :2match none<cr>
