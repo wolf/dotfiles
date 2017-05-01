@@ -216,8 +216,9 @@ nnoremap g0 0
 vnoremap > >gv
 vnoremap < <gv
 
-" Get out of insert mode without stretching for <Esc>
+" Get out of insert, terminal mode without stretching
 inoremap jk <Esc>
+tnoremap jk <C-\><C-n>
 " Don't remap <Esc> as that breaks mouse input
 " }}}
 
