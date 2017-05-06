@@ -72,6 +72,7 @@ endif
 Plugin 'mileszs/ack.vim'
 
 call vundle#end()   " required
+filetype plugin indent on
 " }}}
 
 " Settings {{{
