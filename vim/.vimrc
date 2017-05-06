@@ -20,6 +20,19 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
 
+" OrgMode Plugins {{{
+Plugin 'tpope/vim-speeddating'
+Plugin 'tpope/vim-repeat'
+Plugin 'vim-scripts/utl.vim'
+Plugin 'vim-scripts/taglist.vim'
+Plugin 'vim-scripts/SyntaxRange'
+Plugin 'chrisbra/NrrwRgn'
+Plugin 'majutsushi/tagbar'
+Plugin 'mattn/calendar-vim'
+
+Plugin 'jceb/vim-orgmode'
+" }}}
+
 Plugin 'pangloss/vim-javascript'
 Plugin 'StanAngeloff/php.vim'
 Plugin 'tweekmonster/braceless.vim'
@@ -73,6 +86,7 @@ Plugin 'scrooloose/nerdtree'
 "Plugin 'mileszs/ack.vim'
 
 call vundle#end()   " required
+filetype plugin indent on
 " }}}
 
 " Settings {{{
