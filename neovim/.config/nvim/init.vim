@@ -33,6 +33,7 @@ Plugin 'jceb/vim-orgmode'
 " }}}
 
 Plugin 'pangloss/vim-javascript'
+Plugin 'tyru/open-browser.vim'
 Plugin 'StanAngeloff/php.vim'
 Plugin 'tweekmonster/braceless.vim'
 Plugin 'chikamichi/mediawiki.vim'
