@@ -232,6 +232,10 @@ vnoremap < <gv
 " Get out of insert mode without stretching for <Esc>
 inoremap jk <Esc>
 " Don't remap <Esc> as that breaks mouse input
+
+command! OpenBrowserCurrent execute "OpenBrowser" "file://" . expand('%:p:gs?\\?/?')
+nnoremap <leader>p :OpenBrowserCurrent<cr>
+
 " }}}
 
 " terminal and colorscheme properties {{{

@@ -235,6 +235,10 @@ vnoremap < <gv
 inoremap jk <Esc>
 tnoremap jk <C-\><C-n>
 " Don't remap <Esc> as that breaks mouse input
+
+command! OpenBrowserCurrent execute "OpenBrowser" "file://" . expand('%:p:gs?\\?/?')
+nnoremap <leader>p :OpenBrowserCurrent<cr>
+
 " }}}
 
 " terminal and colorscheme properties {{{
