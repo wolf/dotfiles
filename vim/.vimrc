@@ -239,7 +239,9 @@ nnoremap <leader>p :OpenBrowserCurrent<cr>
 " }}}
 
 " terminal and colorscheme properties {{{
-if has('mac') || &term !~? '^screen'
+if &term =~? 'cygwin'
+    colorscheme peachpuff
+elseif has('mac') || &term !~? '^screen'
     colorscheme PaperColor
 else
     colorscheme peachpuff
