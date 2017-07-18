@@ -1,0 +1,36 @@
+filetype plugin indent on
+syntax enable
+
+set autoindent
+set backspace=indent,eol,start
+set cmdheight=2
+set complete-=i
+set display+=lastline
+set expandtab
+set hlsearch
+set incsearch
+set laststatus=2
+set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+,eol:$
+set modeline
+set mouse=a
+set nocompatible
+set nrformats-=octal
+set number
+set ruler
+set scrolloff=3
+set shiftwidth=4
+set sidescrolloff=5
+set smarttab
+set softtabstop=4
+set splitbelow
+set splitright
+set wildmenu
+
+let mapleader = "\<space>"
+let maplocalleader = "\\"
+
+inoremap jk <Esc>
+
+nnoremap <silent> <C-L> :nohlsearch<cr>
+nnoremap <silent> <leader>r :set relativenumber!<cr>
+nnoremap <silent> <leader>l :set list!<cr>
