@@ -53,9 +53,14 @@ Plugin 'mbbill/undotree'
 Plugin 'editorconfig/editorconfig-vim'
 let gEditor_Config_exclude_patterns = ['fugitive://.*', 'scp://.*']
 
-"Plugin 'SirVer/ultisnips'
-"let g:UltiSnipsSnippetsDir = '~/.vim/ultisnips'
-"Plugin 'honza/vim-snippets'
+Plugin 'SirVer/ultisnips'
+let g:UltiSnipsSnippetsDir = '~/.vim/ultisnips'
+Plugin 'honza/vim-snippets'
+
+let g:yankring_min_element_length = 2
+let g:yankring_manage_numbered_reg = 1
+let g:yankring_history_dir = '~/.vim,~/vimfiles,$HOME'
+Plugin 'vim-scripts/YankRing.vim'
 
 "Plugin 'Valloric/YouCompleteMe'
 "let g:ycm_collect_identifiers_from_tags_files = 1
@@ -210,8 +215,9 @@ set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+,eol:$
 " Force saving files that require root permission 
 cnoremap w!! w !sudo tee > /dev/null %
 
-nnoremap <F5> :UndotreeToggle<cr>
 nnoremap <F1> :NERDTreeToggle<cr>
+nnoremap <F5> :UndotreeToggle<cr>
+nnoremap <silent> <F11> :YRShow<cr>
 
 " Act naturally when lines wrap
 nnoremap j gj
