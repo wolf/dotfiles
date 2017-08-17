@@ -129,7 +129,7 @@ set mouse=a
 set notimeout ttimeout ttimeoutlen=200
 "set pastetoggle=<F11>
 set sessionoptions+=resize,unix,slash
-set clipboard=unnamedplus,autoselect
+set clipboard=autoselect
 set guioptions+=a
 set cursorline
 
@@ -212,7 +212,7 @@ nnoremap <leader>r :set relativenumber!<cr>
 nnoremap <leader>l :set list!<cr>
 set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+,eol:$
 
-" Force saving files that require root permission 
+" Force saving files that require root permission
 cnoremap w!! w !sudo tee > /dev/null %
 
 nnoremap <F1> :NERDTreeToggle<cr>
