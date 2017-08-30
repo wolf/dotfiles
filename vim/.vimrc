@@ -69,6 +69,7 @@ Plugin 'vim-scripts/YankRing.vim'
 set background=light
 set t_Co=256
 Plugin 'NLKNguyen/papercolor-theme'
+Plugin 'altercation/vim-colors-solarized'
 Plugin 'vim-scripts/CycleColor'
 
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
@@ -211,6 +212,9 @@ nnoremap <leader>r :set relativenumber!<cr>
 " Toggle list view
 nnoremap <leader>l :set list!<cr>
 set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+,eol:$
+
+nnoremap <leader>b :set background=dark<cr>
+nnoremap <leader>B :set background=light<cr>
 
 " Force saving files that require root permission
 cnoremap w!! w !sudo tee > /dev/null %

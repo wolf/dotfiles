@@ -4,6 +4,8 @@ if [[ $(uname) =~ CYGWIN.* ]] ; then
     alias make-tags="$WORKSPACE/tools/scripts/shell/make-tags.sh"
     alias fix-wrapping='kill -WINCH $$'
 
+    eval $(dircolors -b ~/.dir_colors)
+
     export EDITOR='vim'
 
     function cdw() {
