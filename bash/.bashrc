@@ -17,11 +17,7 @@ alias ll="ls -Falh ${colorflag}"
 alias tree='tree -lC -I .git'
 alias grep='grep --color'
 
-if command -v nvim >/dev/null; then
-    export EDITOR='nvim'
-else
-    export EDITOR='vim'
-fi
+export EDITOR='vim'
 
 if [[ -d .bash_topics.d ]]; then
     for topic in .bash_topics.d/*; do
@@ -88,24 +84,26 @@ bind '"\e[A":history-search-backward'
 bind '"\e[B":history-search-forward'
 
 function f() {
-    # usage: f <name>
+    # usage: f <name> [...]
+    # example: f Makefile
+    # example: f Makefile -type f
     # find the filesystem object with the given name
-    find . -name "$1" 2>/dev/null
+    find . -name "$@" 2>/dev/null
 }
 
 function fx() {
-    find . -name "$1" 2>/dev/null | xargs ls ${colorflag} -Falhd
+    find . -name "$@" 2>/dev/null | xargs ls ${colorflag} -Falhd
 }
 
 function fcd() {
     # usage: fcd <directory_basename>
     # example: fcd js
     # find the directory with the given name, cd-ing into the first match found
-    cd "$(find . -name "$1" -type d 2>/dev/null | awk "BEGIN { getline; print }")"
+    cd "$(find . -type d -name "$@" 2>/dev/null | awk "BEGIN { getline; print }")"
 }
 
-function en()   { $EDITOR "$(find . -name "$1" -type f 2>/dev/null)"; }
-function ew()   { $EDITOR "$(which "$1")"; }
+function en()   { $EDITOR $(find . -type f -name "$@" 2>/dev/null); }
+function ew()   { $EDITOR "$(which "$@")"; }
 function lw()   { ll "$(which "$1")"; }
 function psg()  { ps ax | grep -v grep | grep "$1"; }
 
