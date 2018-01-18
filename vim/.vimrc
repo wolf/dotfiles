@@ -182,6 +182,13 @@ augroup filetype_python
 augroup END
 " }}}
 
+" The commit message in Git {{{
+augroup filetype_edit_commitmessage
+    autocmd!
+    autocmd BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+augroup END
+" }}}
+
 " Mappings and abbreviations {{{
 iabbrev ehome Wolf@zv.cx
 iabbrev ework Wolf@learninga-z.com
