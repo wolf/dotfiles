@@ -8,5 +8,3 @@ let localmapleader="\\"
 
 nnoremap <leader>r :set relativenumber!<cr>
 nnoremap <leader>l :set list!<cr>
-
-inoremap jk <Esc>

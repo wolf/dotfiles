@@ -200,8 +200,8 @@ let maplocalleader = "\\"
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 if has('gui')
-    nnoremap <leader>eg :vsplit $MYGVIMRC<cr>
-    nnoremap <leader>sg :source $MYGVIMRC<cr>
+nnoremap <leader>eg :vsplit $MYGVIMRC<cr>
+nnoremap <leader>sg :source $MYGVIMRC<cr>
 endif
 
 " Insert Time/Date-stamp
@@ -245,14 +245,6 @@ nnoremap g0 0
 " Keep the visual selection after in|out-denting
 vnoremap > >gv
 vnoremap < <gv
-
-" Get out of insert mode without stretching for <Esc>
-inoremap jk <Esc>
-" Don't remap <Esc> as that breaks mouse input
-
-command! OpenBrowserCurrent execute "OpenBrowser" "file://" . expand('%:p:gs?\\?/?')
-nnoremap <leader>p :OpenBrowserCurrent<cr>
-
 " }}}
 
 " terminal and colorscheme properties {{{

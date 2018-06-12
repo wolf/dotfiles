@@ -29,8 +29,6 @@ set wildmenu
 let mapleader = "\<space>"
 let maplocalleader = "\\"
 
-inoremap jk <Esc>
-
 nnoremap <silent> <C-L> :nohlsearch<cr>
 nnoremap <silent> <leader>r :set relativenumber!<cr>
 nnoremap <silent> <leader>l :set list!<cr>
