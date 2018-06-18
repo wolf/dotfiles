@@ -16,7 +16,7 @@ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
 Then launch `vim` ignoring the error (if I haven't gotten around to fixing it yet), and type `:PluginInstall`.  There's a good progress indicator but expect the install to take several minutes.
 
-`emergency_vim/vimrc` is a file you can source while loading `vim` on a machine where you don't have all your special configuration files.  E.g., `vim -S vimrc some-file.js`.
+`emergency_vim/vimrc` is a file you can source while loading `vim` on a machine where you don't have all your special configuration files.  E.g., `vim -u vimrc some-file.js`.
 
 ### local-only branch
 
