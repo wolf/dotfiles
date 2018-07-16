@@ -198,10 +198,10 @@ let mapleader = "\<space>"
 let maplocalleader = "\\"
 
 " Edit my nvim config in a new vertical split, source it
-nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <leader>ev :tabnew $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 if has('gui')
-    nnoremap <leader>eg :vsplit $MYGVIMRC<cr>
+    nnoremap <leader>eg :tabnew $MYGVIMRC<cr>
     nnoremap <leader>sg :source $MYGVIMRC<cr>
 endif
 
