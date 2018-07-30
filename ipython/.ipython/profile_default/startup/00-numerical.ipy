@@ -1,0 +1,17 @@
+try:
+    import numpy as np
+    from numpy import nan as NA
+    import pandas as pd
+    from pandas import DataFrame, Series
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    from IPython import get_ipython
+    ip = get_ipython()
+    if ip.has_trait('kernel'):
+        %matplotlib inline
+    else:
+        %matplotlib
+        np.set_printoptions(precision=4, suppress=True)
+except ImportError:
+    pass
