@@ -35,6 +35,10 @@ fi
 
 umask go-wx
 
+if [[ -f .dir_colors ]]; then
+    eval $(dircolors -b ~/.dir_colors)
+fi
+
 if command -v brew >/dev/null && test -f $(brew --prefix)/etc/bash_completion ; then
     source $(brew --prefix)/etc/bash_completion
 elif [ -f /etc/bash_completion ] ; then
