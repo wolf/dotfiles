@@ -21,6 +21,10 @@ alias grep='grep --color'
 
 export EDITOR='vim'
 
+function present_in_path() {
+    echo $PATH | tr ':' '\n' | grep -e "^$1$" >/dev/null;
+}
+
 if [[ -d .bash_topics.d ]]; then
     for topic in .bash_topics.d/*; do
         if [[ ! ${topic} =~ .bash_topics.d/~.* ]] ; then
