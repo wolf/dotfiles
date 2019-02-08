@@ -1,3 +1,5 @@
+from collections import ChainMap
+
 try:
     import numpy as np
     from numpy import nan as NA
@@ -34,9 +36,10 @@ def start():
         }
     }
 
-    for category, option in options.items():
-        for op, value in option.items():
-            pd.set_option(f'{category}.{op}', value)
+    if 'pd' in ChainMap(locals(), globals()):
+        for category, option in options.items():
+            for op, value in option.items():
+                pd.set_option(f'{category}.{op}', value)
 
 
 if __name__ == '__main__':
