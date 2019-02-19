@@ -9,6 +9,7 @@
     l = log --decorate --abbrev-commit --oneline
     st = status -s
     n = ! git status -s | wc -l
+    aliases = ! git config --list | grep alias
 [apply]
     whitespace = fix
 [color]
