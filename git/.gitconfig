@@ -3,12 +3,12 @@
     d = diff --word-diff
     ec = config --local -e
     egc = config --global -e
-    # glog = log --all --graph --pretty='format:%d%Cgreen%h%Creset %an - %s'
-    # le = log --decorate --oneline
-    # lg2 = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+    glog = log --all --graph --pretty='format:%d%Cgreen%h%Creset %an - %s'
+    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
     graph = log --all --graph --decorate --abbrev-commit --oneline
     l = log --decorate --abbrev-commit --oneline
     st = status -s
+    n = ! git status -s | wc -l
 [apply]
     whitespace = fix
 [color]
