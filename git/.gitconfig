@@ -1,8 +1,10 @@
 [alias]
     co = checkout
+    ci = commit
+    br = branch
     d = diff --word-diff
-    ec = config --local -e
-    egc = config --global -e
+    ec = config --local --edit
+    egc = config --global --edit
     glog = log --all --graph --pretty='format:%d%Cgreen%h%Creset %an - %s'
     lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
     graph = log --all --graph --decorate --abbrev-commit --oneline
