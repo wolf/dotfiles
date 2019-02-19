@@ -8,6 +8,8 @@ stow --target=${HOME} -S bash git readline tmux vim
 
 ...modulo the exact parts you want to install.  This makes symbolic-links from your home directory to the top-level items inside each of the listed directories.  For example, inside the `dotfiles/bash` directory is a `.bashrc`, `.bash_profile` and a directory: `.bash_topics.d`.  Each of those gets a same-named symbolic-link in your home directory; and that lets bash startup with our custom configuration.  Because the links are symbolic, you need to keep your `dotfiles` directory around forever.  So make sure you put it someplace reasonable.
 
+### Vim
+
 `vim` is special, you need to do a little extra work to get its plugins downloaded.
 
 ```
@@ -17,6 +19,14 @@ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 Then launch `vim` ignoring the error (if I haven't gotten around to fixing it yet), and type `:PluginInstall`.  There's a good progress indicator but expect the install to take several minutes.
 
 `emergency_vim/vimrc` is a file you can source while loading `vim` on a machine where you don't have all your special configuration files.  E.g., `vim -u vimrc some-file.js`.
+
+### NeoVim
+
+NeoVim (`nvim`) is installed similarly to `vim` however: you should make sure that `~/.config` directory exists before you execute the `stow` command.  The exact command to get Vundle is
+
+```
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.config/nvim/bundle/Vundle.vim
+```
 
 ### local-only branch
 
