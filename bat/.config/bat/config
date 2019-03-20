@@ -1,3 +1,3 @@
 --theme="OneHalfLight"
---pager="less -FR"
+--pager="less -FRX"
 --wrap="never"
