@@ -18,6 +18,7 @@ Plugin 'tpope/vim-characterize'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
+Plugin 'tpope/vim-commentary'
 
 " OrgMode Plugins {{{
 Plugin 'tpope/vim-speeddating'
@@ -43,7 +44,6 @@ Plugin 'nginx/nginx', {'rtp': 'contrib/vim/', 'name': 'NGINX-Syntax'}
 Plugin 'docker/docker', {'rtp': 'contrib/syntax/vim/', 'name': 'Docker-Syntax'}
 Plugin 'apple/swift', {'rtp': 'utils/vim/', 'name': 'Swift-Syntax'}
 
-Plugin 'scrooloose/nerdcommenter'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'bronson/vim-visual-star-search'
