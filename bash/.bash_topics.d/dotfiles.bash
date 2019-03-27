@@ -1,5 +1,5 @@
-export DOTFILES="~/builds/dotfiles"
+export DOTFILES_DIR=~/builds/dotfiles
 
 function cdd() {
-    cd "${DOTFILES}"
+    cd "${DOTFILES_DIR}"
 }
