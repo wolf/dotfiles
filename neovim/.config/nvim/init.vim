@@ -22,29 +22,15 @@ Plugin 'tpope/vim-commentary'
 
 Plugin 'tommcdo/vim-exchange'
 
-" OrgMode Plugins {{{
-Plugin 'tpope/vim-speeddating'
-Plugin 'tpope/vim-repeat'
-Plugin 'vim-scripts/utl.vim'
-Plugin 'vim-scripts/taglist.vim'
-Plugin 'vim-scripts/SyntaxRange'
-Plugin 'chrisbra/NrrwRgn'
-Plugin 'majutsushi/tagbar'
-Plugin 'mattn/calendar-vim'
-
-Plugin 'jceb/vim-orgmode'
-" }}}
-
 Plugin 'pangloss/vim-javascript'
-Plugin 'tyru/open-browser.vim'
 Plugin 'StanAngeloff/php.vim'
 Plugin 'tweekmonster/braceless.vim'
 Plugin 'chikamichi/mediawiki.vim'
 Plugin 'tmux-plugins/vim-tmux'
 
-Plugin 'nginx/nginx', {'rtp': 'contrib/vim/', 'name': 'NGINX-Syntax'}
-Plugin 'docker/docker', {'rtp': 'contrib/syntax/vim/', 'name': 'Docker-Syntax'}
-Plugin 'apple/swift', {'rtp': 'utils/vim/', 'name': 'Swift-Syntax'}
+" Plugin 'nginx/nginx', {'rtp': 'contrib/vim/', 'name': 'NGINX-Syntax'}
+" Plugin 'docker/docker', {'rtp': 'contrib/syntax/vim/', 'name': 'Docker-Syntax'}
+" Plugin 'apple/swift', {'rtp': 'utils/vim/', 'name': 'Swift-Syntax'}
 
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'airblade/vim-gitgutter'
