@@ -20,6 +20,8 @@ Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-commentary'
 
+Plugin 'tommcdo/vim-exchange'
+
 " OrgMode Plugins {{{
 Plugin 'tpope/vim-speeddating'
 Plugin 'tpope/vim-repeat'
