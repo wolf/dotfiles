@@ -184,7 +184,9 @@ iabbrev ework Wolf@learninga-z.com
 let mapleader = "\<space>"
 let maplocalleader = "\\"
 
-" Edit my ~/.vimrc in a new vertical split, source it
+nnoremap <silent> <C-L> :nohlsearch<cr>
+
+" Edit my ~/.vimrc in a new tab, source it
 nnoremap <leader>ev :tabnew $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 if has('gui')
