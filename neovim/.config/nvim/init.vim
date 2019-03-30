@@ -44,11 +44,6 @@ Plugin 'SirVer/ultisnips'
 let g:UltiSnipsSnippetDir = '~/.config/nvim/ultisnips'
 Plugin 'honza/vim-snippets'
 
-let g:yankring_min_element_length = 2
-let g:yankring_manage_numbered_regs = 1
-let g:yankring_history_dir = '~/.config/nvim,$HOME'
-Plugin 'vim-scripts/YankRing.vim'
-
 Plugin 'Valloric/YouCompleteMe'
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_global_ycm_extra_conf = '~/.config/nvim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
