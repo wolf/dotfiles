@@ -60,14 +60,6 @@ let NERDTreeSortOrder=[]
 let NERDTreeIgnore=['\.o$[[file]]', '\.pyc$[[file]]']
 Plugin 'scrooloose/nerdtree'
 
-"let g:ctrlp_map = '<c-t>'
-"let g:ctrlp_cmd = 'CtrlPMixed'
-"let g:ctrlp_match_window = 'bottom,order:ttb'
-"let g:ctrlp_switch_buffer = 0
-"let g:ctrlp_working_path_mode = 0
-"let g:ctrlp_user_command = 'ag %s -1 --nocolor -g ""'
-"Plugin 'ctrlpvim/ctrlp.vim'
-
 if executable('ag')
     let g:ackprg = 'ag --vimgrep'
 endif
@@ -197,9 +189,6 @@ inoremap <F2> <C-r>=strftime('%c')<cr>
 nnoremap <leader>w :2match Error /\v\s+$/<cr>
 nnoremap <leader>W :2match none<cr>
 
-" Open the CtrlP's buffer explorer window
-nnoremap <leader>b :CtrlPBuffer<cr>
-
 " Toggle relative line numbers for easier motion math
 nnoremap <leader>r :set relativenumber!<cr>
 " Toggle list view
@@ -210,8 +199,6 @@ set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+,eol:$
 cnoremap w!! w !sudo tee > /dev/null %
 
 nnoremap <F1> :NERDTreeToggle<cr>
-nnoremap <F5> :UndotreeToggle<cr>
-nnoremap <silent> <F11> :YRShow<cr>
 
 " Act naturally when lines wrap
 nnoremap j gj
@@ -228,9 +215,6 @@ nnoremap g0 0
 " Keep the visual selection after in|out-denting
 vnoremap > >gv
 vnoremap < <gv
-
-command! OpenBrowserCurrent execute "OpenBrowser" "file://" . expand('%:p:gs?\\?/?')
-nnoremap <leader>p :OpenBrowserCurrent<cr>
 
 " }}}
 
