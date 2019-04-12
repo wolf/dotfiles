@@ -46,6 +46,7 @@ Plugin 'pangloss/vim-javascript'
 Plugin 'StanAngeloff/php.vim'
 Plugin 'tweekmonster/braceless.vim'
 Plugin 'chikamichi/mediawiki.vim'
+Plugin 'cespare/vim-toml'
 Plugin 'tmux-plugins/vim-tmux'
 
 " Plugin 'nginx/nginx', {'rtp': 'contrib/vim/', 'name': 'NGINX-Syntax'}
