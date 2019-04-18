@@ -91,8 +91,8 @@ filetype plugin indent on
 " }}}
 
 " Settings {{{
-let g:python_host_prog = '/usr/bin/python2' 
-let g:python3_host_prog = '/usr/bin/python3' 
+let g:python_host_prog = '/usr/bin/python2'
+let g:python3_host_prog = '/usr/bin/python3'
 
 set hidden
 set showcmd
@@ -216,7 +216,7 @@ nnoremap <leader>r :set relativenumber!<cr>
 nnoremap <leader>l :set list!<cr>
 set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+,eol:$
 
-" Force saving files that require root permission 
+" Force saving files that require root permission
 cnoremap w!! w !sudo tee > /dev/null %
 
 nnoremap <F1> :NERDTreeToggle<cr>
