@@ -62,9 +62,14 @@ fi
 
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
-function virtualenv_info()  { [ $VIRTUAL_ENV ] && echo ' ('$(basename $VIRTUAL_ENV)')'; }
-function tip()              { git rev-parse --short HEAD 2>/dev/null; }
+function tip() {
+    branch=${1:-HEAD}
+    git rev-parse --short $branch 2>/dev/null;
+}
+__git_complete tip __git_complete_refs
+
 function time_since_last_commit { git log --no-walk --format="%ar" 2>/dev/null | sed 's/\([0-9]\) \(.\).*/\1\2/'; }
+function virtualenv_info()      { [ $VIRTUAL_ENV ] && echo ' ('$(basename $VIRTUAL_ENV)')'; }
 
 # used to reattach ssh forwarding to "stale" tmux sessions
 # http://justinchouinard.com/blog/2010/04/10/fix-stale-ssh-environment-variables-in-gnu-screen-and-tmux/
