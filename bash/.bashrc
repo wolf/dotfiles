@@ -66,8 +66,6 @@ function tip() {
     branch=${1:-HEAD}
     git rev-parse --short $branch 2>/dev/null;
 }
-__git_complete tip __git_complete_refs
-
 function time_since_last_commit { git log --no-walk --format="%ar" 2>/dev/null | sed 's/\([0-9]\) \(.\).*/\1\2/'; }
 function virtualenv_info()      { [ $VIRTUAL_ENV ] && echo ' ('$(basename $VIRTUAL_ENV)')'; }
 
