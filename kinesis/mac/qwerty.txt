@@ -7,5 +7,5 @@
 [lp-tab]>[rctrl]
 [rctrl]>[rwin]
 [rp-kpent]>[escape]
-[rwin]>[lp-tab]
+[rwin]>[rctrl]
 [scroll]>[shutdn]
