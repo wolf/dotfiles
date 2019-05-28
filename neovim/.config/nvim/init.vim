@@ -51,6 +51,9 @@ Plugin 'StanAngeloff/php.vim'
 Plugin 'tweekmonster/braceless.vim'
 Plugin 'chikamichi/mediawiki.vim'
 Plugin 'cespare/vim-toml'
+Plugin 'wlangstroth/vim-racket'
+Plugin 'scribble.vim'
+Plugin 'otherjoel/vim-pollen'
 Plugin 'tmux-plugins/vim-tmux'
 
 " Plugin 'nginx/nginx', {'rtp': 'contrib/vim/', 'name': 'NGINX-Syntax'}
@@ -173,6 +176,22 @@ augroup END
 augroup filetype_markdown
     autocmd!
     autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+augroup END
+" }}}
+
+" Racket Languages files {{{
+augroup filetype_racket_langs
+    autocmd!
+
+    "Set syntax for files with these extensions:
+    autocmd! BufRead,BufNewFile *.pm set filetype=pollen
+    autocmd! BufRead,BufNewFile *.pp set filetype=pollen
+    autocmd! BufRead,BufNewFile *.ptree set filetype=pollen
+    autocmd! BufRead,BufNewFile *.scrbl set filetype=scribble
+
+    " Suggested editor settings:
+    autocmd FileType pollen setlocal wrap      " Soft wrap (don't affect buffer)
+    autocmd FileType pollen setlocal linebreak " Wrap on word-breaks only
 augroup END
 " }}}
 
