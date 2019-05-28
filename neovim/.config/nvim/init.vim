@@ -188,6 +188,7 @@ augroup filetype_racket_langs
     autocmd! BufRead,BufNewFile *.pp set filetype=pollen
     autocmd! BufRead,BufNewFile *.ptree set filetype=pollen
     autocmd! BufRead,BufNewFile *.scrbl set filetype=scribble
+    autocmd! BufRead,BufNewFile *.rkt set filetype=racket
 
     " Suggested editor settings:
     autocmd FileType pollen setlocal wrap      " Soft wrap (don't affect buffer)
