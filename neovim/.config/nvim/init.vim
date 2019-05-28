@@ -1,4 +1,5 @@
-" init.vim
+set encoding=utf-8
+set fileencoding=utf-8
 
 set nocompatible    " this is Vim, not vi, so act like it
 
