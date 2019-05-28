@@ -219,11 +219,11 @@ let maplocalleader = "\\"
 nnoremap <silent> <C-L> :nohlsearch<cr>
 
 " Edit my ~/.vimrc in a new tab, source it
-nnoremap <leader>ev :tabnew $MYVIMRC<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
+nnoremap <silent> <leader>ev :tabnew $MYVIMRC<cr>
+nnoremap <silent> <leader>sv :source $MYVIMRC<cr>
 if has('gui')
-nnoremap <leader>eg :tabnew $MYGVIMRC<cr>
-nnoremap <leader>sg :source $MYGVIMRC<cr>
+    nnoremap <silent> <leader>eg :tabnew $MYGVIMRC<cr>
+    nnoremap <silent> <leader>sg :source $MYGVIMRC<cr>
 endif
 
 " Insert Time/Date-stamp
