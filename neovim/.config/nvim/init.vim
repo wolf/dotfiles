@@ -141,7 +141,7 @@ set cursorline
 set shiftwidth=4
 set softtabstop=4
 set expandtab
-set modeline
+set nomodeline
 " }}}
 
 " All files {{{
