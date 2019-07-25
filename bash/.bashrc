@@ -115,6 +115,10 @@ function fcd() {
     cd "$(find . -type d -name "$@" 2>/dev/null | awk "BEGIN { getline; print }")"
 }
 
+function show_path() {
+    echo ${PATH} | tr ':' '\n'
+}
+
 function en()   { $EDITOR $(find . -type f -name "$@" 2>/dev/null); }
 function ew()   { $EDITOR "$(which "$@")"; }
 function lw()   { ll "$(which "$1")"; }
