@@ -16,7 +16,7 @@ fi
 
 alias ls="command ls ${colorflag}"
 alias ll="ls -Falh ${colorflag}"
-alias tree='tree -lC -I .git -I __pycache__'
+alias tree="tree -alC -I '.git|__pycache__'"
 alias grep='grep --color'
 
 export EDITOR='vim'
