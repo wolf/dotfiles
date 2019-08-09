@@ -46,6 +46,7 @@ let g:airline#extensions#tabline#left_alt_sep = ''
 
 Plugin 'tommcdo/vim-exchange'
 
+Plugin 'mattn/emmet-vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'StanAngeloff/php.vim'
 Plugin 'tweekmonster/braceless.vim'
