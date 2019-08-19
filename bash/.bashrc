@@ -119,6 +119,10 @@ function show_path() {
     echo ${PATH} | tr ':' '\n'
 }
 
+function hosts() {
+    grep -e '^Host' ~/.ssh/config
+}
+
 function en()   { $EDITOR $(find . -type f -name "$@" 2>/dev/null); }
 function ew()   { $EDITOR "$(which "$@")"; }
 function lw()   { ll "$(which "$1")"; }
