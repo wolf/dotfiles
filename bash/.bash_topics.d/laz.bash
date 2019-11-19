@@ -1,5 +1,5 @@
 if [[ $(uname) =~ CYGWIN.* ]] ; then
-    export WORKSPACE=/cygdrive/c/kepler/workspace
+    export WORKSPACE=/cygdrive/c/dev/code/cvs/workspace
     export WINDOWSHOME=/cygdrive/c/Users/Wolf
 
     alias make-tags="$WORKSPACE/tools/scripts/shell/make-tags.sh"
