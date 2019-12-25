@@ -1,7 +1,5 @@
 [[ "$-" != *i* ]] && return
 
-cd $HOME
-
 if [ -f /etc/bashrc ] ; then
     source /etc/bashrc
 fi
@@ -25,9 +23,9 @@ function present_in_path() {
     echo $PATH | tr ':' '\n' | grep -e "^$1$" >/dev/null;
 }
 
-if [[ -d .bash_topics.d ]]; then
-    for topic in .bash_topics.d/*; do
-        if [[ ! ${topic} =~ .bash_topics.d/~.* ]] ; then
+if [[ -d ~/.bash_topics.d ]]; then
+    for topic in ~/.bash_topics.d/*; do
+        if [[ ! ${topic} =~ ~/.bash_topics.d/~.* ]] ; then
             source ${topic}
         fi
     done
@@ -35,7 +33,7 @@ fi
 
 umask go-wx
 
-if [[ -f .dir_colors ]]; then
+if [[ -f ~/.dir_colors ]]; then
     eval $(dircolors -b ~/.dir_colors)
 fi
 
