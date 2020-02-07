@@ -10,6 +10,7 @@
     graph = log --all --graph --decorate --abbrev-commit --oneline
     l = log --decorate --abbrev-commit --oneline
     l8 = log --decorate --abbrev-commit --oneline -8
+    log2 = log --pretty=format:'%C(yellow)%h%Creset %C(red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
     st = status -s
     n = ! git status -s | wc -l
     aliases = ! git config --list | grep alias
