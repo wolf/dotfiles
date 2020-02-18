@@ -53,10 +53,12 @@
 [merge]
     tool = opendiff
     conflictstyle = diff3
+    renameLimit = 65000
+    directoryRename = true
 [mergetool]
     prompt = false
 [pull]
-    rebase = true
+    rebase = merges
 [push]
     default = nothing
 [repack]
