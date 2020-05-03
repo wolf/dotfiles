@@ -9,13 +9,17 @@ if [[ $(uname) =~ CYGWIN.* ]] ; then
 
     export EDITOR='vim'
 
-    function cdw() {
-        cd "$WORKSPACE/$1"
-    }
+    function cdd() { cd "$DOTFILES/$1"; }
+    function cdh() { cd "$WINDOWSHOME/$1"; }
+    function cdw() { cd "$WORKSPACE/$1"; }
 
-    function cdh() {
-        cd "$WINDOWSHOME/$1"
-    }
+    function cl_mysql() {
+        case $1 in
+            local)  DB_HOST=127.0.0.1 ;;
+            dev)    DB_HOST=dmilazdb.in.learninga-z.com ;;
+            pre)    DB_HOST=pmilazdb.in.learninga-z.com ;;
+            post)   DB_HOST=tmilazdb.in.learninga-z.com ;;
+        esac
 else
     function be() {
         sudo -u "$1" -i bash;
