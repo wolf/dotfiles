@@ -20,6 +20,7 @@ if [[ $(uname) =~ CYGWIN.* ]] ; then
             pre)    DB_HOST=pmilazdb.in.learninga-z.com ;;
             post)   DB_HOST=tmilazdb.in.learninga-z.com ;;
         esac
+    }
 else
     function be() {
         sudo -u "$1" -i bash;
