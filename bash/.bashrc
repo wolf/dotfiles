@@ -124,6 +124,7 @@ function hosts() {
 function en()   { $EDITOR $(find . -type f -name "$@" 2>/dev/null); }
 function ew()   { $EDITOR "$(which "$@")"; }
 function lw()   { ll "$(which "$1")"; }
+function mkcd() { mkdir -p "$1" && cd "$1"; }
 function psg()  { ps ax | grep -v grep | grep "$1"; }
 
 export XML_CATALOG_FILES=/usr/local/etc/xml/catalog
