@@ -2,6 +2,7 @@ set incsearch
 set hlsearch
 set surround
 set scrolloff=3
+set easymotion
 
 let mapleader="\<space>"
 let localmapleader="\\"

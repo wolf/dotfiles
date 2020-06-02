@@ -22,6 +22,11 @@ Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-obsession'
+Plugin 'easymotion/vim-easymotion'
+Plugin 'haya14busa/incsearch.vim'
+Plugin 'haya14busa/incsearch-easymotion.vim'
+
+Plugin 'tommcdo/vim-exchange'
 
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
@@ -45,21 +50,19 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ''
 let g:airline#extensions#tabline#left_alt_sep = ''
 
-Plugin 'tommcdo/vim-exchange'
-
 Plugin 'mattn/emmet-vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'StanAngeloff/php.vim'
 Plugin 'tweekmonster/braceless.vim'
 Plugin 'chikamichi/mediawiki.vim'
-Plugin 'wlangstroth/vim-racket'
-Plugin 'scribble.vim'
-Plugin 'otherjoel/vim-pollen'
-Plugin 'cespare/vim-toml'
+" Plugin 'wlangstroth/vim-racket'
+" Plugin 'scribble.vim'
+" Plugin 'otherjoel/vim-pollen'
+" Plugin 'cespare/vim-toml'
 Plugin 'tmux-plugins/vim-tmux'
 
+Plugin 'docker/docker', {'rtp': 'contrib/syntax/vim/', 'name': 'Docker-Syntax'}
 " Plugin 'nginx/nginx', {'rtp': 'contrib/vim/', 'name': 'NGINX-Syntax'}
-" Plugin 'docker/docker', {'rtp': 'contrib/syntax/vim/', 'name': 'Docker-Syntax'}
 " Plugin 'apple/swift', {'rtp': 'utils/vim/', 'name': 'Swift-Syntax'}
 
 Plugin 'jiangmiao/auto-pairs'
@@ -70,9 +73,9 @@ Plugin 'mbbill/undotree'
 Plugin 'editorconfig/editorconfig-vim'
 let gEditor_Config_exclude_patterns = ['fugitive://.*', 'scp://.*']
 
-Plugin 'SirVer/ultisnips'
-let g:UltiSnipsSnippetsDir = '~/.vim/ultisnips'
-Plugin 'honza/vim-snippets'
+"Plugin 'SirVer/ultisnips'
+"let g:UltiSnipsSnippetsDir = '~/.vim/ultisnips'
+"Plugin 'honza/vim-snippets'
 
 "Plugin 'Valloric/YouCompleteMe'
 "let g:ycm_collect_identifiers_from_tags_files = 1
@@ -115,6 +118,7 @@ set number          " display line numbers
 
 " statusline {{{
 set statusline=%<                           " where to break
+set statusline+=%{ObsessionStatus()}        " if Session.vim saving is active
 set statusline+=%f%M%R                      " leafname, modified, read-only
 set statusline+=\ %{fugitive#statusline()}  " if in git repo, git info
 set statusline+=%=                          " switch to the right side
