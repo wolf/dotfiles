@@ -50,6 +50,9 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ''
 let g:airline#extensions#tabline#left_alt_sep = ''
 
+Plugin 'tommcdo/vim-exchange'
+
+Plugin 'majutsushi/tagbar'
 Plugin 'mattn/emmet-vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'StanAngeloff/php.vim'
@@ -204,6 +207,15 @@ augroup END
 augroup filetype_python
     autocmd!
     autocmd FileType python BracelessEnable +indent +highlight-cc2 +fold
+    autocmd FileType python call tagbar#autoopen(0)
+augroup END
+" }}}
+
+" C/C++ files {{{
+augroup filetype_c
+    autocmd!
+    autocmd FileType c call tagbar#autoopen(0)
+    autocmd FileType cpp call tagbar#autoopen(0)
 augroup END
 " }}}
 
