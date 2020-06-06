@@ -21,6 +21,11 @@ Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-obsession'
+Plugin 'easymotion/vim-easymotion'
+Plugin 'haya14busa/incsearch.vim'
+Plugin 'haya14busa/incsearch-easymotion.vim'
+
+Plugin 'tommcdo/vim-exchange'
 
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
@@ -44,21 +49,20 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ''
 let g:airline#extensions#tabline#left_alt_sep = ''
 
-Plugin 'tommcdo/vim-exchange'
-
+Plugin 'majutsushi/tagbar'
 Plugin 'mattn/emmet-vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'StanAngeloff/php.vim'
 Plugin 'tweekmonster/braceless.vim'
 Plugin 'chikamichi/mediawiki.vim'
-Plugin 'cespare/vim-toml'
-Plugin 'wlangstroth/vim-racket'
-Plugin 'scribble.vim'
-Plugin 'otherjoel/vim-pollen'
+" Plugin 'wlangstroth/vim-racket'
+" Plugin 'scribble.vim'
+" Plugin 'otherjoel/vim-pollen'
+" Plugin 'cespare/vim-toml'
 Plugin 'tmux-plugins/vim-tmux'
 
+Plugin 'docker/docker', {'rtp': 'contrib/syntax/vim/', 'name': 'Docker-Syntax'}
 " Plugin 'nginx/nginx', {'rtp': 'contrib/vim/', 'name': 'NGINX-Syntax'}
-" Plugin 'docker/docker', {'rtp': 'contrib/syntax/vim/', 'name': 'Docker-Syntax'}
 " Plugin 'apple/swift', {'rtp': 'utils/vim/', 'name': 'Swift-Syntax'}
 
 Plugin 'jiangmiao/auto-pairs'
@@ -80,6 +84,7 @@ let g:ycm_global_ycm_extra_conf = '~/.config/nvim/bundle/YouCompleteMe/third_par
 set background=light
 set t_Co=256
 Plugin 'NLKNguyen/papercolor-theme'
+Plugin 'altercation/vim-colors-solarized'
 Plugin 'vim-scripts/CycleColor'
 
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
@@ -116,6 +121,7 @@ set number          " display line numbers
 
 " statusline {{{
 set statusline=%<                           " where to break
+set statusline+=%{ObsessionStatus()}        " if Session.vim saving is active
 set statusline+=%f%M%R                      " leafname, modified, read-only
 set statusline+=\ %{fugitive#statusline()}  " if in git repo, git info
 set statusline+=%=                          " switch to the right side
@@ -201,6 +207,15 @@ augroup END
 augroup filetype_python
     autocmd!
     autocmd FileType python BracelessEnable +indent +highlight-cc2 +fold
+    autocmd FileType python call tagbar#autoopen(0)
+augroup END
+" }}}
+
+" C/C++ files {{{
+augroup filetype_c
+    autocmd!
+    autocmd FileType c call tagbar#autoopen(0)
+    autocmd FileType cpp call tagbar#autoopen(0)
 augroup END
 " }}}
 
@@ -241,10 +256,14 @@ nnoremap <leader>r :set relativenumber!<cr>
 nnoremap <leader>l :set list!<cr>
 set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+,eol:$
 
+nnoremap <leader>b :set background=dark<cr>
+nnoremap <leader>B :set background=light<cr>
+
 " Force saving files that require root permission
 cnoremap w!! w !sudo tee > /dev/null %
 
 nnoremap <F1> :NERDTreeToggle<cr>
+nnoremap <F5> :UndotreeToggle<cr>
 
 " Act naturally when lines wrap
 nnoremap j gj
@@ -261,7 +280,6 @@ nnoremap g0 0
 " Keep the visual selection after in|out-denting
 vnoremap > >gv
 vnoremap < <gv
-
 " }}}
 
 " terminal and colorscheme properties {{{
