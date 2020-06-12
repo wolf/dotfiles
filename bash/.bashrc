@@ -138,5 +138,6 @@ function help_wolf() {
     echo 'en pattern        -- find and edit the files that match pattern in or below .'
     echo 'ew script         -- find and edit the file matching script along $PATH'
     echo 'lw command        -- ls -l the file matching command along $PATH'
+    echo 'mkcd path         -- create a directory (and all intervening directories) and cd into it'
     echo 'psg pattern       -- grep with ps for the given pattern'
 }
