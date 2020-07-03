@@ -74,9 +74,9 @@ Plugin 'mbbill/undotree'
 Plugin 'editorconfig/editorconfig-vim'
 let gEditor_Config_exclude_patterns = ['fugitive://.*', 'scp://.*']
 
-"Plugin 'SirVer/ultisnips'
-"let g:UltiSnipsSnippetsDir = '~/.vim/ultisnips'
-"Plugin 'honza/vim-snippets'
+Plugin 'SirVer/ultisnips'
+let g:UltiSnipsSnippetsDir = '~/.vim/ultisnips'
+Plugin 'honza/vim-snippets'
 
 "Plugin 'Valloric/YouCompleteMe'
 "let g:ycm_collect_identifiers_from_tags_files = 1
@@ -95,16 +95,19 @@ let NERDTreeSortOrder=[]
 let NERDTreeIgnore=['\.o$[[file]]', '\.pyc$[[file]]']
 Plugin 'scrooloose/nerdtree'
 
-"if executable('ag')
-    "let g:ackprg = 'ag --vimgrep'
-"endif
-"Plugin 'mileszs/ack.vim'
+if executable('ag')
+    let g:ackprg = 'ag --vimgrep'
+endif
+Plugin 'mileszs/ack.vim'
 
 call vundle#end()   " required
 filetype plugin indent on
 " }}}
 
 " Settings {{{
+let g:python_host_prog = '/Users/wolf/.pyenv/versions/nvim2/bin/python'
+let g:python3_host_prog = '/Users/wolf/.pyenv/versions/nvim3/bin/python'
+
 set hidden
 set showcmd
 set hlsearch
@@ -139,7 +142,11 @@ set mouse=a
 set notimeout ttimeout ttimeoutlen=200
 "set pastetoggle=<F11>
 set sessionoptions+=resize,unix,slash
-set clipboard=autoselect
+if has('nvim')
+    set clipboard=unnamedplus
+else
+    set clipboard=autoselect
+endif
 set guioptions+=a
 set cursorline
 
@@ -234,8 +241,8 @@ let maplocalleader = "\\"
 nnoremap <silent> <C-L> :nohlsearch<cr>
 
 " Edit my ~/.vimrc in a new tab, source it
-nnoremap <silent> <leader>ev :tabnew $MYVIMRC<cr>
-nnoremap <silent> <leader>sv :source $MYVIMRC<cr>
+nnoremap <silent> <leader>ev :tabnew $HOME/.vimrc<cr>
+nnoremap <silent> <leader>sv :source $HOME/.vimrc<cr>
 if has('gui')
     nnoremap <silent> <leader>eg :tabnew $MYGVIMRC<cr>
     nnoremap <silent> <leader>sg :source $MYGVIMRC<cr>
@@ -289,7 +296,7 @@ else
     colorscheme peachpuff
 endif
 
-if &term !~ 'builtin_gui'
+if !has('nvim') && &term !~ 'builtin_gui'
     set ttymouse=xterm2
 endif
 " }}}
