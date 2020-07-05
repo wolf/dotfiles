@@ -9,7 +9,6 @@ if [[ $(uname) =~ CYGWIN.* ]] ; then
 
     export EDITOR='vim'
 
-    function cdd() { cd "$DOTFILES/$1"; }
     function cdh() { cd "$WINDOWSHOME/$1"; }
     function cdw() { cd "$WORKSPACE/$1"; }
 
