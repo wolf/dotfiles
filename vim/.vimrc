@@ -285,6 +285,10 @@ nnoremap g0 0
 " Keep the visual selection after in|out-denting
 vnoremap > >gv
 vnoremap < <gv
+
+" Easy expansion of the active file directory (see Practical Vim)
+cnoremap <expr> %% getcmdtype()==':' ? expand('%:h').'/' : '%%' 
+
 " }}}
 
 " terminal and colorscheme properties {{{
