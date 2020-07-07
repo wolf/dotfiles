@@ -251,7 +251,7 @@ vnoremap > >gv
 vnoremap < <gv
 
 " Easy expansion of the active file directory (see Practical Vim)
-cnoremap <expr> %% getcmdtype()==':' ? expand('%:h').'/' : '%%' 
+cnoremap <expr> %% getcmdtype()==':' ? expand('%:h').'/' : '%%'
 
 " }}}
 
