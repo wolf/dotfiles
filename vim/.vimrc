@@ -28,6 +28,8 @@ Plugin 'haya14busa/incsearch-easymotion.vim'
 Plugin 'tommcdo/vim-exchange'
 
 Plugin 'vim-airline/vim-airline'
+let g:airline#extensions#fzf#enabled = 0
+
 Plugin 'vim-airline/vim-airline-themes'
 
 if !exists('g:airline_symbols')
