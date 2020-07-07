@@ -21,7 +21,6 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-commentary'
-Plugin 'tpope/vim-obsession'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'haya14busa/incsearch.vim'
 Plugin 'haya14busa/incsearch-easymotion.vim'
@@ -50,37 +49,21 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ''
 let g:airline#extensions#tabline#left_alt_sep = ''
 
-Plugin 'majutsushi/tagbar'
 Plugin 'mattn/emmet-vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'StanAngeloff/php.vim'
 Plugin 'tweekmonster/braceless.vim'
-Plugin 'chikamichi/mediawiki.vim'
-" Plugin 'wlangstroth/vim-racket'
-" Plugin 'scribble.vim'
-" Plugin 'otherjoel/vim-pollen'
-" Plugin 'cespare/vim-toml'
-Plugin 'tmux-plugins/vim-tmux'
 
-Plugin 'docker/docker', {'rtp': 'contrib/syntax/vim/', 'name': 'Docker-Syntax'}
+" Plugin 'docker/docker', {'rtp': 'contrib/syntax/vim/', 'name': 'Docker-Syntax'}
 " Plugin 'nginx/nginx', {'rtp': 'contrib/vim/', 'name': 'NGINX-Syntax'}
 " Plugin 'apple/swift', {'rtp': 'utils/vim/', 'name': 'Swift-Syntax'}
 
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'bronson/vim-visual-star-search'
-Plugin 'mbbill/undotree'
 
 Plugin 'editorconfig/editorconfig-vim'
 let gEditor_Config_exclude_patterns = ['fugitive://.*', 'scp://.*']
-
-Plugin 'SirVer/ultisnips'
-let g:UltiSnipsSnippetsDir = '~/.vim/ultisnips'
-Plugin 'honza/vim-snippets'
-
-Plugin 'Valloric/YouCompleteMe'
-let g:ycm_collect_identifiers_from_tags_files = 1
-let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 
 set background=light
 set t_Co=256
@@ -90,15 +73,6 @@ Plugin 'vim-scripts/CycleColor'
 
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
 Plugin 'tpope/vim-markdown'
-
-let NERDTreeSortOrder=[]
-let NERDTreeIgnore=['\.o$[[file]]', '\.pyc$[[file]]']
-Plugin 'scrooloose/nerdtree'
-
-if executable('ag')
-    let g:ackprg = 'ag --vimgrep'
-endif
-Plugin 'mileszs/ack.vim'
 
 call vundle#end()   " required
 filetype plugin indent on
@@ -212,15 +186,6 @@ augroup END
 augroup filetype_python
     autocmd!
     autocmd FileType python BracelessEnable +indent +highlight-cc2 +fold
-    autocmd FileType python call tagbar#autoopen(0)
-augroup END
-" }}}
-
-" C/C++ files {{{
-augroup filetype_c
-    autocmd!
-    autocmd FileType c call tagbar#autoopen(0)
-    autocmd FileType cpp call tagbar#autoopen(0)
 augroup END
 " }}}
 
@@ -266,9 +231,6 @@ nnoremap <leader>B :set background=light<cr>
 
 " Force saving files that require root permission
 cnoremap w!! w !sudo tee > /dev/null %
-
-nnoremap <F1> :NERDTreeToggle<cr>
-nnoremap <F5> :UndotreeToggle<cr>
 
 " Act naturally when lines wrap
 nnoremap j gj
