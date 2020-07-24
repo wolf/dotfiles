@@ -10,7 +10,11 @@ if [[ $(uname) =~ CYGWIN.* ]] ; then
     export EDITOR='vim'
 
     function cdh() { cd "$WINDOWSHOME/$1"; }
-    function cdw() { cd "$WORKSPACE/$1"; }
+    function cdw() {
+        cd "$WORKSPACE";
+        cd $(pwd -P);
+        cd "$1";
+    }
 
     function cl_mysql() {
         case $1 in

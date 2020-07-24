@@ -125,6 +125,7 @@ function en()   { $EDITOR $(find . -type f -name "$@" 2>/dev/null); }
 function ew()   { $EDITOR "$(which "$@")"; }
 function lw()   { ll "$(which "$1")"; }
 function mkcd() { mkdir -p "$1" && cd "$1"; }
+function resolve() { cd $(pwd -P); }
 function psg()  { ps ax | grep -v grep | grep "$1"; }
 
 export XML_CATALOG_FILES=/usr/local/etc/xml/catalog
@@ -139,5 +140,6 @@ function help_wolf() {
     echo 'ew script         -- find and edit the file matching script along $PATH'
     echo 'lw command        -- ls -l the file matching command along $PATH'
     echo 'mkcd path         -- create a directory (and all intervening directories) and cd into it'
+    echo 'resolve           -- make the logical current directory match the physical one'
     echo 'psg pattern       -- grep with ps for the given pattern'
 }
