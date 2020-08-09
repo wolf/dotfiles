@@ -135,6 +135,13 @@ set expandtab
 set nomodeline
 " }}}
 
+" No files {{{
+augroup no_files
+    autocmd!
+    autocmd VimEnter * if expand("%") == "" | NERDTree | endif
+augroup END
+" }}}
+
 " All files {{{
 augroup open_and_close
     autocmd!
