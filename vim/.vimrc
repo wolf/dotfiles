@@ -197,6 +197,7 @@ augroup END
 " Python files {{{
 augroup filetype_python
     autocmd!
+    autocmd! BufRead,BufNewFile *.ipy set filetype=python
     autocmd FileType python BracelessEnable +indent +highlight-cc2 +fold
 augroup END
 " }}}
