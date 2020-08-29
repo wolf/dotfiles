@@ -1,11 +1,13 @@
-set incsearch
-set hlsearch
-set surround
-set scrolloff=3
+source ~/.vimrc
+
+set commentary
 set easymotion
+set exchange
+set highlightedyank
+set surround
+set clipboard+=ideaput
 
-let mapleader="\<space>"
-let localmapleader="\\"
+nnoremap <silent> <C-l> :action EditorToggleShowWhitespaces<cr>
 
-nnoremap <leader>r :set relativenumber!<cr>
-nnoremap <leader>l :set list!<cr>
+nnoremap [m :action MethodUp<cr>
+nnoremap ]m :action MethodDown<cr
