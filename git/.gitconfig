@@ -5,14 +5,12 @@
     d = diff --word-diff
     ec = config --local --edit
     egc = config --global --edit
-    glog = log --all --graph --pretty='format:%d%Cgreen%h%Creset %an - %s'
-    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-    graph = log --all --graph --decorate --abbrev-commit --oneline
     l = log --decorate --abbrev-commit --oneline
     l8 = log --decorate --abbrev-commit --oneline -8
-    log2 = log --pretty=format:'%C(yellow)%h%Creset %C(red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+    lg = log --pretty=format:'%C(yellow)%h%Creset %C(red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
     st = status -s
     n = ! git status -s | wc -l
+    unstage = restore --staged
     aliases = ! git config --list | grep alias
 [apply]
     whitespace = fix
