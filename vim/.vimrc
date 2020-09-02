@@ -218,7 +218,6 @@ let mapleader = "\<space>"
 let maplocalleader = "\\"
 
 inoremap jk <esc>
-inoremap kj <esc>
 
 nnoremap <silent> <C-L> :nohlsearch<cr>
 
