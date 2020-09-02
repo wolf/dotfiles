@@ -27,8 +27,9 @@ Plugin 'haya14busa/incsearch.vim'
 Plugin 'haya14busa/incsearch-easymotion.vim'
 
 Plugin 'tommcdo/vim-exchange'
-Plugin 'preservim/nerdtree'
 Plugin 'majutsushi/tagbar'
+Plugin 'preservim/nerdtree'
+let NERDTreeIgnore=['\.git$[[dir]]']
 
 Plugin 'vim-airline/vim-airline'
 let g:airline#extensions#fzf#enabled = 0
@@ -245,7 +246,7 @@ set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+,eol:$
 nnoremap <leader>b :set background=dark<cr>
 nnoremap <leader>B :set background=light<cr>
 
-nnoremap <leader>n :NERDTreeToggle<cr>
+nnoremap <silent> <leader>n :NERDTreeToggle<cr>
 
 " Force saving files that require root permission
 cnoremap w!! w !sudo tee > /dev/null %
