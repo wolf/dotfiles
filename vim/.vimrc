@@ -218,8 +218,6 @@ iabbrev ework Wolf@learninga-z.com
 let mapleader = "\<space>"
 let maplocalleader = "\\"
 
-inoremap jk <esc>
-
 nnoremap <silent> <C-L> :nohlsearch<cr>
 
 " Edit my ~/.vimrc in a new tab, source it
