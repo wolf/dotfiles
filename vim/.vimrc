@@ -26,6 +26,9 @@ Plugin 'easymotion/vim-easymotion'
 Plugin 'haya14busa/incsearch.vim'
 Plugin 'haya14busa/incsearch-easymotion.vim'
 
+Plugin 'machakann/vim-highlightedyank'
+let g:highlightedyank_highlight_duration = 450
+
 Plugin 'tommcdo/vim-exchange'
 Plugin 'majutsushi/tagbar'
 Plugin 'preservim/nerdtree'
