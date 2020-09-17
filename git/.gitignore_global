@@ -2,4 +2,3 @@
 .DS_Store
 .*.sw?
 __pycache__/
-*.vim
