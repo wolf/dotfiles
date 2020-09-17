@@ -16,24 +16,13 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 Plugin 'tpope/vim-sensible'
-Plugin 'tpope/vim-characterize'
 Plugin 'tpope/vim-fugitive'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'jiangmiao/auto-pairs'
 Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-unimpaired'
-Plugin 'tpope/vim-commentary'
-Plugin 'tpope/vim-repeat'
-Plugin 'tpope/vim-capslock'
-Plugin 'easymotion/vim-easymotion'
-Plugin 'haya14busa/incsearch.vim'
-Plugin 'haya14busa/incsearch-easymotion.vim'
-
-Plugin 'machakann/vim-highlightedyank'
-let g:highlightedyank_highlight_duration = 450
-
 Plugin 'tommcdo/vim-exchange'
-Plugin 'majutsushi/tagbar'
-Plugin 'preservim/nerdtree'
-let NERDTreeIgnore=['\.git$[[dir]]']
+Plugin 'tpope/vim-commentary'
+Plugin 'tpope/vim-capslock'
 
 Plugin 'vim-airline/vim-airline'
 let g:airline#extensions#fzf#enabled = 0
@@ -59,31 +48,9 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ''
 let g:airline#extensions#tabline#left_alt_sep = ''
 
-Plugin 'chikamichi/mediawiki.vim'
-Plugin 'mattn/emmet-vim'
-Plugin 'pangloss/vim-javascript'
-Plugin 'StanAngeloff/php.vim'
-Plugin 'tweekmonster/braceless.vim'
-
-" Plugin 'docker/docker', {'rtp': 'contrib/syntax/vim/', 'name': 'Docker-Syntax'}
-" Plugin 'nginx/nginx', {'rtp': 'contrib/vim/', 'name': 'NGINX-Syntax'}
-" Plugin 'apple/swift', {'rtp': 'utils/vim/', 'name': 'Swift-Syntax'}
-
-Plugin 'jiangmiao/auto-pairs'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'bronson/vim-visual-star-search'
-
-Plugin 'editorconfig/editorconfig-vim'
-let gEditor_Config_exclude_patterns = ['fugitive://.*', 'scp://.*']
-
 set background=light
 set t_Co=256
 Plugin 'NLKNguyen/papercolor-theme'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'vim-scripts/CycleColor'
-
-let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
-Plugin 'tpope/vim-markdown'
 
 call vundle#end()   " required
 filetype plugin indent on
@@ -107,7 +74,6 @@ set number          " display line numbers
 
 " statusline {{{
 set statusline=%<                           " where to break
-set statusline+=%{ObsessionStatus()}        " if Session.vim saving is active
 set statusline+=%f%M%R                      " leafname, modified, read-only
 set statusline+=\ %{fugitive#statusline()}  " if in git repo, git info
 set statusline+=%=                          " switch to the right side
@@ -139,13 +105,6 @@ set shiftwidth=4
 set softtabstop=4
 set expandtab
 set nomodeline
-" }}}
-
-" No files {{{
-augroup no_files
-    autocmd!
-    autocmd VimEnter * if expand("%") == "" | NERDTree | endif
-augroup END
 " }}}
 
 " All files {{{
@@ -183,28 +142,11 @@ augroup filetype_markdown
 augroup END
 " }}}
 
-" Racket Languages files {{{
-augroup filetype_racket_langs
-    autocmd!
-
-    "Set syntax for files with these extensions:
-    autocmd! BufRead,BufNewFile *.pm set filetype=pollen
-    autocmd! BufRead,BufNewFile *.pp set filetype=pollen
-    autocmd! BufRead,BufNewFile *.ptree set filetype=pollen
-    autocmd! BufRead,BufNewFile *.scrbl set filetype=scribble
-    autocmd! BufRead,BufNewFile *.rkt set filetype=racket
-
-    " Suggested editor settings:
-    autocmd FileType pollen setlocal wrap      " Soft wrap (don't affect buffer)
-    autocmd FileType pollen setlocal linebreak " Wrap on word-breaks only
-augroup END
-" }}}
-
 " Python files {{{
 augroup filetype_python
     autocmd!
     autocmd! BufRead,BufNewFile *.ipy set filetype=python
-    autocmd FileType python BracelessEnable +indent +highlight-cc2 +fold
+    autocmd FileType python +indent +highlight-cc2 +fold
 augroup END
 " }}}
 
@@ -245,11 +187,6 @@ nnoremap <leader>r :set relativenumber!<cr>
 nnoremap <leader>l :set list!<cr>
 set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+,eol:$
 
-nnoremap <leader>b :set background=dark<cr>
-nnoremap <leader>B :set background=light<cr>
-
-nnoremap <silent> <leader>n :NERDTreeToggle<cr>
-
 " Force saving files that require root permission
 cnoremap w!! w !sudo tee > /dev/null %
 
@@ -268,9 +205,6 @@ nnoremap g0 0
 " Keep the visual selection after in|out-denting
 vnoremap > >gv
 vnoremap < <gv
-
-" Easy expansion of the active file directory (see Practical Vim)
-cnoremap <expr> %% getcmdtype()==':' ? expand('%:h').'/' : '%%'
 
 " }}}
 
