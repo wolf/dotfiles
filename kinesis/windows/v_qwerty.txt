@@ -15,3 +15,4 @@
 [rp-kpent]>[escape]
 [rwin]>[rctrl]
 [scroll]>[shutdn]
+[caps]>[escape][t&h250][lctrl]
