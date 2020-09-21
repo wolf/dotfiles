@@ -15,6 +15,7 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
+" Basics {{{
 Plugin 'tpope/vim-sensible'
 Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
@@ -23,7 +24,13 @@ Plugin 'tpope/vim-surround'
 Plugin 'tommcdo/vim-exchange'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-capslock'
+" }}}
 
+" Language support {{{
+Plugin 'tweekmonster/braceless.vim'
+" }}}
+
+" Airline {{{
 Plugin 'vim-airline/vim-airline'
 let g:airline#extensions#fzf#enabled = 0
 
@@ -47,6 +54,7 @@ let g:airline_theme='papercolor'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ''
 let g:airline#extensions#tabline#left_alt_sep = ''
+" }}}
 
 set background=light
 set t_Co=256
@@ -146,7 +154,7 @@ augroup END
 augroup filetype_python
     autocmd!
     autocmd! BufRead,BufNewFile *.ipy set filetype=python
-    autocmd FileType python +indent +highlight-cc2 +fold
+    autocmd FileType python BracelessEnable +indent +highlight-cc2 +fold
 augroup END
 " }}}
 
