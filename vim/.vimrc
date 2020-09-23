@@ -26,6 +26,11 @@ Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-capslock'
 " }}}
 
+" Special effects {{{
+Plugin 'machakann/vim-highlightedyank'
+let g:highlightedyank_highlight_duration = 450
+" }}}
+
 " Language support {{{
 Plugin 'tweekmonster/braceless.vim'
 " }}}
@@ -226,6 +231,9 @@ elseif has('mac') || &term !~? '^screen'
 else
     colorscheme peachpuff
 endif
+
+" must come after setting the colorscheme
+highlight HighlightedyankRegion guibg=#f0f000
 
 if !has('nvim') && &term !~ 'builtin_gui'
     set ttymouse=xterm2
