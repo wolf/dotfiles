@@ -70,8 +70,10 @@ let g:python3_host_prog = '/Users/wolf/.pyenv/versions/nvim3/bin/python'
 
 set hidden
 set showcmd
+set showmode
 set hlsearch
 set showmatch
+set autoread
 
 set ignorecase      " searches are case-insensitive
 set smartcase       " ...unless you actually include capital letters in the search string
