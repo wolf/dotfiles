@@ -35,6 +35,25 @@ let g:highlightedyank_highlight_duration = 450
 Plugin 'tweekmonster/braceless.vim'
 " }}}
 
+" Experimental {{{
+if !has('windows')
+    Plugin 'ervandew/supertab'
+    Plugin 'Valloric/YouCompleteMe'
+    Plugin 'SirVer/ultisnips'
+    Plugin 'honza/vim-snippets'
+    let g:SuperTabDefaultCompletionType = '<C-n>'
+    let g:SuperTabCrMapping = 0
+    let g:ycm_extra_conf_globlist = ['~/work/*']
+    let g:ycm_key_list_select_completion = ['<C-j>', '<C-n>', '<Down>']
+    let g:ycm_key_list_previous_completion = ['<C-k>', '<C-p>', '<Up>']
+    let g:UltiSnipsExpandTrigger = '<Tab>'
+    let g:UltiSnipsJumpForwardTrigger = '<Tab>'
+    let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
+endif
+
+Plugin 'easymotion/vim-easymotion'
+" }}}
+
 " Airline {{{
 Plugin 'vim-airline/vim-airline'
 let g:airline#extensions#fzf#enabled = 0
