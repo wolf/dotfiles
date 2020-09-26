@@ -247,12 +247,11 @@ if &term =~? 'cygwin'
     colorscheme peachpuff
 elseif has('mac') || &term !~? '^screen'
     colorscheme PaperColor
+    " must come after setting the colorscheme
+    highlight HighlightedyankRegion guifg=Black guibg=Yellow
 else
     colorscheme peachpuff
 endif
-
-" must come after setting the colorscheme
-highlight HighlightedyankRegion guibg=#f0f000
 
 if !has('nvim') && &term !~ 'builtin_gui'
     set ttymouse=xterm2
