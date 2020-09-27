@@ -36,7 +36,8 @@ Plugin 'tweekmonster/braceless.vim'
 " }}}
 
 " Experimental {{{
-if !has('windows')
+if !has('win32')
+    " These are too hard to keep running on Windows
     Plugin 'ervandew/supertab'
     Plugin 'Valloric/YouCompleteMe'
     Plugin 'SirVer/ultisnips'
