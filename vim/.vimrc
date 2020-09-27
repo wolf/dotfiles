@@ -52,6 +52,7 @@ if !has('win32')
     let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
 endif
 
+Plugin 'tpope/vim-repeat'
 Plugin 'easymotion/vim-easymotion'
 " }}}
 
