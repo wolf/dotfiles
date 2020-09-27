@@ -29,32 +29,10 @@ Plugin 'tpope/vim-capslock'
 " Special effects {{{
 Plugin 'machakann/vim-highlightedyank'
 let g:highlightedyank_highlight_duration = 450
-" }}}
 
-" Language support {{{
-Plugin 'tweekmonster/braceless.vim'
-" }}}
-
-" Experimental {{{
-if !has('win32')
-    " These are too hard to keep running on Windows
-    Plugin 'ervandew/supertab'
-    Plugin 'Valloric/YouCompleteMe'
-    Plugin 'SirVer/ultisnips'
-    Plugin 'honza/vim-snippets'
-    let g:SuperTabDefaultCompletionType = '<C-n>'
-    let g:SuperTabCrMapping = 0
-    let g:ycm_extra_conf_globlist = ['~/work/*']
-    let g:ycm_key_list_select_completion = ['<C-j>', '<C-n>', '<Down>']
-    let g:ycm_key_list_previous_completion = ['<C-k>', '<C-p>', '<Up>']
-    let g:UltiSnipsExpandTrigger = '<Tab>'
-    let g:UltiSnipsJumpForwardTrigger = '<Tab>'
-    let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
-endif
-
-Plugin 'tpope/vim-repeat'
-Plugin 'easymotion/vim-easymotion'
-" }}}
+set background=light
+set t_Co=256
+Plugin 'NLKNguyen/papercolor-theme'
 
 " Airline {{{
 Plugin 'vim-airline/vim-airline'
@@ -81,10 +59,32 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ''
 let g:airline#extensions#tabline#left_alt_sep = ''
 " }}}
+" }}}
 
-set background=light
-set t_Co=256
-Plugin 'NLKNguyen/papercolor-theme'
+" Language support {{{
+Plugin 'tweekmonster/braceless.vim'
+" }}}
+
+" Experimental {{{
+if !has('win32')
+    " These are too hard to keep running on Windows
+    Plugin 'ervandew/supertab'
+    Plugin 'Valloric/YouCompleteMe'
+    Plugin 'SirVer/ultisnips'
+    Plugin 'honza/vim-snippets'
+    let g:SuperTabDefaultCompletionType = '<C-n>'
+    let g:SuperTabCrMapping = 0
+    let g:ycm_extra_conf_globlist = ['~/work/*']
+    let g:ycm_key_list_select_completion = ['<C-j>', '<C-n>', '<Down>']
+    let g:ycm_key_list_previous_completion = ['<C-k>', '<C-p>', '<Up>']
+    let g:UltiSnipsExpandTrigger = '<Tab>'
+    let g:UltiSnipsJumpForwardTrigger = '<Tab>'
+    let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
+endif
+
+Plugin 'tpope/vim-repeat'
+Plugin 'easymotion/vim-easymotion'
+" }}}
 
 call vundle#end()   " required
 filetype plugin indent on
@@ -244,7 +244,7 @@ vnoremap < <gv
 
 " }}}
 
-" terminal and colorscheme properties {{{
+" Terminal and colorscheme properties {{{
 if &term =~? 'cygwin'
     colorscheme peachpuff
 elseif has('mac') || &term !~? '^screen'
