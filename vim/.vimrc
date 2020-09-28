@@ -66,7 +66,7 @@ Plugin 'tweekmonster/braceless.vim'
 " }}}
 
 " Experimental {{{
-if !has('win32')
+if !has('win32') && !has('win32unix')
     " These are too hard to keep running on Windows
     Plugin 'ervandew/supertab'
     Plugin 'Valloric/YouCompleteMe'
@@ -83,6 +83,7 @@ if !has('win32')
 endif
 
 Plugin 'tpope/vim-repeat'
+Plugin 'haya14busa/incsearch.vim'
 Plugin 'easymotion/vim-easymotion'
 " }}}
 
