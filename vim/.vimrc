@@ -92,6 +92,22 @@ call vundle#end()   " required
 filetype plugin indent on
 " }}}
 
+" Terminal and colorscheme properties {{{
+if &term =~? 'cygwin'
+    colorscheme peachpuff
+elseif has('mac') || &term !~? '^screen'
+    colorscheme PaperColor
+    " must come after setting the colorscheme
+    highlight HighlightedyankRegion guifg=Black guibg=Yellow
+else
+    colorscheme peachpuff
+endif
+
+if !has('nvim') && &term !~ 'builtin_gui'
+    set ttymouse=xterm2
+endif
+" }}}
+
 " Settings {{{
 let g:python_host_prog = '/Users/wolf/.pyenv/versions/nvim2/bin/python'
 let g:python3_host_prog = '/Users/wolf/.pyenv/versions/nvim3/bin/python'
@@ -244,22 +260,6 @@ nnoremap g0 0
 vnoremap > >gv
 vnoremap < <gv
 
-" }}}
-
-" Terminal and colorscheme properties {{{
-if &term =~? 'cygwin'
-    colorscheme peachpuff
-elseif has('mac') || &term !~? '^screen'
-    colorscheme PaperColor
-    " must come after setting the colorscheme
-    highlight HighlightedyankRegion guifg=Black guibg=Yellow
-else
-    colorscheme peachpuff
-endif
-
-if !has('nvim') && &term !~ 'builtin_gui'
-    set ttymouse=xterm2
-endif
 " }}}
 
 if has('persistent_undo')
