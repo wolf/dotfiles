@@ -63,6 +63,7 @@ let g:airline#extensions#tabline#left_alt_sep = ''
 
 " Language support {{{
 Plugin 'tweekmonster/braceless.vim'
+Plugin 'chikamichi/mediawiki.vim'
 " }}}
 
 " Experimental {{{
