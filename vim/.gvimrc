@@ -1,4 +1,5 @@
-set guifont=JetBrains_Mono:h17:cANSI:qDRAFT
+set guifont=JetBrainsMono-Regular:h20
+set macligatures
 set columns=148
 set lines=40
 
