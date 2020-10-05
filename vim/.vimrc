@@ -95,10 +95,21 @@ filetype plugin indent on
 " }}}
 
 " Terminal and colorscheme properties {{{
+" See https://stackoverflow.com/a/44102038/908269
+function! GetColorSchemes()
+    return uniq(sort(map(
+    \   globpath(&runtimepath, "colors/*.vim", 0, 1),
+    \   'fnamemodify(v:val, ":t:r")'
+    \)))
+endfunction
+
 if &term =~? 'cygwin'
     colorscheme peachpuff
 elseif has('mac') || &term !~? '^screen'
-    colorscheme PaperColor
+    let s:schemes = GetColorSchemes()
+    if index(s:schemes, 'PaperColor') >= 0
+        colorscheme PaperColor
+    endif
     " must come after setting the colorscheme
     highlight HighlightedyankRegion guifg=Black guibg=Yellow
 else
