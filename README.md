@@ -16,7 +16,7 @@ stow --target=${HOME} -S bash git readline tmux vim
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 ```
 
-Then launch `vim` ignoring the error (if I haven't gotten around to fixing it yet), and type `:PluginInstall`.  There's a good progress indicator but expect the install to take several minutes.
+Then launch `vim` and type `:PluginInstall`.  There's a good progress indicator but expect the install to take a couple of minutes.
 
 `emergency_vim/vimrc` is a file you can source while loading `vim` on a machine where you don't have all your special configuration files.  E.g., `vim -u vimrc some-file.js`.
 
@@ -30,6 +30,6 @@ git clone https://github.com/VundleVim/Vundle.vim.git ~/.config/nvim/bundle/Vund
 
 ### local-only branch
 
-This repo comprises the things that are the same between my various machines, but some things are different per machine or secret and should not be uploaded.  Therefore, when I clone the repo, I immediately make a branch named `local-only` that contains things like my work email address in the global `.gitconfig`, or a GitHub token to make `brew` work better, or platform specific paths that I haven't factored out yet, etc.  With no remote, an accidental `git push` just fails when `local-only` is checked out; so no secrets get published.  As changes come down to `master`, you choose which you want in `local-only` with `cherry-pick`.  I highly recommend this technique.
+This repo comprises the things that are the same between my various machines, but some things are different per machine or secret and should not be uploaded.  Therefore, when I clone the repo, I immediately make a branch named `local-only` that contains things like my work email address in the global `.gitconfig`, or a GitHub token to make `brew` work better, or platform specific paths that I haven't factored out yet, etc.  With no remote, an accidental `git push` just fails when `local-only` is checked out; so no secrets get published.  As changes come down to `main`, you choose which you want in `local-only` with `cherry-pick`.  I highly recommend this technique.
 
 By the way: don't upload your `.ssh` directory or any of the private keys it contains.
