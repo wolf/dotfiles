@@ -172,6 +172,8 @@ set shiftwidth=4
 set softtabstop=4
 set expandtab
 set nomodeline
+
+set pyxversion=3
 " }}}
 
 " All files {{{
