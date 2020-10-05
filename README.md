@@ -20,14 +20,6 @@ Then launch `vim` and type `:PluginInstall`.  There's a good progress indicator 
 
 `emergency_vim/vimrc` is a file you can source while loading `vim` on a machine where you don't have all your special configuration files.  E.g., `vim -u vimrc some-file.js`.
 
-### NeoVim
-
-NeoVim (`nvim`) is installed similarly to `vim`.  The exact command to get Vundle is
-
-```
-git clone https://github.com/VundleVim/Vundle.vim.git ~/.config/nvim/bundle/Vundle.vim
-```
-
 ### local-only branch
 
 This repo comprises the things that are the same between my various machines, but some things are different per machine or secret and should not be uploaded.  Therefore, when I clone the repo, I immediately make a branch named `local-only` that contains things like my work email address in the global `.gitconfig`, or a GitHub token to make `brew` work better, or platform specific paths that I haven't factored out yet, etc.  With no remote, an accidental `git push` just fails when `local-only` is checked out; so no secrets get published.  As changes come down to `main`, you choose which you want in `local-only` with `cherry-pick`.  I highly recommend this technique.
