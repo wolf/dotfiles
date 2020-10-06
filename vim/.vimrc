@@ -88,6 +88,7 @@ endif
 Plugin 'tpope/vim-repeat'
 Plugin 'haya14busa/incsearch.vim'
 Plugin 'easymotion/vim-easymotion'
+Plugin 'tpope/vim-endwise'
 " }}}
 
 call vundle#end()   " required
