@@ -105,9 +105,7 @@ function! GetColorSchemes()
     \)))
 endfunction
 
-if &term =~? 'cygwin'
-    colorscheme peachpuff
-elseif has('mac') || &term !~? '^screen'
+if has('mac') || &term !~? '^screen'
     let s:schemes = GetColorSchemes()
     if index(s:schemes, 'PaperColor') >= 0
         colorscheme PaperColor
@@ -126,6 +124,8 @@ endif
 " Settings {{{
 let g:python_host_prog = '/Users/wolf/.pyenv/versions/nvim2/bin/python'
 let g:python3_host_prog = '/Users/wolf/.pyenv/versions/nvim3/bin/python'
+
+set pyxversion=3
 
 set hidden
 set showcmd
@@ -174,8 +174,6 @@ set shiftwidth=4
 set softtabstop=4
 set expandtab
 set nomodeline
-
-set pyxversion=3
 " }}}
 
 " All files {{{
