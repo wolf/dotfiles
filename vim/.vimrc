@@ -90,6 +90,8 @@ if !has('win32') && !has('win32unix')
 endif
 
 Plugin 'haya14busa/incsearch-easymotion.vim'
+Plugin 'godlygeek/tabular'
+Plugin 'plasticboy/vim-markdown'
 " }}}
 
 call vundle#end()   " required
