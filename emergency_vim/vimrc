@@ -1,3 +1,5 @@
+set nocompatible
+
 filetype plugin indent on
 syntax enable
 
@@ -13,7 +15,6 @@ set laststatus=2
 set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+,eol:$
 set modeline
 set mouse=a
-set nocompatible
 set nrformats-=octal
 set number
 set ruler
