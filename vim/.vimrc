@@ -24,6 +24,9 @@ Plugin 'tpope/vim-surround'
 Plugin 'tommcdo/vim-exchange'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-capslock'
+Plugin 'tpope/vim-repeat'
+Plugin 'haya14busa/incsearch.vim'
+Plugin 'easymotion/vim-easymotion'
 " }}}
 
 " Special effects {{{
@@ -62,6 +65,7 @@ let g:airline#extensions#tabline#left_alt_sep = ''
 " }}}
 
 " Language support {{{
+Plugin 'tpope/vim-endwise'
 Plugin 'tweekmonster/braceless.vim'
 let g:braceless_line_continuation = 0
 
@@ -85,10 +89,7 @@ if !has('win32') && !has('win32unix')
     let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
 endif
 
-Plugin 'tpope/vim-repeat'
-Plugin 'haya14busa/incsearch.vim'
-Plugin 'easymotion/vim-easymotion'
-Plugin 'tpope/vim-endwise'
+Plugin 'haya14busa/incsearch-easymotion.vim'
 " }}}
 
 call vundle#end()   " required
