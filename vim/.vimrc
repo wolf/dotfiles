@@ -242,13 +242,13 @@ endif
 inoremap <F2> <C-r>=strftime('%c')<cr>
 
 " Highlight whitespace errors, clear highlighting
-nnoremap <leader>w :2match Error /\v\s+$/<cr>
-nnoremap <leader>W :2match none<cr>
+nnoremap <silent> <leader>w :2match Error /\v\s+$/<cr>
+nnoremap <silent> <leader>W :2match none<cr>
 
 " Toggle relative line numbers for easier motion math
-nnoremap <leader>r :set relativenumber!<cr>
+nnoremap <silent> <leader>r :set relativenumber!<cr>
 " Toggle list view
-nnoremap <leader>l :set list!<cr>
+nnoremap <silent> <leader>l :set list!<cr>
 set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+,eol:$
 
 " Force saving files that require root permission
