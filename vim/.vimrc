@@ -206,13 +206,6 @@ augroup filetype_help
 augroup END
 " }}}
 
-" Markdown files {{{
-augroup filetype_markdown
-    autocmd!
-    autocmd BufNewFile,BufReadPost *.md set filetype=markdown
-augroup END
-" }}}
-
 " Python files {{{
 augroup filetype_python
     autocmd!
