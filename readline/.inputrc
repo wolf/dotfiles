@@ -3,3 +3,7 @@ set editing-mode vi
 set blink-matching-paren on
 set colored-stats on
 set enable-bracketed-paste off
+
+set show-mode-in-prompt on
+set vi-ins-mode-string "+"
+set vi-cmd-mode-string ":"
