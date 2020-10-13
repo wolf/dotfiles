@@ -27,6 +27,29 @@ Plugin 'tpope/vim-capslock'
 Plugin 'tpope/vim-repeat'
 Plugin 'haya14busa/incsearch.vim'
 Plugin 'easymotion/vim-easymotion'
+Plugin 'haya14busa/incsearch-easymotion.vim'
+" }}}
+
+" Advanced {{{
+if !has('win32') && !has('win32unix')
+    " These are too hard to keep running on Windows
+    Plugin 'ervandew/supertab'
+    Plugin 'Valloric/YouCompleteMe'
+    Plugin 'SirVer/ultisnips'
+    Plugin 'honza/vim-snippets'
+    let g:SuperTabDefaultCompletionType = '<C-n>'
+    let g:SuperTabCrMapping = 0
+    let g:ycm_extra_conf_globlist = ['~/work/*']
+    let g:ycm_key_list_select_completion = ['<C-j>', '<C-n>', '<Down>']
+    let g:ycm_key_list_previous_completion = ['<C-k>', '<C-p>', '<Up>']
+    let g:UltiSnipsExpandTrigger = '<Tab>'
+    let g:UltiSnipsJumpForwardTrigger = '<Tab>'
+    let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
+endif
+" }}}
+
+" Experimental {{{
+" ...nothing at the moment...
 " }}}
 
 " Special effects {{{
@@ -70,26 +93,6 @@ Plugin 'tweekmonster/braceless.vim'
 let g:braceless_line_continuation = 0
 
 Plugin 'chikamichi/mediawiki.vim'
-" }}}
-
-" Experimental {{{
-if !has('win32') && !has('win32unix')
-    " These are too hard to keep running on Windows
-    Plugin 'ervandew/supertab'
-    Plugin 'Valloric/YouCompleteMe'
-    Plugin 'SirVer/ultisnips'
-    Plugin 'honza/vim-snippets'
-    let g:SuperTabDefaultCompletionType = '<C-n>'
-    let g:SuperTabCrMapping = 0
-    let g:ycm_extra_conf_globlist = ['~/work/*']
-    let g:ycm_key_list_select_completion = ['<C-j>', '<C-n>', '<Down>']
-    let g:ycm_key_list_previous_completion = ['<C-k>', '<C-p>', '<Up>']
-    let g:UltiSnipsExpandTrigger = '<Tab>'
-    let g:UltiSnipsJumpForwardTrigger = '<Tab>'
-    let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
-endif
-
-Plugin 'haya14busa/incsearch-easymotion.vim'
 " }}}
 
 call vundle#end()   " required
