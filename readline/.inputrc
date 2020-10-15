@@ -4,6 +4,10 @@ set blink-matching-paren on
 set colored-stats on
 set enable-bracketed-paste off
 
-set show-mode-in-prompt on
-set vi-ins-mode-string "+"
-set vi-cmd-mode-string ":"
+$if Bash
+    set bell-style visible
+
+    set show-mode-in-prompt on
+    set vi-ins-mode-string "+"
+    set vi-cmd-mode-string ":"
+$endif
