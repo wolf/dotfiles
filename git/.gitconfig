@@ -38,6 +38,7 @@
     editor = nvim
     legacyheaders = false
     excludesfile = ~/.gitignore_global
+    attributesfile = ~/.gitattributes_global
     whitespace = trailing-space,space-before-tab,cr-at-eol
 [diff]
     renames = copy
