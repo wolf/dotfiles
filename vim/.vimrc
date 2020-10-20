@@ -179,7 +179,6 @@ set cursorline
 set shiftwidth=4
 set softtabstop=4
 set expandtab
-set nomodeline
 " }}}
 
 " All files {{{
@@ -273,7 +272,27 @@ vnoremap < <gv
 
 " }}}
 
+" Modelines {{{
+set modeline
+
+" Append modeline after last line in buffer.
+" Use substitute() instead of printf() to handle '%%s' modeline in LaTeX
+" files.  See: https://vim.fandom.com/wiki/Modeline_magic
+function! AppendModeline()
+    let l:modeline = printf(" vim: set ts=%d sw=%d tw=%d %set %sai :",
+        \ &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no', &autoindent ? '' : 'no')
+    let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
+    call append(line("$"), "")
+    call append(line("$"), l:modeline)
+endfunction
+
+nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
+
+" }}}
+
 if has('persistent_undo')
     set undodir=~/.vim/undo/
     set undofile
 endif
+
+" vim: set ts=4 sw=4 tw=78 et ai :
