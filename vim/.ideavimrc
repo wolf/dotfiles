@@ -1,10 +1,5 @@
 source ~/.vimrc
 
-set commentary
-set easymotion
-set exchange
-set highlightedyank
-set surround
 set clipboard+=ideaput
 
 nnoremap <silent> <C-l> :action EditorToggleShowWhitespaces<cr>
