@@ -188,6 +188,9 @@ augroup open_and_close
     autocmd InsertLeave,WinEnter * set cursorline
     autocmd InsertEnter,WinLeave * set nocursorline
 
+    " Use the current background color
+    autocmd VimEnter * set t_ut=
+
     " When opening a buffer, restore the exact cursor position if it still
     " exists
     autocmd BufReadPost *
