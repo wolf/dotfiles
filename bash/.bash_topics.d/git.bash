@@ -8,18 +8,18 @@ export GIT_PS1_DESCRIBE_STYLE="branch"
 function cdtop() {
     # usage: cdtop [<relative path>]
     # change directory to the top-level of a git working-copy, or to a path relative to that
-    git_dir=$(git rev-parse --git-dir)
-    if [ -n "$git_dir" ]; then
-        cd "$git_dir/../$1"
+    GIT_DIR=$(git rev-parse --git-dir)
+    if [ -n "$GIT_DIR" ]; then
+        cd "$GIT_DIR/../$1"
     fi
 }
 
 function pushdtop() {
     # usage: pushdtop [<relative path>]
     # pushd combined with cdtop
-    git_dir=$(git rev-parse --git-dir)
-    if [ -n "$git_dir" ]; then
-        pushd "$git_dir/../$1"
+    GIT_DIR=$(git rev-parse --git-dir)
+    if [ -n "$GIT_DIR" ]; then
+        pushd "$GIT_DIR/../$1"
     fi
 }
 
@@ -28,16 +28,16 @@ function since_commit() {
     # usage: since_commit HEAD~3
     # list all the files modified by all the commits since the given commit,
     #   including currently unstaged changes
-    commit=${1:-HEAD}
-    git diff $commit --name-only --relative
+    COMMIT=${1:-HEAD}
+    git diff $COMMIT --name-only --relative
 }
 
 function in_commit() {
     # usage: in_commit 12345
     # usage: in_commit HEAD~3
     # list all the files modified as part of the given commit
-    commit=${1:-HEAD}
-    git diff $commit ${commit}\^ --name-only --relative
+    COMMIT=${1:-HEAD}
+    git diff $COMMIT ${COMMIT}\^ --name-only --relative
 }
 
 function dirty() {
