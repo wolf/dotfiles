@@ -50,7 +50,6 @@ endif
 
 " Experimental {{{
 Plugin 'tpope/vim-eunuch'
-Plugin 'christoomey/vim-system-copy'
 " }}}
 
 " Special effects {{{
