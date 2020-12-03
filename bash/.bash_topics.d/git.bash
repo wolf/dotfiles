@@ -48,3 +48,24 @@ function dirty() {
 function edit_since()   { $EDITOR $(since_commit $1); }
 function edit_commit()  { $EDITOR $(in_commit $1); }
 function edit_dirty()   { $EDITOR $(dirty); }
+
+function start_rebase_onto_origin_main() {
+    STASH_KEY=$(python -c 'import uuid; print(str(uuid.uuid4()))')
+    MY_BRANCH="$(git branch --show-current)"
+    if [[ "$MY_BRANCH" != main ]] ; then
+        git stash push --include-untracked -m "$STASH_KEY"
+        git switch main
+    fi
+    git pull --rebase=merges
+    if [[ "$MY_BRANCH" != main ]] ; then
+        if [[ "$MY_BRANCH" != local-only ]] ; then
+            git rebase main $MY_BRANCH
+        else
+            git switch $MY_BRANCH
+        fi
+        STASH_TOP=$(git stash list -1 | awk '{ print $NF }')
+        if [[ $STASH_TOP == $STASH_KEY ]] && [[  "$MY_BRANCH" == "$(git branch --show-current)" ]] ; then
+            git stash pop
+        fi
+    fi
+}
