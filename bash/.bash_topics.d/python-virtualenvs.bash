@@ -12,7 +12,7 @@ function activate_found_venv() {
     fi
 }
 
-function cdvenv() {
+function cdv() {
     cd "$1"
     activate_found_venv
 }
