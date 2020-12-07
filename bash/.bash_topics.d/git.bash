@@ -8,18 +8,18 @@ export GIT_PS1_DESCRIBE_STYLE="branch"
 function cdtop() {
     # usage: cdtop [<relative path>]
     # change directory to the top-level of a git working-copy, or to a path relative to that
-    GIT_DIR=$(git rev-parse --git-dir)
-    if [ -n "$GIT_DIR" ]; then
-        cd "$GIT_DIR/../$1"
+    TOP_LEVEL="$(git rev-parse --show-toplevel)"
+    if [ -n "${TOP_LEVEL}" ] ; then
+        cd "${TOP_LEVEL}/$1"
     fi
 }
 
 function pushdtop() {
     # usage: pushdtop [<relative path>]
     # pushd combined with cdtop
-    GIT_DIR=$(git rev-parse --git-dir)
-    if [ -n "$GIT_DIR" ]; then
-        pushd "$GIT_DIR/../$1"
+    TOP_LEVEL="$(git rev-parse --show-toplevel)"
+    if [ -n "${TOP_LEVEL}" ] ; then
+        pushd "${TOP_LEVEL}/$1"
     fi
 }
 
