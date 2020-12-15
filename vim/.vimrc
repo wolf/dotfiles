@@ -249,6 +249,13 @@ augroup filetype_edit_commitmessage
 augroup END
 " }}}
 
+" Files on Dropbox {{{
+augroup filetype_on_dropbox
+    autocmd!
+    autocmd BufEnter ~/Dropbox/* :set noswapfile
+augroup END
+" }}}
+
 " Mappings and abbreviations {{{
 iabbrev ehome Wolf@zv.cx
 iabbrev ework Wolf@learninga-z.com
