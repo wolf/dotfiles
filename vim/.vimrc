@@ -28,6 +28,7 @@ Plugin 'tpope/vim-repeat'
 Plugin 'haya14busa/incsearch.vim'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'haya14busa/incsearch-easymotion.vim'
+Plugin 'tpope/vim-eunuch'
 " }}}
 
 " Advanced {{{
@@ -49,7 +50,7 @@ endif
 " }}}
 
 " Experimental {{{
-Plugin 'tpope/vim-eunuch'
+" ...nothing at the moment...
 " }}}
 
 " Special effects {{{
