@@ -1,5 +1,8 @@
 source ~/.vimrc
 
+let mapleader = "\<space>"
+set easymotion
+
 set clipboard+=ideaput
 
 nnoremap <silent> <C-l> :action EditorToggleShowWhitespaces<cr>
