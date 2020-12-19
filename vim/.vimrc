@@ -50,7 +50,7 @@ endif
 " }}}
 
 " Experimental {{{
-" ...nothing at the moment...
+Plugin 'justinmk/vim-sneak'
 " }}}
 
 " Special effects {{{
