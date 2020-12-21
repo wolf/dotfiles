@@ -170,12 +170,11 @@ set notimeout ttimeout ttimeoutlen=200
 "set pastetoggle=<F11>
 set sessionoptions+=resize,unix,slash
 
-" Comment this out while we try the plugin vim-system-copy
-" if has('nvim')
-"     set clipboard=unnamedplus
-" else
-"     set clipboard=autoselect
-" endif
+if has('nvim')
+    set clipboard=unnamedplus
+else
+    set clipboard=unnamed,autoselect
+endif
 
 set guioptions+=a
 set cursorline
