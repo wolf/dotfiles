@@ -94,9 +94,6 @@ Plugin 'tweekmonster/braceless.vim'
 let g:braceless_line_continuation = 0
 
 Plugin 'chikamichi/mediawiki.vim'
-Plugin 'wlangstroth/vim-racket'
-Plugin 'scribble.vim'
-Plugin 'otherjoel/vim-pollen'
 " }}}
 
 call vundle#end()   " required
@@ -212,24 +209,6 @@ augroup END
 augroup filetype_help
     autocmd!
     autocmd FileType help setlocal scrolloff=0 nonumber
-augroup END
-" }}}
-
-" Racket Languages files {{{
-augroup filetype_racket_langs
-    autocmd!
-
-    "Set syntax for files with these extensions:
-    autocmd! BufRead,BufNewFile *.pm set filetype=pollen
-    autocmd! BufRead,BufNewFile *.pp set filetype=pollen
-    autocmd! BufRead,BufNewFile *.ptree set filetype=pollen
-    autocmd! BufRead,BufNewFile *.scrbl set filetype=scribble
-    autocmd! BufRead,BufNewFile *.ss set filetype=racket
-    autocmd! BufRead,BufNewFile *.rkt set filetype=racket
-
-    " Suggested editor settings:
-    autocmd FileType pollen setlocal wrap      " Soft wrap (don't affect buffer)
-    autocmd FileType pollen setlocal linebreak " Wrap on word-breaks only
 augroup END
 " }}}
 
