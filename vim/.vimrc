@@ -92,8 +92,6 @@ let g:airline#extensions#tabline#left_alt_sep = ''
 Plugin 'tpope/vim-endwise'
 Plugin 'tweekmonster/braceless.vim'
 let g:braceless_line_continuation = 0
-
-Plugin 'chikamichi/mediawiki.vim'
 " }}}
 
 call vundle#end()   " required
