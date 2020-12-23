@@ -259,9 +259,6 @@ nnoremap <silent> <leader>r :set relativenumber!<cr>
 nnoremap <silent> <leader>l :set list!<cr>
 set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+,eol:$
 
-" Force saving files that require root permission
-cnoremap w!! w !sudo tee > /dev/null %
-
 " Act naturally when lines wrap
 nnoremap j gj
 nnoremap k gk
