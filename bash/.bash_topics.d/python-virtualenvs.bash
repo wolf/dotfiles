@@ -1,3 +1,18 @@
+function venv() {
+    if [[ ! -z "$VIRTUAL_ENV" ]] ; then
+        deactivate
+    fi
+    if [[ -z "$1" ]] ; then
+        VENV_DIR="$(basename "$(pwd)")".venv
+    else
+        mkdir -p "$(dirname "$1")"
+        VENV_DIR="$1"
+    fi
+    python -m venv "$VENV_DIR"
+    source "$VENV_DIR/bin/activate"
+    python -m pip install --upgrade pip setuptools wheel
+}
+
 function activate_found_venv() {
     if [[ ! -z "$VIRTUAL_ENV" ]] ; then
         deactivate
