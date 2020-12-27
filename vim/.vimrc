@@ -295,9 +295,13 @@ nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 
 " }}}
 
+" Undo {{{
 if has('persistent_undo')
     set undodir=~/.vim/undo/
     set undofile
 endif
+
+" }}}
+
 
 " vim: set ts=4 sw=4 tw=78 et ai :
