@@ -50,6 +50,7 @@ endif
 " }}}
 
 " Experimental {{{
+Plugin 'python-mode/python-mode'
 Plugin 'justinmk/vim-sneak'
 " }}}
 
