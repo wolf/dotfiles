@@ -64,7 +64,7 @@ function start_rebase_onto_origin_main() {
             git switch $MY_BRANCH
         fi
         STASH_TOP=$(git stash list -1 | awk '{ print $NF }')
-        if [[ $STASH_TOP == $STASH_KEY ]] && [[  "$MY_BRANCH" == "$(git branch --show-current)" ]] ; then
+        if [[ $STASH_TOP == $STASH_KEY ]] && [[ "$MY_BRANCH" == "$(git branch --show-current)" ]] ; then
             git stash pop
         fi
     fi
