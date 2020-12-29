@@ -1,4 +1,4 @@
-function venv() {
+function create_venv() {
     if [[ ! -z "$VIRTUAL_ENV" ]] ; then
         deactivate
     fi
