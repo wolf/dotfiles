@@ -60,6 +60,16 @@ let g:pymode_lint_options_pep8 = {'max_line_length': g:pymode_options_max_line_l
 let g:pymode_options_colorcolumn = 1
 
 Plugin 'justinmk/vim-sneak'
+Plugin 'preservim/nerdtree'
+Plugin 'leafgarland/typescript-vim'
+Plugin 'mattn/emmet-vim'
+
+Plugin 'junegunn/fzf'
+
+Plugin 'editorconfig/editorconfig-vim'
+let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+
+Plugin 'tpope/vim-unimpaired'
 " }}}
 
 " Special effects {{{
@@ -186,6 +196,23 @@ set cursorline
 set shiftwidth=4
 set softtabstop=4
 set expandtab
+" }}}
+
+" FZF behavior {{{
+nnoremap <silent> <leader>o :NERDTreeClose \| FZF<cr>
+" }}}
+
+" NERDTree behavior {{{
+augroup NERDTree_behavior
+    autocmd!
+    autocmd StdinReadPre * let s:std_in=1
+    autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
+augroup END
+
+let NERDTreeIgnore = ['\.git[[dir]]', 'node_modules[[dir]]']
+
+nnoremap <silent> <Leader>t :NERDTreeToggle<CR>
+nnoremap <silent> <Leader>n :NERDTreeFocus<CR>
 " }}}
 
 " All files {{{
