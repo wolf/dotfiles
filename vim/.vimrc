@@ -3,6 +3,10 @@ set fileencoding=utf-8
 
 set nocompatible    " this is Vim, not vi, so act like it
 
+" Set <leader> before anything references it
+let mapleader = "\<space>"
+let maplocalleader = "\\"
+
 " Plugins {{{
 filetype off        " required by Vundle
 
@@ -240,9 +244,6 @@ augroup END
 " Mappings and abbreviations {{{
 iabbrev ehome Wolf@zv.cx
 iabbrev ework Wolf@learninga-z.com
-
-let mapleader = "\<space>"
-let maplocalleader = "\\"
 
 nnoremap <silent> <C-L> :nohlsearch<cr>
 
