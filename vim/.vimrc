@@ -183,6 +183,7 @@ set mouse=a
 set notimeout ttimeout ttimeoutlen=200
 "set pastetoggle=<F11>
 set sessionoptions+=resize,unix,slash
+set shortmess-=S
 
 if has('nvim')
     set clipboard=unnamedplus
