@@ -1,3 +1,11 @@
+function present_in_path() {
+    echo $PATH | tr ':' '\n' | grep -e "^$1$" >/dev/null;
+}
+
+if [ !present_in_path /usr/local/bin ] ; then
+    export PATH=/usr/local/bin:${PATH}
+fi
+
 [[ "$-" != *i* ]] && return
 
 if [ -f /etc/bashrc ] ; then
@@ -16,12 +24,9 @@ alias ls="command ls ${colorflag}"
 alias ll="ls -Falh ${colorflag}"
 alias tree="tree -alC -I '.git|__pycache__'"
 alias grep='grep --color'
+alias h20='history 20'
 
 export EDITOR='vim'
-
-function present_in_path() {
-    echo $PATH | tr ':' '\n' | grep -e "^$1$" >/dev/null;
-}
 
 if [[ -d ~/.bash_topics.d ]]; then
     for topic in ~/.bash_topics.d/*; do
@@ -50,7 +55,7 @@ else
     fi
 fi
 
-if [ $(uname) = 'Darwin' ] ; then # if I'm on MacOS X...
+if [ $(uname) = 'Darwin' ] ; then # if I'm on macOS...
 
     if [ -z "${SSH_CONNECTION}" ] ; then
         alias fixopenwith='/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user'
@@ -79,13 +84,13 @@ function refresh_ssh() {
 }
 
 if command -v __git_ps1 >/dev/null; then
-    export PS1='\n\u@\h:\[\e[35m\]\w\[\e[0m\]$(virtualenv_info) $(__git_ps1 "\[\e[32m\][$(time_since_last_commit) %s $(tip)]\[\e[0m\]")'$'\n\! $ '
+    export PS1='\n\u@\h:\[\e[35m\]\w\[\e[0m\]$(virtualenv_info) $(__git_ps1 "\[\e[32m\][$(time_since_last_commit) %s $(tip)]\[\e[0m\]")'$'\n$ '
 else
-    export PS1='\n\u@\h:\[\e[35m\]\w\[\e[0m\]$(virtualenv_info)'$'\n\! $ '
+    export PS1='\n\u@\h:\[\e[35m\]\w\[\e[0m\]$(virtualenv_info)'$'\n$ '
 fi
 
 export HISTSIZE=10000
-export HISTIGNORE="&:ls:[bf]g:exit:history:..:pwd:ll:did"
+export HISTIGNORE="&:ls:[bf]g:exit:history:h20:..:pwd:ll:did"
 shopt -s histappend cdspell autocd
 
 function did() { history | grep -v 'did' | grep "$1"; }
