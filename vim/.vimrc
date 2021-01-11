@@ -61,6 +61,7 @@ let g:pymode_options_colorcolumn = 1
 
 Plugin 'justinmk/vim-sneak'
 Plugin 'preservim/nerdtree'
+Plugin 'pangloss/vim-javascript'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'mattn/emmet-vim'
 
