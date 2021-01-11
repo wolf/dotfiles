@@ -1,10 +1,4 @@
-function present_in_path() {
-    echo $PATH | tr ':' '\n' | grep -e "^$1$" >/dev/null;
-}
-
-if [ !present_in_path /usr/local/bin ] ; then
-    export PATH=/usr/local/bin:${PATH}
-fi
+export PATH=/usr/local/bin:${PATH}
 
 [[ "$-" != *i* ]] && return
 
@@ -27,6 +21,10 @@ alias grep='grep --color'
 alias h20='history 20'
 
 export EDITOR='vim'
+
+function present_in_path() {
+    echo $PATH | tr ':' '\n' | grep -e "^$1$" >/dev/null;
+}
 
 if [[ -d ~/.bash_topics.d ]]; then
     for topic in ~/.bash_topics.d/*; do
