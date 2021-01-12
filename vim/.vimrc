@@ -29,13 +29,22 @@ Plugin 'tommcdo/vim-exchange'
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-capslock'
 Plugin 'tpope/vim-repeat'
-Plugin 'haya14busa/incsearch.vim'
-Plugin 'easymotion/vim-easymotion'
-Plugin 'haya14busa/incsearch-easymotion.vim'
 Plugin 'tpope/vim-eunuch'
 " }}}
 
-" Advanced {{{
+" Navigation {{{
+" Within a file...
+Plugin 'haya14busa/incsearch.vim'
+Plugin 'easymotion/vim-easymotion'
+Plugin 'haya14busa/incsearch-easymotion.vim'
+Plugin 'justinmk/vim-sneak'
+
+" Between files...
+Plugin 'junegunn/fzf'
+Plugin 'preservim/nerdtree'
+" }}}
+
+" Autocomplete and friends {{{
 if !has('win32') && !has('win32unix')
     " These are too hard to keep running on Windows
     Plugin 'ervandew/supertab'
@@ -51,6 +60,8 @@ if !has('win32') && !has('win32unix')
     let g:UltiSnipsJumpForwardTrigger = '<Tab>'
     let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
 endif
+
+Plugin 'mattn/emmet-vim'
 " }}}
 
 " Experimental {{{
@@ -59,13 +70,8 @@ let g:pymode_options_max_line_length = 120
 let g:pymode_lint_options_pep8 = {'max_line_length': g:pymode_options_max_line_length}
 let g:pymode_options_colorcolumn = 1
 
-Plugin 'justinmk/vim-sneak'
-Plugin 'preservim/nerdtree'
 Plugin 'pangloss/vim-javascript'
 Plugin 'leafgarland/typescript-vim'
-Plugin 'mattn/emmet-vim'
-
-Plugin 'junegunn/fzf'
 
 Plugin 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
@@ -73,7 +79,7 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 Plugin 'tpope/vim-unimpaired'
 " }}}
 
-" Special effects {{{
+" Visual effects {{{
 Plugin 'machakann/vim-highlightedyank'
 let g:highlightedyank_highlight_duration = 450
 
