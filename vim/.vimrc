@@ -3,8 +3,8 @@ set fileencoding=utf-8
 
 set nocompatible    " this is Vim, not vi, so act like it
 
-" Set <leader> before anything references it
-let mapleader = "\<space>"
+" Set <Leader> before anything references it
+let mapleader = "\<Space>"
 let maplocalleader = "\\"
 
 " Plugins {{{
@@ -51,11 +51,11 @@ if !has('win32') && !has('win32unix')
     Plugin 'Valloric/YouCompleteMe'
     Plugin 'SirVer/ultisnips'
     Plugin 'honza/vim-snippets'
-    let g:SuperTabDefaultCompletionType = '<C-n>'
+    let g:SuperTabDefaultCompletionType = '<C-N>'
     let g:SuperTabCrMapping = 0
     let g:ycm_extra_conf_globlist = ['~/work/*']
-    let g:ycm_key_list_select_completion = ['<C-j>', '<C-n>', '<Down>']
-    let g:ycm_key_list_previous_completion = ['<C-k>', '<C-p>', '<Up>']
+    let g:ycm_key_list_select_completion = ['<C-J>', '<C-N>', '<Down>']
+    let g:ycm_key_list_previous_completion = ['<C-K>', '<C-P>', '<Up>']
     let g:UltiSnipsExpandTrigger = '<Tab>'
     let g:UltiSnipsJumpForwardTrigger = '<Tab>'
     let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
@@ -207,7 +207,7 @@ set expandtab
 " }}}
 
 " FZF behavior {{{
-nnoremap <silent> <leader>o :NERDTreeClose \| FZF<cr>
+nnoremap <silent> <Leader>o :NERDTreeClose \| FZF<CR>
 " }}}
 
 " NERDTree behavior {{{
@@ -280,24 +280,24 @@ augroup END
 iabbrev ehome Wolf@zv.cx
 iabbrev ework Wolf@learninga-z.com
 
-nnoremap <silent> <C-L> :nohlsearch<cr>
+nnoremap <silent> <C-L> :nohlsearch<CR>
 
 " Edit my ~/.vimrc in a new tab, source it
-nnoremap <silent> <leader>ev :tabnew $HOME/.vimrc<cr>
-nnoremap <silent> <leader>sv :source $HOME/.vimrc<cr>
+nnoremap <silent> <Leader>ev :tabnew $HOME/.vimrc<CR>
+nnoremap <silent> <Leader>sv :source $HOME/.vimrc<CR>
 if has('gui')
-    nnoremap <silent> <leader>eg :tabnew $MYGVIMRC<cr>
-    nnoremap <silent> <leader>sg :source $MYGVIMRC<cr>
+    nnoremap <silent> <Leader>eg :tabnew $MYGVIMRC<CR>
+    nnoremap <silent> <Leader>sg :source $MYGVIMRC<CR>
 endif
 
 " Highlight whitespace errors, clear highlighting
-nnoremap <silent> <leader>w :2match Error /\v\s+$/<cr>
-nnoremap <silent> <leader>W :2match none<cr>
+nnoremap <silent> <Leader>w :2match Error /\v\s+$/<CR>
+nnoremap <silent> <Leader>W :2match none<CR>
 
 " Toggle relative line numbers for easier motion math
-nnoremap <silent> <leader>r :set relativenumber!<cr>
+nnoremap <silent> <Leader>r :set relativenumber!<CR>
 " Toggle list view
-nnoremap <silent> <leader>l :set list!<cr>
+nnoremap <silent> <Leader>l :set list!<CR>
 set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+,eol:$
 
 " Act naturally when lines wrap
