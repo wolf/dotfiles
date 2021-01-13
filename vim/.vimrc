@@ -78,6 +78,7 @@ Plugin 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 Plugin 'tpope/vim-unimpaired'
+Plugin 'nelstrom/vim-visual-star-search'
 " }}}
 
 " Visual effects {{{
