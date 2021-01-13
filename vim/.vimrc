@@ -79,6 +79,8 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 Plugin 'tpope/vim-unimpaired'
 Plugin 'nelstrom/vim-visual-star-search'
+Plugin 'alok/notational-fzf-vim'
+let g:nv_search_paths = ['~/notes', './notes']
 " }}}
 
 " Visual effects {{{
@@ -211,6 +213,8 @@ set expandtab
 " FZF behavior {{{
 nnoremap <silent> <Leader>o :NERDTreeClose \| FZF<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
+
+nnoremap <silent> <Leader>n :NV<CR>
 " }}}
 
 " NERDTree behavior {{{
@@ -223,7 +227,7 @@ augroup END
 let NERDTreeIgnore = ['\.git[[dir]]', 'node_modules[[dir]]']
 
 nnoremap <silent> <Leader>t :NERDTreeToggle<CR>
-nnoremap <silent> <Leader>n :NERDTreeFocus<CR>
+nnoremap <silent> <Leader>f :NERDTreeFocus<CR>
 " }}}
 
 " All files {{{
