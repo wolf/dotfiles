@@ -27,9 +27,9 @@ set splitbelow
 set splitright
 set wildmenu
 
-let mapleader = "\<space>"
+let mapleader = "\<Space>"
 let maplocalleader = "\\"
 
-nnoremap <silent> <C-L> :nohlsearch<cr>
-nnoremap <silent> <leader>r :set relativenumber!<cr>
-nnoremap <silent> <leader>l :set list!<cr>
+nnoremap <silent> <C-L> :nohlsearch<CR>
+nnoremap <silent> <Leader>r :set relativenumber!<CR>
+nnoremap <silent> <Leader>l :set list!<CR>
