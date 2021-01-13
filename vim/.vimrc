@@ -41,6 +41,7 @@ Plugin 'justinmk/vim-sneak'
 
 " Between files...
 Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
 Plugin 'preservim/nerdtree'
 " }}}
 
@@ -208,6 +209,7 @@ set expandtab
 
 " FZF behavior {{{
 nnoremap <silent> <Leader>o :NERDTreeClose \| FZF<CR>
+nnoremap <silent> <Leader>b :Buffers<CR>
 " }}}
 
 " NERDTree behavior {{{
