@@ -155,9 +155,6 @@ endif
 " }}}
 
 " Settings {{{
-let g:python_host_prog = '/Users/wolf/.pyenv/versions/nvim2/bin/python'
-let g:python3_host_prog = '/Users/wolf/.pyenv/versions/nvim3/bin/python'
-
 set pyxversion=3
 
 set hidden
@@ -219,11 +216,11 @@ nnoremap <silent> <Leader>n :NV<CR>
 " }}}
 
 " NERDTree behavior {{{
-augroup NERDTree_behavior
-    autocmd!
-    autocmd StdinReadPre * let s:std_in=1
-    autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
-augroup END
+" augroup NERDTree_behavior
+"     autocmd!
+"     autocmd StdinReadPre * let s:std_in=1
+"     autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
+" augroup END
 
 let NERDTreeIgnore = ['\.git[[dir]]', 'node_modules[[dir]]']
 
