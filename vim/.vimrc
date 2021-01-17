@@ -222,7 +222,7 @@ nnoremap <silent> <Leader>n :NV<CR>
 "     autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
 " augroup END
 
-let NERDTreeIgnore = ['\.git[[dir]]', 'node_modules[[dir]]']
+let g:NERDTreeIgnore=['\.git$[[dir]]', 'node_modules[[dir]]', '__pycache__[[dir]]', '.*\.venv$[[dir]]']
 
 nnoremap <silent> <Leader>t :NERDTreeToggle<CR>
 nnoremap <silent> <Leader>f :NERDTreeFocus<CR>
