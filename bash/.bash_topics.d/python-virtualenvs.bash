@@ -8,9 +8,9 @@ function create_venv() {
         mkdir -p "$(dirname "$1")"
         VENV_DIR="$1"
     fi
-    python -m venv "$VENV_DIR"
+    python -m venv --upgrade-deps "$VENV_DIR"
     source "$VENV_DIR/bin/activate"
-    python -m pip install --upgrade pip setuptools wheel
+    python -m pip install --upgrade wheel
 }
 
 function activate_found_venv() {
