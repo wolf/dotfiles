@@ -2,3 +2,5 @@
 .DS_Store
 .*.sw?
 __pycache__/
+node_modules/
+*.venv/
