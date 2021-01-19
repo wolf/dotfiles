@@ -72,7 +72,8 @@ let g:pymode_lint_options_pep8 = {'max_line_length': g:pymode_options_max_line_l
 let g:pymode_options_colorcolumn = 1
 
 Plugin 'pangloss/vim-javascript'
-Plugin 'leafgarland/typescript-vim'
+Plugin 'HerringtonDarkholme/yats.vim'
+Plugin 'Xuyuanp/nerdtree-git-plugin'
 
 Plugin 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
