@@ -79,9 +79,12 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 Plugin 'tpope/vim-unimpaired'
 Plugin 'nelstrom/vim-visual-star-search'
-Plugin 'alok/notational-fzf-vim'
-let g:nv_search_paths = ['~/Dropbox/Notes', './notes']
-let g:nv_create_note_window = 'split'
+
+if !has('win32') && !has('win32unix')
+    Plugin 'alok/notational-fzf-vim'
+    let g:nv_search_paths = ['~/Dropbox/Notes', './notes']
+    let g:nv_create_note_window = 'split'
+endif
 " }}}
 
 " Visual effects {{{
