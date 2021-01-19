@@ -214,6 +214,7 @@ set expandtab
 " FZF behavior {{{
 nnoremap <silent> <Leader>o :NERDTreeClose \| FZF<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
+nnoremap <silent> <Leader>g :Ag<CR>
 
 nnoremap <silent> <Leader>n :NV<CR>
 " }}}
