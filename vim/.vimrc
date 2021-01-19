@@ -66,6 +66,8 @@ Plugin 'mattn/emmet-vim'
 " }}}
 
 " Experimental {{{
+" ...that is, plugins I don't know that I will keep
+
 Plugin 'python-mode/python-mode'
 let g:pymode_options_max_line_length = 120
 let g:pymode_lint_options_pep8 = {'max_line_length': g:pymode_options_max_line_length}
@@ -215,9 +217,9 @@ set expandtab
 " FZF behavior {{{
 nnoremap <silent> <Leader>o :NERDTreeClose \| FZF<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
-nnoremap <silent> <Leader>g :Ag<CR>
+nnoremap <silent> <Leader>ag :Ag<CR>
 
-nnoremap <silent> <Leader>n :NV<CR>
+nnoremap <silent> <Leader>nv :NV<CR>
 " }}}
 
 " NERDTree behavior {{{
