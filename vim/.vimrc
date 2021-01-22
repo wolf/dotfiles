@@ -223,11 +223,13 @@ nnoremap <silent> <Leader>nv :NV<CR>
 " }}}
 
 " NERDTree behavior {{{
-" augroup NERDTree_behavior
-"     autocmd!
+augroup NERDTree_behavior
+    autocmd!
 "     autocmd StdinReadPre * let s:std_in=1
 "     autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
-" augroup END
+    autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
+        \ quit | endif
+augroup END" Exit Vim if NERDTree is the only window left.
 
 let g:NERDTreeIgnore=['\.git$[[dir]]', 'node_modules[[dir]]', '__pycache__[[dir]]', '.*\.venv$[[dir]]']
 
