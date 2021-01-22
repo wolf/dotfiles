@@ -43,6 +43,13 @@ Plugin 'justinmk/vim-sneak'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 Plugin 'preservim/nerdtree'
+
+" Between notes...
+if !has('win32') && !has('win32unix')
+    Plugin 'alok/notational-fzf-vim'
+    let g:nv_search_paths = ['~/Dropbox/Notes', './notes']
+    let g:nv_create_note_window = 'split'
+endif
 " }}}
 
 " Autocomplete and friends {{{
@@ -82,12 +89,6 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 Plugin 'tpope/vim-unimpaired'
 Plugin 'nelstrom/vim-visual-star-search'
-
-if !has('win32') && !has('win32unix')
-    Plugin 'alok/notational-fzf-vim'
-    let g:nv_search_paths = ['~/Dropbox/Notes', './notes']
-    let g:nv_create_note_window = 'split'
-endif
 " }}}
 
 " Visual effects {{{
