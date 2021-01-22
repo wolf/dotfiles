@@ -8,7 +8,7 @@ function create_venv() {
         mkdir -p "$(dirname "$1")"
         VENV_DIR="$1"
     fi
-    python -m venv --upgrade-deps "$VENV_DIR"
+    python -m venv --copies --upgrade-deps "$VENV_DIR"
     source "$VENV_DIR/bin/activate"
     python -m pip install --upgrade wheel
 }
