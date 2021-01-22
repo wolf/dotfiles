@@ -16,7 +16,6 @@ fi
 
 alias ls="command ls ${colorflag}"
 alias ll="ls -Falh ${colorflag}"
-alias tree="tree -alC -I '.git|__pycache__'"
 alias grep='grep --color'
 alias h20='history 20'
 
@@ -32,6 +31,12 @@ if [[ -d ~/.bash_topics.d ]]; then
             source ${topic}
         fi
     done
+fi
+
+if [ $(command -v fd) ] && [ $(command -v as-tree) ] ; then
+    alias tree="fd --follow --hidden | as-tree"
+else
+    alias tree="tree -alC -I '.git|__pycache__|node_modules|*.venv'"
 fi
 
 umask go-wx
