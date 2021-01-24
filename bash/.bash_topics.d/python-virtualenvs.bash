@@ -1,5 +1,5 @@
 function create_venv() {
-    if [[ ! -z "$VIRTUAL_ENV" ]] ; then
+    if [ -v VIRTUAL_ENV ] ; then
         deactivate
     fi
     if [[ -z "$1" ]] ; then
@@ -14,7 +14,7 @@ function create_venv() {
 }
 
 function activate_found_venv() {
-    if [[ ! -z "$VIRTUAL_ENV" ]] ; then
+    if [ -v VIRTUAL_ENV ] ; then
         deactivate
     fi
     if [ -d .venv ] ; then
@@ -27,7 +27,29 @@ function activate_found_venv() {
     fi
 }
 
+function rename_venv() {
+    FROM_NAME="${1}"
+    TO_NAME="${2}"
+    RANDOM_STRING=$(python -c "import uuid; print(str(uuid.uuid4()),end='')")
+    TEMP_FILE_NAME=/tmp/${RANDOM_STRING}.requirements.txt
+
+    source "${FROM_NAME}/bin/activate"
+    python -m pip freeze > "${TEMP_FILE_NAME}"
+    deactivate 2>/dev/null
+
+    create_venv "${TO_NAME}"
+    python -m pip install -r "${TEMP_FILE_NAME}"
+    deactivate 2>/dev/null
+
+    rm "${TEMP_FILE_NAME}"
+    rm -rf "${FROM_NAME}"
+}
+
 function cdv() {
     cd "$1"
     activate_found_venv
 }
+
+export -f create_venv
+export -f activate_found_venv
+export -f rename_venv
