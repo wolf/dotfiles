@@ -33,7 +33,7 @@ if [[ -d ~/.bash_topics.d ]]; then
     done
 fi
 
-if [ $(command -v fd) ] && [ $(command -v as-tree) ] ; then
+if [ "$(command -v fd)" ] && [ "$(command -v as-tree)" ] ; then
     alias tree="fd --follow --hidden | as-tree"
 else
     alias tree="tree -alC -I '.git|__pycache__|node_modules|*.venv'"
