@@ -168,6 +168,7 @@ endif
 
 set pyxversion=3
 
+set termguicolors
 set hidden
 set showcmd
 set showmode
