@@ -162,6 +162,10 @@ endif
 " }}}
 
 " Settings {{{
+if has('nvim')
+    let g:python3_host_prog = '~/.pyenv/versions/nvim3/bin/python'
+endif
+
 set pyxversion=3
 
 set hidden
