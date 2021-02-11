@@ -83,6 +83,18 @@ let g:pymode_options_colorcolumn = 1
 Plugin 'pangloss/vim-javascript'
 Plugin 'HerringtonDarkholme/yats.vim'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
+let g:NERDTreeGitStatusIndicatorMapCustom = {
+    \ 'Modified'    :'*',
+    \ 'Staged'      :'+',
+    \ 'Untracked'   :'%',
+    \ 'Renamed'     :'➜',
+    \ 'Unmerged'    :'=',
+    \ 'Deleted'     :'-',
+    \ 'Dirty'       :'.',
+    \ 'Ignored'     :'!',
+    \ 'Clean'       :'✔︎',
+    \ 'Unknown'     :'?',
+    \ }
 
 Plugin 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
