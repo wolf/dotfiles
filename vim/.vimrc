@@ -108,6 +108,9 @@ Plugin 'vim-scripts/YankRing.vim'
 let g:yankring_min_element_length = 2
 let g:yankring_history_dir = '$HOME/.vim'
 " }}}
+
+" Temporary {{{
+" ...not experimental because I know I will be ditching these when I'm done
 " }}}
 
 " Visual effects {{{
@@ -169,8 +172,6 @@ if has('mac') || &term !~? '^screen'
     if index(s:schemes, 'PaperColor') >= 0
         colorscheme PaperColor
     endif
-    " must come after setting the colorscheme
-    highlight HighlightedyankRegion guifg=Black guibg=Yellow
 else
     colorscheme peachpuff
 endif
