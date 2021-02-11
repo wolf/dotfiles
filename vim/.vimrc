@@ -44,8 +44,8 @@ Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 Plugin 'preservim/nerdtree'
 
-" Between notes...
 if !has('win32') && !has('win32unix')
+    " Between notes...
     Plugin 'alok/notational-fzf-vim'
     let g:nv_search_paths = ['~/Dropbox/Notes', './notes']
     let g:nv_create_note_window = 'split'
@@ -259,9 +259,11 @@ augroup NERDTree_behavior
     autocmd!
 "     autocmd StdinReadPre * let s:std_in=1
 "     autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
+
+    " Exit Vim if NERDTree is the only window left.
     autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
         \ quit | endif
-augroup END" Exit Vim if NERDTree is the only window left.
+augroup END
 
 let g:NERDTreeIgnore=['\.git$[[dir]]', 'node_modules[[dir]]', '__pycache__[[dir]]', '.*\.venv$[[dir]]']
 
@@ -336,10 +338,18 @@ if has('gui')
     nnoremap <silent> <Leader>sg :source $MYGVIMRC<CR>
 endif
 
-" Highlight whitespace errors, clear highlighting
-nnoremap <silent> <Leader>w :2match Error /\v\s+$/<CR>
-nnoremap <silent> <Leader>W :2match none<CR>
+" Whitespace errors {{{
+let g:show_whitespace_errors = 0
+function! ToggleShowWhitespaceErrors()
+    let g:show_whitespace_errors = !g:show_whitespace_errors
+    if g:show_whitespace_errors
+        :2match Error /\v\s+$/
+    else
+        :2match none
+    endif
+endfunction
 
+nnoremap <silent> <Leader>ws :call ToggleShowWhitespaceErrors()<CR>
 " Toggle relative line numbers for easier motion math
 nnoremap <silent> <Leader>r :set relativenumber!<CR>
 " Toggle list view
