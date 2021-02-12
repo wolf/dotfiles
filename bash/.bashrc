@@ -34,7 +34,12 @@ if [[ -d ~/.bash_topics.d ]]; then
 fi
 
 if [ "$(command -v fd)" ] && [ "$(command -v as-tree)" ] ; then
-    alias tree="fd --follow --hidden | as-tree"
+    function tree() {
+        TARGET_DIR=${1:-.}
+        PATTERN=${2:-.}
+        # Note the reversal.  This is the opposite of how fd normally works.
+        fd --follow --hidden "${PATTERN}" "${TARGET_DIR}" | as-tree
+    }
 else
     alias tree="tree -alC -I '.git|__pycache__|node_modules|*.venv'"
 fi
