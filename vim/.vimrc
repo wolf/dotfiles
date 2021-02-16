@@ -53,8 +53,7 @@ endif
 " }}}
 
 " Autocomplete and friends {{{
-if !has('win32') && !has('win32unix')
-    " These are too hard to keep running on Windows
+if has('python3')
     Plugin 'ervandew/supertab'
     " Plugin 'Valloric/YouCompleteMe'  " in favor of coc.vim
     Plugin 'SirVer/ultisnips'
@@ -77,10 +76,12 @@ Plugin 'mattn/emmet-vim'
 
 Plugin 'neoclide/coc.nvim'
 
-Plugin 'python-mode/python-mode'
-let g:pymode_options_max_line_length = 120
-let g:pymode_lint_options_pep8 = {'max_line_length': g:pymode_options_max_line_length}
-let g:pymode_options_colorcolumn = 1
+if has('python3')
+    Plugin 'python-mode/python-mode'
+    let g:pymode_options_max_line_length = 120
+    let g:pymode_lint_options_pep8 = {'max_line_length': g:pymode_options_max_line_length}
+    let g:pymode_options_colorcolumn = 1
+endif
 
 Plugin 'pangloss/vim-javascript'
 Plugin 'HerringtonDarkholme/yats.vim'
