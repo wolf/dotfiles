@@ -53,7 +53,8 @@ endif
 " }}}
 
 " Autocomplete and friends {{{
-if has('python3')
+if !has('win32') && !has('win32unix')
+    " Yeah.  Even with Python3, this stuff has trouble on Windows.
     Plugin 'ervandew/supertab'
     " Plugin 'Valloric/YouCompleteMe'  " in favor of coc.vim
     Plugin 'SirVer/ultisnips'
