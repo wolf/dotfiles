@@ -2,7 +2,7 @@ function create_venv() {
     if [ -v VIRTUAL_ENV ] ; then
         deactivate
     fi
-    if [[ -z "$1" ]] ; then
+    if [[ -z "${1+x}" ]] ; then
         VENV_DIR="$(basename "$(pwd)")".venv
     else
         mkdir -p "$(dirname "$1")"
