@@ -3,6 +3,7 @@ source ~/.vimrc
 let mapleader = "\<Space>"
 set easymotion
 set sneak
+set multiple-cursors
 
 set clipboard+=ideaput
 
