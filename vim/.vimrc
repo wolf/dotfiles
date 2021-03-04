@@ -74,6 +74,8 @@ Plugin 'mattn/emmet-vim'
 
 " Experimental {{{
 " ...that is, plugins I don't know that I will keep
+Plugin 'scrooloose/syntastic'
+Plugin 'zyedidia/literate.vim'
 
 Plugin 'neoclide/coc.nvim'
 
