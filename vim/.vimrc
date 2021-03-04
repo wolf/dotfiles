@@ -108,9 +108,6 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 Plugin 'tpope/vim-unimpaired'
 Plugin 'nelstrom/vim-visual-star-search'
 Plugin 'mg979/vim-visual-multi'
-Plugin 'vim-scripts/YankRing.vim'
-let g:yankring_min_element_length = 2
-let g:yankring_history_dir = '$HOME/.vim'
 " }}}
 
 " Temporary {{{
@@ -363,9 +360,6 @@ endfunction
 
 nnoremap <silent> <Leader>ws :call ToggleShowWhitespaceErrors()<CR>
 " }}}
-
-" Toggle the YankRing panel
-nnoremap <silent> <leader>yr :YRShow<CR>
 
 " Toggle relative line numbers for easier motion math
 nnoremap <silent> <Leader>r :set relativenumber!<CR>
