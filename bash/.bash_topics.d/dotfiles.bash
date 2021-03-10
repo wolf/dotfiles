@@ -7,3 +7,9 @@ function cddf() {
 function pushddf() {
     pushd "${DOTFILES_DIR}/$1"
 }
+
+pushddf >/dev/null
+if [[ $(git branch --show-current) != local-only ]] ; then
+    echo "WARNING: dotfiles is not on the local-only branch"
+fi
+popd >/dev/null
