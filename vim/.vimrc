@@ -168,11 +168,9 @@ function! GetColorSchemes()
     \)))
 endfunction
 
-if has('mac') || &term !~? '^screen'
-    let s:schemes = GetColorSchemes()
-    if index(s:schemes, 'PaperColor') >= 0
-        colorscheme PaperColor
-    endif
+let s:schemes = GetColorSchemes()
+if index(s:schemes, 'PaperColor') >= 0
+    colorscheme PaperColor
 else
     colorscheme peachpuff
 endif
