@@ -22,6 +22,7 @@ Plugin 'VundleVim/Vundle.vim'
 " Basics {{{
 Plugin 'tpope/vim-sensible'
 Plugin 'tpope/vim-fugitive'
+Plugin 'idanarye/vim-merginal'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'tpope/vim-surround'
@@ -276,6 +277,10 @@ let g:NERDTreeIgnore=['\.git$[[dir]]', 'node_modules[[dir]]', '__pycache__[[dir]
 
 nnoremap <silent> <Leader>t :NERDTreeToggle<CR>
 nnoremap <silent> <Leader>f :NERDTreeFocus<CR>
+" }}}
+
+" Git behavior {{{
+nnoremap <silent> <Leader>mt :MerginalToggle<CR>
 " }}}
 
 " All files {{{
