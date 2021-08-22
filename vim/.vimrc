@@ -79,7 +79,13 @@ Plugin 'mattn/emmet-vim'
 Plugin 'scrooloose/syntastic'
 Plugin 'zyedidia/literate.vim'
 
-Plugin 'neoclide/coc.nvim'
+" let g:ale_disable_lsp = 1
+Plugin 'dense-analysis/ale'
+let g:ale_linters = {
+\    'python': ['flake8', 'mypy', 'pyright']
+\}
+let g:ale_linters_explicit = 1
+" Plugin 'neoclide/coc.nvim'
 
 if has('python3')
     Plugin 'python-mode/python-mode'
