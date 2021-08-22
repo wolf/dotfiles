@@ -31,6 +31,7 @@ Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-capslock'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-eunuch'
+Plugin 'tpope/vim-abolish'
 " }}}
 
 " Navigation {{{
