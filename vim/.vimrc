@@ -58,7 +58,7 @@ endif
 if !has('win32') && !has('win32unix')
     " Yeah.  Even with Python3, this stuff has trouble on Windows.
     Plugin 'ervandew/supertab'
-    " Plugin 'Valloric/YouCompleteMe'  " in favor of coc.vim
+    Plugin 'Valloric/YouCompleteMe'  " in favor of coc.vim
     Plugin 'SirVer/ultisnips'
     Plugin 'honza/vim-snippets'
     let g:SuperTabDefaultCompletionType = '<C-N>'
