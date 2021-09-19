@@ -79,6 +79,9 @@ Plugin 'mattn/emmet-vim'
 Plugin 'scrooloose/syntastic'
 Plugin 'zyedidia/literate.vim'
 
+Plugin 'mattn/webapi-vim'
+Plugin 'mem-dev/vim'
+
 " let g:ale_disable_lsp = 1
 Plugin 'dense-analysis/ale'
 let g:ale_linters = {
