@@ -49,7 +49,7 @@ Plugin 'preservim/nerdtree'
 if !has('win32') && !has('win32unix')
     " Between notes...
     Plugin 'alok/notational-fzf-vim'
-    let g:nv_search_paths = ['~/Dropbox/Notes', './notes']
+    let g:nv_search_paths = ['~/Vaults/Notes', './notes']
     let g:nv_create_note_window = 'split'
 endif
 " }}}
@@ -58,7 +58,7 @@ endif
 if !has('win32') && !has('win32unix')
     " Yeah.  Even with Python3, this stuff has trouble on Windows.
     Plugin 'ervandew/supertab'
-    Plugin 'Valloric/YouCompleteMe'  " in favor of coc.vim
+    Plugin 'Valloric/YouCompleteMe'
     Plugin 'SirVer/ultisnips'
     Plugin 'honza/vim-snippets'
     let g:SuperTabDefaultCompletionType = '<C-N>'
@@ -79,16 +79,12 @@ Plugin 'mattn/emmet-vim'
 Plugin 'scrooloose/syntastic'
 Plugin 'zyedidia/literate.vim'
 
-Plugin 'mattn/webapi-vim'
-Plugin 'mem-dev/vim'
-
 " let g:ale_disable_lsp = 1
 Plugin 'dense-analysis/ale'
 let g:ale_linters = {
 \    'python': ['flake8', 'mypy', 'pyright']
 \}
 let g:ale_linters_explicit = 1
-" Plugin 'neoclide/coc.nvim'
 
 if has('python3')
     Plugin 'python-mode/python-mode'
@@ -208,7 +204,7 @@ endif
 
 " Settings {{{
 if has('nvim')
-    let g:python3_host_prog = '~/.pyenv/versions/nvim3/bin/python'
+    let g:python3_host_prog = '~/.pyenv/versions/nvim/bin/python'
 endif
 
 set pyxversion=3
@@ -336,13 +332,6 @@ augroup END
 augroup filetype_edit_commitmessage
     autocmd!
     autocmd BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
-augroup END
-" }}}
-
-" Files on Dropbox {{{
-augroup filetype_on_dropbox
-    autocmd!
-    autocmd BufEnter ~/Dropbox/* :set noswapfile
 augroup END
 " }}}
 
