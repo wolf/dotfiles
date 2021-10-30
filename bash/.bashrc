@@ -40,8 +40,20 @@ if [ "$(command -v fd)" ] && [ "$(command -v as-tree)" ] ; then
         # Note the reversal.  This is the opposite of how fd normally works.
         fd --follow --hidden "${PATTERN}" "${TARGET_DIR}" | as-tree
     }
+
+    function f() {
+        fd --follow -uu --glob "$@" . 2>/dev/null
+    }
 else
     alias tree="tree -alC -I '.git|__pycache__|node_modules|*.venv'"
+
+    function f() {
+        # usage: f <name> [...]
+        # example: f Makefile
+        # example: f Makefile -type f
+        # find the filesystem object with the given name
+        find . -name "$@" 2>/dev/null
+    }
 fi
 
 umask go-wx
@@ -54,16 +66,9 @@ if command -v brew >/dev/null && test -f $(brew --prefix)/etc/bash_completion ; 
     source $(brew --prefix)/etc/bash_completion
 elif [ -f /etc/bash_completion ] ; then
     source /etc/bash_completion
-else
-    if [ -f ~/.git-completion.bash ] ; then
-        source ~/.git-completion.bash
-    fi
-    if [ -f ~/.git-prompt.sh ] ; then
-        source ~/.git-prompt.sh
-    fi
 fi
 
-if [ $(uname) = 'Darwin' ] ; then # if I'm on macOS...
+if [ "$(uname)" = 'Darwin' ] ; then # if I'm on macOS...
 
     if [ -z "${SSH_CONNECTION}" ] ; then
         alias fixopenwith='/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user'
@@ -75,10 +80,10 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 function tip() {
     branch=${1:-HEAD}
-    git rev-parse --short $branch 2>/dev/null;
+    git rev-parse --short "${branch}" 2>/dev/null;
 }
 function time_since_last_commit { git log --no-walk --format="%ar" 2>/dev/null | sed 's/\([0-9]\) \(.\).*/\1\2/'; }
-function virtualenv_info()      { [ $VIRTUAL_ENV ] && echo ' ('$(basename $VIRTUAL_ENV)')'; }
+function virtualenv_info()      { [ "${VIRTUAL_ENV}" ] && echo ' ('$(basename "${VIRTUAL_ENV}")')'; }
 
 # used to reattach ssh forwarding to "stale" tmux sessions
 # http://justinchouinard.com/blog/2010/04/10/fix-stale-ssh-environment-variables-in-gnu-screen-and-tmux/
@@ -107,41 +112,38 @@ bind '"\t":menu-complete'
 bind '"\e[A":history-search-backward'
 bind '"\e[B":history-search-forward'
 
-function f() {
-    # usage: f <name> [...]
-    # example: f Makefile
-    # example: f Makefile -type f
-    # find the filesystem object with the given name
-    find . -name "$@" 2>/dev/null
-}
-
 function fx() {
-    find . -name "$@" 2>/dev/null | xargs ls ${colorflag} -Falhd
+    find . -name "$@" -print0 2>/dev/null | xargs -0 ls ${colorflag} -Falhd
 }
 
 function fcd() {
     # usage: fcd <directory_basename>
     # example: fcd js
     # find the directory with the given name, cd-ing into the first match found
-    cd "$(find . -type d -name "$@" 2>/dev/null | awk "BEGIN { getline; print }")"
+    FIRST_MATCHING_DIRECTORY="$(find . -type d -name "$@" 2>/dev/null | awk "BEGIN { getline; print }")"
+    if [ -d "${FIRST_MATCHING_DIRECTORY}" ]; then
+        cd "${FIRST_MATCHING_DIRECTORY}" || return
+    fi
 }
 
 function show_path() {
-    echo ${PATH} | tr ':' '\n'
+    echo "${PATH}" | tr ':' '\n'
 }
 
 function hosts() {
     grep -e '^Host' ~/.ssh/config
 }
 
-function en()   { $EDITOR $(find . -type f -name "$@" 2>/dev/null); }
+function en()   { $EDITOR "$(find . -type f -name "$@" 2>/dev/null)"; }
 function ew()   { $EDITOR "$(which "$@")"; }
 function lw()   { ll "$(which "$1")"; }
-function mkcd() { mkdir -p "$1" && cd "$1"; }
-function resolve() { cd $(pwd -P); }
+function mkcd() { mkdir -p "$1" && cd "$1" || return; }
+function resolve() { cd "$(pwd -P)" || return; }
 function psg()  { ps ax | grep -v grep | grep "$1"; }
 
-export XML_CATALOG_FILES=/usr/local/etc/xml/catalog
+if [ -f /opt/homebrew/etc/xml/catalog ]; then
+    export XML_CATALOG_FILES=/opt/homebrew/etc/xml/catalog
+fi
 
 function help_wolf() {
     echo 'did pattern       -- find pattern in history'
