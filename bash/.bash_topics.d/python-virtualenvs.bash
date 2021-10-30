@@ -9,7 +9,7 @@ function create_venv() {
         VENV_DIR="$1"
     fi
     python -m venv --copies --upgrade-deps "$VENV_DIR"
-    source "$VENV_DIR/bin/activate"
+    source "${VENV_DIR}/bin/activate"
     python -m pip install --upgrade wheel
 }
 
@@ -20,10 +20,10 @@ function activate_found_venv() {
     if [ -d .venv ] ; then
         VENV_DIR=.venv
     else
-        VENV_DIR=$(ls -d *.venv 2>/dev/null | awk 'BEGIN { getline; print }')
+        VENV_DIR=$(ls --color=never -d ./*.venv 2>/dev/null | awk 'BEGIN { getline; print }')
     fi
-    if [[ ! -z "$VENV_DIR" ]] ; then
-        source ./$VENV_DIR/bin/activate
+    if [[ -n "${VENV_DIR}" ]] ; then
+        source ./"${VENV_DIR}"/bin/activate
     fi
 }
 
@@ -46,7 +46,7 @@ function rename_venv() {
 }
 
 function cdv() {
-    cd "$1"
+    cd "$1" || return
     activate_found_venv
 }
 
