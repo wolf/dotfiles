@@ -16,13 +16,13 @@ alias h20='history 20'
 export EDITOR='vim'
 
 function present_in_path() {
-    echo $PATH | tr ':' '\n' | grep -e "^$1$" >/dev/null;
+    echo "${PATH}" | tr ':' '\n' | grep -e "^$1$" >/dev/null;
 }
 
 if [[ -d ~/.bash_topics.d ]]; then
-    for topic in ~/.bash_topics.d/*; do
-        if [[ ! ${topic} =~ ~/.bash_topics.d/~.* ]] ; then
-            source ${topic}
+    for TOPIC in ~/.bash_topics.d/*; do
+        if [[ ! "${TOPIC}" =~ ~/.bash_topics.d/~.* ]] ; then
+            source "${TOPIC}"
         fi
     done
 fi
@@ -44,7 +44,7 @@ if [[ -f ~/.dir_colors ]]; then
 fi
 
 if command -v brew >/dev/null && test -f $(brew --prefix)/etc/bash_completion ; then
-    source $(brew --prefix)/etc/bash_completion
+    source "$(brew --prefix)"/etc/bash_completion
 elif [ -f /etc/bash_completion ] ; then
     source /etc/bash_completion
 fi
