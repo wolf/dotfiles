@@ -8,14 +8,8 @@ fi
 
 stty -ixon -ixoff
 
-if ls --color >/dev/null 2>&1; then # GNU `ls`
-    colorflag="--color"
-else # macOS `ls`
-    colorflag=-G
-fi
-
-alias ls="command ls ${colorflag}"
-alias ll="ls -Falh ${colorflag}"
+alias ls="command ls --color"
+alias ll="ls -Falh --color"
 alias grep='grep --color'
 alias h20='history 20'
 
