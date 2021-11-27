@@ -78,10 +78,12 @@ function refresh_ssh() {
 }
 
 if command -v __git_ps1 >/dev/null; then
-    export PS1='\n\u@\h:\[\e[35m\]\w\[\e[0m\]$(virtualenv_info) $(__git_ps1 "\[\e[32m\][$(time_since_last_commit) %s $(tip)]\[\e[0m\]")'$'\n$ '
+    export PS1='\n\u@\h:\[\e[35m\]\w\[\e[0m\]$(virtualenv_info) $(__git_ps1 "\[\e[32m\][$(time_since_last_commit) %s $(tip)]\[\e[0m\]")'$'\n\$ '
 else
-    export PS1='\n\u@\h:\[\e[35m\]\w\[\e[0m\]$(virtualenv_info)'$'\n$ '
+    export PS1='\n\u@\h:\[\e[35m\]\w\[\e[0m\]$(virtualenv_info)'$'\n\$ '
 fi
+
+export SUDO_PS1='\n\u@\h:\[\e[35m\]\w\[\e[0m\]\n\$ '
 
 export HISTSIZE=10000
 export HISTIGNORE="&:ls:[bf]g:exit:history:h20:..:pwd:ll:did"
