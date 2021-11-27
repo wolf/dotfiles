@@ -27,20 +27,7 @@ if [[ -d ~/.bash_topics.d ]]; then
     done
 fi
 
-if [ "$(command -v fd)" ] && [ "$(command -v as-tree)" ] ; then
-    function tree() {
-        TARGET_DIR=${1:-.}
-        PATTERN=${2:-.}
-        # Note the reversal.  This is the opposite of how fd normally works.
-        fd --follow --hidden "${PATTERN}" "${TARGET_DIR}" | as-tree
-    }
-
-    function f() {
-        fd --follow -uu --glob "$@" . 2>/dev/null
-    }
-else
-    alias tree="tree -alC -I '.git|__pycache__|node_modules|*.venv'"
-
+if [ ! $(command -v f) ] ; then
     function f() {
         # usage: f <name> [...]
         # example: f Makefile
@@ -106,19 +93,23 @@ bind '"\t":menu-complete'
 bind '"\e[A":history-search-backward'
 bind '"\e[B":history-search-forward'
 
-function fx() {
-    find . -name "$@" -print0 2>/dev/null | xargs -0 ls ${colorflag} -Falhd
-}
+if [ ! "$(command -v fx)" ] ; then
+    function fx() {
+        find . -name "$@" -print0 2>/dev/null | xargs -0 ls --color -Falhd
+    }
+fi
 
-function fcd() {
-    # usage: fcd <directory_basename>
-    # example: fcd js
-    # find the directory with the given name, cd-ing into the first match found
-    FIRST_MATCHING_DIRECTORY="$(find . -type d -name "$@" 2>/dev/null | awk "BEGIN { getline; print }")"
-    if [ -d "${FIRST_MATCHING_DIRECTORY}" ]; then
-        cd "${FIRST_MATCHING_DIRECTORY}" || return
-    fi
-}
+if [ ! "$(command -v fcd)" ] ; then
+    function fcd() {
+        # usage: fcd <pattern>
+        # example: fcd js
+        # find the directory with the given name, cd-ing into the first match found
+        FIRST_MATCHING_DIRECTORY="$(find . -type d -name "$@" 2>/dev/null | head -n 1)"
+        if [ -d "${FIRST_MATCHING_DIRECTORY}" ]; then
+            cd "${FIRST_MATCHING_DIRECTORY}" || return
+        fi
+    }
+fi
 
 function show_path() {
     echo "${PATH}" | tr ':' '\n'
@@ -128,7 +119,12 @@ function hosts() {
     grep -e '^Host' ~/.ssh/config
 }
 
-function en()   { $EDITOR "$(find . -type f -name "$@" 2>/dev/null)"; }
+if [ ! "$(command -v en)" ] ; then
+    function en() {
+        find . -type f -print0 -name "$1" 2>/dev/null | xargs -0 "${EDITOR}"
+    }
+fi
+
 function ew()   { $EDITOR "$(which "$@")"; }
 function lw()   { ll "$(which "$1")"; }
 function filew(){ file "$(which "$1")"; }
