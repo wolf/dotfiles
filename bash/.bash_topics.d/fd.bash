@@ -12,7 +12,7 @@ else
 fi
 
 function f() {
-    fd --follow -uu --glob "$@" 2>/dev/null
+    fd --follow --no-ignore --hidden --glob "$@" 2>/dev/null
 }
 
 function fcd() {
@@ -32,5 +32,5 @@ function fx() {
 }
 
 function en() {
-    fd --type f --glob --follow --hidden --no-ignore --print0 "$@" | xargs -0 "${EDITOR}"
+    fd --type f --glob --follow --hidden --no-ignore "$@" -X "${EDITOR}"
 }
