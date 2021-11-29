@@ -60,8 +60,8 @@ fi
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 function tip() {
-    branch=${1:-HEAD}
-    git rev-parse --short "${branch}" 2>/dev/null;
+    BRANCH=${1:-HEAD}
+    git rev-parse --short "${BRANCH}" 2>/dev/null;
 }
 function time_since_last_commit { git log --no-walk --format="%ar" 2>/dev/null | sed 's/\([0-9]\) \(.\).*/\1\2/'; }
 function virtualenv_info()      { [ "${VIRTUAL_ENV}" ] && echo ' ('$(basename "${VIRTUAL_ENV}")')'; }
