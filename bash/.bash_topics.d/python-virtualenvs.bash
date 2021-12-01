@@ -20,7 +20,7 @@ function activate_found_venv() {
     if [ -d .venv ] ; then
         VENV_DIR=.venv
     else
-        VENV_DIR=$(ls --color=never -d ./*.venv 2>/dev/null | awk 'BEGIN { getline; print }')
+        VENV_DIR=$(command ls --color=never -d ./*.venv 2>/dev/null | head -n 1)
     fi
     if [[ -n "${VENV_DIR}" ]] ; then
         source ./"${VENV_DIR}"/bin/activate
