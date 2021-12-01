@@ -8,8 +8,15 @@ fi
 
 stty -ixon -ixoff
 
-alias ls="command ls --color"
-alias ll="ls -Falh --color"
+if [ "$(command -v exa)" ] ; then
+    alias ls=exa
+    alias ll="exa -Fal"
+    alias lgit="exa -Fal --tree --git --ignore-glob '.git' --icons"
+else
+    alias ls="command ls --color"
+    alias ll="ls -Falh --color"
+fi
+
 alias grep='grep --color'
 alias h20='history 20'
 
