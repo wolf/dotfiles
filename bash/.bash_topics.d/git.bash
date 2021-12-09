@@ -41,7 +41,6 @@ function in_commit() {
 }
 
 function dirty() {
-    # git ls-files --modified --unmerged | awk '{ print $4 }' | sort -u
     git ls-files --modified | sort -u
 }
 
