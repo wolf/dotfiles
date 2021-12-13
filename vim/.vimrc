@@ -76,6 +76,15 @@ Plugin 'mattn/emmet-vim'
 
 " Experimental {{{
 " ...that is, plugins I don't know that I will keep
+
+Plugin 'inkarkat/vim-visualrepeat'
+Plugin 'inkarkat/vim-ingo-library'
+Plugin 'inkarkat/vim-ReplaceWithRegister'
+Plugin 'inkarkat/vim-ReplaceWithSameIndentRegister'
+
+Plugin 'michaeljsmith/vim-indent-object'
+
+Plugin 'prettier/vim-prettier'
 Plugin 'scrooloose/syntastic'
 
 " let g:ale_disable_lsp = 1
@@ -248,10 +257,10 @@ set shortmess-=S
 if has('nvim')
     set clipboard=unnamedplus
 else
-    set clipboard=unnamed,autoselect
+    set clipboard=unnamed
 endif
 
-set guioptions+=a
+set cpoptions+=>
 set cursorline
 
 set shiftwidth=4

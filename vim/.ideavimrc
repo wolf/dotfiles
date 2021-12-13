@@ -1,28 +1,20 @@
 source ~/.vimrc
 
 let mapleader = "\<Space>"
-set easymotion
-set sneak
 
 set clipboard+=ideaput
+
+set easymotion
+set ideajoin
+set idearefactormode=keep
+set sneak
+set surround
 
 nmap <silent> <C-l> :action EditorToggleShowWhitespaces<CR>
 
 nmap [m :action MethodUp<CR>
 nmap ]m :action MethodDown<CR>
 
-set multiple-cursors
-
-nmap <C-n> <Plug>NextWholeOccurrence
-xmap <C-n> <Plug>NextWholeOccurrence
-nmap g<C-n> <Plug>NextOccurrence
-xmap g<C-n> <Plug>NextOccurrence
-nmap <C-x> <Plug>SkipOccurrence
-xmap <C-x> <Plug>SkipOccurrence
-nmap <C-p> <Plug>RemoveOccurrence
-xmap <C-p> <Plug>RemoveOccurrence
-
-nmap <S-C-n> <Plug>AllWholeOccurrances
-xmap <S-C-n> <Plug>AllWholeOccurrances
-nmap g<S-C-n> <Plug>AllOccurrances
-xmap g<S-C-n> <Plug>AllOccurrances
+set NERDTree
+let g:NERDTreeMapActivateNode='l'
+let g:NERDTreeMapJumpParent='h'
