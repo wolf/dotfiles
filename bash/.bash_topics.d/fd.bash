@@ -7,8 +7,6 @@ if [ "$(command -v as-tree)" ] ; then
         # Note the reversal.  This is the opposite of how fd normally works.
         fd --follow --hidden "${PATTERN}" "${TARGET_DIR}" | as-tree
     }
-else
-    alias tree="tree -alC -I '.git|__pycache__|node_modules|*.venv'"
 fi
 
 function f() {

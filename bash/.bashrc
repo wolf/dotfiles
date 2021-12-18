@@ -17,6 +17,10 @@ else
     alias ll="ls -Falh --color"
 fi
 
+if [ "$(command -v tree)" ] && [ ! "$(command -v fd)" ] && [ ! "$(command -v as-tree)" ] ; then
+    alias tree="tree -alC -I '.git|__pycache__|node_modules|*.venv'"
+fi
+
 alias grep='grep --color'
 alias h20='history 20'
 
