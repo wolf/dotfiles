@@ -21,7 +21,7 @@ function fcd() {
     # example: fcd '*.venv'
     # example: fcd --regex 'venv$'
     # find the directory with the given name, cd-ing into the first match found
-    FIRST_MATCHING_DIRECTORY="$(fd --type d --glob --max-results 1 "$@" 2>/dev/null)"
+    FIRST_MATCHING_DIRECTORY="$(fd --type d --glob --hidden --no-ignore --max-results 1 "$@" 2>/dev/null)"
     if [ -d "${FIRST_MATCHING_DIRECTORY}" ]; then
         cd "${FIRST_MATCHING_DIRECTORY}" || return
     fi
