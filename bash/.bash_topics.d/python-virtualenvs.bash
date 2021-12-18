@@ -1,3 +1,11 @@
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
+function virtualenv_info() {
+    [ "${VIRTUAL_ENV}" ] && echo ' ('$(basename "${VIRTUAL_ENV}")')';
+}
+
+# TODO: every place here I use bin/activate I probably need to test and possibly use Scripts/activate
+
 function create_venv() {
     if [ -v VIRTUAL_ENV ] ; then
         deactivate

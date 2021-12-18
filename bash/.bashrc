@@ -64,10 +64,6 @@ if [ "$(uname)" = 'Darwin' ] ; then # if I'm on macOS...
 
 fi
 
-export VIRTUAL_ENV_DISABLE_PROMPT=1
-
-function virtualenv_info()      { [ "${VIRTUAL_ENV}" ] && echo ' ('$(basename "${VIRTUAL_ENV}")')'; }
-
 # used to reattach ssh forwarding to "stale" tmux sessions
 # http://justinchouinard.com/blog/2010/04/10/fix-stale-ssh-environment-variables-in-gnu-screen-and-tmux/
 function refresh_ssh() {
