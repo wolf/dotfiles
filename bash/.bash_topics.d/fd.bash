@@ -25,10 +25,16 @@ function fcd() {
     fi
 }
 
-function fx() {
-    fd --print0 "$@" 2>/dev/null | xargs -0 ls --color -Falhd
+function en() {
+    fd --type f --glob --follow --hidden --no-ignore "$@" --exec-batch "${EDITOR}"
 }
 
-function en() {
-    fd --type f --glob --follow --hidden --no-ignore "$@" -X "${EDITOR}"
-}
+if [ "$(command -v exa)" ] ; then
+    function fx() {
+        fd "$@" --exec-batch exa -Fal
+    }
+else
+    function fx() {
+        fd "$@" --exec-batch command ls --color -Falhd
+    }
+fi
