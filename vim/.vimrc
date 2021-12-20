@@ -22,7 +22,6 @@ Plugin 'VundleVim/Vundle.vim'
 " Basics {{{
 Plugin 'tpope/vim-sensible'
 Plugin 'tpope/vim-fugitive'
-Plugin 'idanarye/vim-merginal'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'tpope/vim-surround'
@@ -32,14 +31,15 @@ Plugin 'tpope/vim-capslock'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-eunuch'
 Plugin 'tpope/vim-abolish'
+Plugin 'tpope/vim-unimpaired'
 " }}}
 
 " Navigation {{{
 " Within a file...
+Plugin 'justinmk/vim-sneak'
 Plugin 'haya14busa/incsearch.vim'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'haya14busa/incsearch-easymotion.vim'
-Plugin 'justinmk/vim-sneak'
 
 " Between files...
 Plugin 'junegunn/fzf'
@@ -120,7 +120,6 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
 Plugin 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
-Plugin 'tpope/vim-unimpaired'
 Plugin 'nelstrom/vim-visual-star-search'
 Plugin 'mg979/vim-visual-multi'
 " }}}
@@ -291,10 +290,6 @@ let g:NERDTreeIgnore=['\.git$[[dir]]', 'node_modules[[dir]]', '__pycache__[[dir]
 
 nnoremap <silent> <Leader>t :NERDTreeToggle<CR>
 nnoremap <silent> <Leader>f :NERDTreeFocus<CR>
-" }}}
-
-" Git behavior {{{
-nnoremap <silent> <Leader>mt :MerginalToggle<CR>
 " }}}
 
 " All files {{{
