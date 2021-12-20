@@ -31,10 +31,10 @@ function en() {
 
 if [ "$(command -v exa)" ] ; then
     function fx() {
-        fd "$@" --exec-batch exa -Fal
+        fd --glob --follow --hidden "$@" --exec-batch exa -Fal
     }
 else
     function fx() {
-        fd "$@" --exec-batch command ls --color -Falhd
+        fd --glob --follow --hidden "$@" --exec-batch command ls --color -Falhd
     }
 fi
