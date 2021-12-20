@@ -32,9 +32,7 @@ function present_in_path() {
 
 if [[ -d ~/.bash_topics.d ]]; then
     for TOPIC in ~/.bash_topics.d/*.bash; do
-        if [[ ! "${TOPIC}" =~ ~/.bash_topics.d/~.* ]] ; then
-            source "${TOPIC}"
-        fi
+        source "${TOPIC}"
     done
 fi
 
