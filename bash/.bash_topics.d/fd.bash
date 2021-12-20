@@ -26,7 +26,7 @@ function fcd() {
 }
 
 function en() {
-    fd --type f --glob --follow --hidden --no-ignore "$@" --exec-batch "${EDITOR}"
+    fd --type f --glob --follow --hidden --no-ignore "$@" --exec-batch ${EDITOR}
 }
 
 if [ "$(command -v exa)" ] ; then

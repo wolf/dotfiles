@@ -53,9 +53,9 @@ function dirty() {
     git ls-files --modified | sort -u
 }
 
-function edit_since()   { "${EDITOR}" $(since_commit "${1}"); }
-function edit_commit()  { "${EDITOR}" $(in_commit "${1}"); }
-function edit_dirty()   { "${EDITOR}" $(dirty); }
+function edit_since()   { ${EDITOR} $(since_commit "${1}"); }
+function edit_commit()  { ${EDITOR} $(in_commit "${1}"); }
+function edit_dirty()   { ${EDITOR} $(dirty); }
 
 # TODO: do I still need this?
 function start_rebase_onto_origin_main() {

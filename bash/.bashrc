@@ -104,11 +104,11 @@ function hosts() {
 
 if [ ! "$(command -v en)" ] ; then
     function en() {
-        find . -type f -print0 -name "$1" 2>/dev/null | xargs -0 "${EDITOR}"
+        find . -type f -print0 -name "$1" 2>/dev/null | xargs -0 ${EDITOR}
     }
 fi
 
-function ew()   { $EDITOR "$(which "$@")"; }
+function ew()   { ${EDITOR} "$(which "$@")"; }
 function lw()   { ll "$(which "$1")"; }
 function filew(){ file "$(which "$1")"; }
 function mkcd() { mkdir -p "$1" && cd "$1" || return; }
