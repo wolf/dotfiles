@@ -2,6 +2,7 @@ if command -v bat >/dev/null ; then
     alias cat=bat
 
     if [[ $(uname) =~ CYGWIN.* ]] ; then
+        # shellcheck disable=SC2155
         export BAT_CONFIG_PATH="$(cygpath --windows ~/.config/bat/config)"
 
         function bat() {

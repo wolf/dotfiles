@@ -26,6 +26,7 @@ function fcd() {
 }
 
 function en() {
+    # shellcheck disable=SC2086
     fd --type f --glob --follow --hidden --no-ignore "$@" --exec-batch ${EDITOR}
 }
 

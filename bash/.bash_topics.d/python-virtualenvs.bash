@@ -17,6 +17,7 @@ function create_venv() {
         VENV_DIR="$1"
     fi
     python -m venv --copies --upgrade-deps "$VENV_DIR"
+    # shellcheck disable=SC1091
     source "${VENV_DIR}/bin/activate"
     python -m pip install --upgrade wheel
 }
@@ -31,6 +32,7 @@ function activate_found_venv() {
         VENV_DIR=$(command ls --color=never -d ./*.venv 2>/dev/null | head -n 1)
     fi
     if [[ -n "${VENV_DIR}" ]] ; then
+        # shellcheck disable=SC1090
         source ./"${VENV_DIR}"/bin/activate
     fi
 }
@@ -41,6 +43,7 @@ function rename_venv() {
     RANDOM_STRING=$(python -c "import uuid; print(str(uuid.uuid4()),end='')")
     TEMP_FILE_NAME=/tmp/${RANDOM_STRING}.requirements.txt
 
+    # shellcheck disable=SC1091
     source "${FROM_NAME}/bin/activate"
     python -m pip freeze > "${TEMP_FILE_NAME}"
     deactivate 2>/dev/null
