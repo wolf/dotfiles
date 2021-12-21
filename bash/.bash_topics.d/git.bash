@@ -59,6 +59,19 @@ function edit_since()   { ${EDITOR} $(since_commit "${1}"); }
 function edit_commit()  { ${EDITOR} $(in_commit "${1}"); }
 function edit_dirty()   { ${EDITOR} $(dirty); }
 
+if [ "$(command -v fzf)" ] ; then
+    function fzf_git_show() {
+        # usage: fzf_git_show [...options for git log...]
+        # example: fzf_git_show
+        # example: fzf_git_show --author=Wolf --since="{2 days ago}"
+        # brings up fzf over a log of selected commits, then shows the chosen one
+        COMMIT_TO_SHOW="$(git log --abbrev-commit --oneline "$@" | fzf | cut -d ' ' -f 1)"
+        if [ -n "${COMMIT_TO_SHOW}" ] ; then
+            git show "${COMMIT_TO_SHOW}"
+        fi
+    }
+fi
+
 # TODO: do I still need this?
 function start_rebase_onto_origin_main() {
     STASH_KEY="$(python -c 'import uuid; print(str(uuid.uuid4()))')"
