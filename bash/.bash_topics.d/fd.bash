@@ -1,7 +1,7 @@
 command -v fd >/dev/null || return
 
 if [ "$(command -v as-tree)" ] ; then
-    function tree() {
+    function ftree() {
         TARGET_DIR=${1:-.}
         PATTERN=${2:-.}
         # Note the reversal.  This is the opposite of how fd normally works.
@@ -35,17 +35,17 @@ function fcd() {
     fi
 }
 
-function en() {
+function fe() {
     # shellcheck disable=SC2086
     fd --type f --glob --follow --hidden --no-ignore "$@" --exec-batch ${EDITOR}
 }
 
 if [ "$(command -v exa)" ] ; then
-    function fx() {
+    function fll() {
         fd --glob --follow --hidden "$@" --exec-batch exa -Fal
     }
 else
-    function fx() {
+    function fll() {
         fd --glob --follow --hidden "$@" --exec-batch command ls --color -Falhd
     }
 fi

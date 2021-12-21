@@ -81,11 +81,11 @@ if [ ! "$(command -v f)" ] ; then
     }
 fi
 
-if [ ! "$(command -v fx)" ] ; then
-    function fx() {
+if [ ! "$(command -v fll)" ] ; then
+    function fll() {
         # "find and list files in long format"
-        # usage: fx <pattern>
-        # example: fx '*.bash'
+        # usage: fll <pattern>
+        # example: fll '*.bash'
         # find the filesystem objects matching the given pattern in or below .
 
         # shellcheck disable=SC2033
@@ -118,11 +118,11 @@ if [ ! "$(command -v fcat)" ] ; then
     fi
 fi
 
-if [ ! "$(command -v en)" ] ; then
-    function en() {
+if [ ! "$(command -v fe)" ] ; then
+    function fe() {
         # "edit by name"
-        # usage: en <name>
-        # example: en .bashrc
+        # usage: fe <name>
+        # example: fe .bashrc
         # find the files with the given name in or below . and open them in the default editor
         find . -type f -print0 -name "$1" 2>/dev/null | xargs -0 ${EDITOR}
     }
@@ -131,25 +131,26 @@ fi
 function show_path()    { echo "${PATH}" | tr ':' '\n'; }
 function hosts()        { grep -e '^Host' ~/.ssh/config; }
 function did()          { history | grep -v 'did' | grep "$1"; }
-function ew()           { ${EDITOR} "$(which "$@")"; }
-function lw()           { ll "$(which "$1")"; }
-function filew()        { file "$(which "$1")"; }
+function we()           { ${EDITOR} "$(which "$@")"; }
+function wll()          { ll "$(which "$1")"; }
+function wfile()        { file "$(which "$1")"; }
 function mkcd()         { mkdir -p "$1" && cd "$1" || return; }
 function resolve()      { cd "$(pwd -P)" || return; }
 
 function help_wolf() {
     echo 'did pattern       -- find pattern in history'
     echo
-    echo 'f pattern         -- find pattern in or below .'
-    echo 'fx pattern        -- ls -l all the files that match pattern in or below .'
+    echo 'f pattern         -- find all the filesystem objects that match the pattern in or below .'
+    echo 'fll pattern       -- ls -l all the files that match pattern in or below .'
     echo 'fcd pattern       -- cd to the first directory that matches pattern in or below .'
-    echo 'en pattern        -- find and edit the files that match pattern in or below .'
+    echo 'fcat pattern      -- cat all the filesystem objects that match the pattern in or below .'
+    echo 'fe pattern        -- find and edit all the files that match pattern in or below .'
     # shellcheck disable=SC2016
-    echo 'ew script         -- find and edit the file matching script along $PATH'
+    echo 'we script         -- find (with which) and edit the script along $PATH'
     # shellcheck disable=SC2016
-    echo 'lw command        -- ls -l the file matching command along $PATH'
+    echo 'wll pattern       -- ls -l the filesystem objects matching pattern along $PATH'
     # shellcheck disable=SC2016
-    echo 'filew command     -- run `file` on the file matching command along $PATH'
+    echo 'wfile command     -- run `file` on the file matching command along $PATH'
     echo 'mkcd path         -- create a directory (and all intervening directories) and cd into it'
     echo 'resolve           -- make the logical current directory match the physical one'
 }
