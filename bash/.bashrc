@@ -106,6 +106,18 @@ if [ ! "$(command -v fcd)" ] ; then
     }
 fi
 
+if [ ! "$(command -v fcat)" ] ; then
+    if [ "$(command -v bat)" ] ; then
+        function fcat () {
+            find . -type f -print0 -name "$@" 2>/dev/null | xargs -0 bat
+        }
+    else
+        function fcat () {
+            find . -type f -print0 -name "$@" 2>/dev/null | xargs -0 cat
+        }
+    fi
+fi
+
 if [ ! "$(command -v en)" ] ; then
     function en() {
         # "edit by name"

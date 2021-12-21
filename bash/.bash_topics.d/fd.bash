@@ -13,6 +13,16 @@ function f() {
     fd --follow --no-ignore --hidden --glob "$@" 2>/dev/null
 }
 
+if [ "$(command -v bat)" ] ; then
+    function fcat() {
+        fd --follow --no-ignore --hidden --glob --type f "$@" --exec-batch bat
+    }
+else
+    function fcat() {
+        fd --follow --no-ignore --hidden --glob --type f "$@" --exec-batch cat
+    }
+fi
+
 function fcd() {
     # usage: fcd <pattern>
     # example: fcd js
