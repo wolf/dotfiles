@@ -38,6 +38,12 @@ elif [ -f /etc/bash_completion ] ; then
     source /etc/bash_completion
 fi
 
+if [ "$(uname)" = 'Darwin' ] ; then # if I'm on macOS...
+    if [ -z "${SSH_CONNECTION}" ] ; then
+        alias fixopenwith='/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user'
+    fi
+fi
+
 if command -v __git_ps1 >/dev/null ; then
     export PS1='\n\u@\h:\[\e[35m\]\w\[\e[0m\]$(virtualenv_info) $(__git_ps1 "\[\e[32m\][$(time_since_last_commit) %s $(tip)]\[\e[0m\]")'$'\n\$ '
 else
