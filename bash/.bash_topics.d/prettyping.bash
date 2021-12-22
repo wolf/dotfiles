@@ -1,3 +1,3 @@
-if command -v prettyping >/dev/null ; then
-    alias ping=prettyping
-fi
+command -v prettyping >/dev/null || return
+
+alias ping=prettyping

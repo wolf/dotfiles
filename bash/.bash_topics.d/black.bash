@@ -1,3 +1,5 @@
+command -v black >/dev/null || return
+
 if [ "$(command -v fd)" ] ; then
     function black_name() {
         fd --type f --extension py --glob --follow --hidden "$@" -X black
