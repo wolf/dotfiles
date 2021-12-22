@@ -1,1 +1,2 @@
 *.local-only.bash
+*.do-not-load
