@@ -130,7 +130,13 @@ if [ ! "$(command -v fe)" ] ; then
         # usage: fe <name>
         # example: fe .bashrc
         # find the files with the given name in or below . and open them in the default editor
-        find . -type f -print0 -name "$1" 2>/dev/null | xargs -0 ${EDITOR}
+        find . -type f -print0 -name "$1" 2>/dev/null | xargs -o -0 ${EDITOR}
+    }
+fi
+
+if [ ! "$(command -v ge)" ] ; then
+    function ge() {
+        grep -rl "$@" | xargs -o ${EDITOR}
     }
 fi
 
@@ -151,6 +157,7 @@ function help_wolf() {
     echo 'fcd pattern       -- cd to the first directory that matches pattern in or below .'
     echo 'fcat pattern      -- cat all the filesystem objects that match the pattern in or below .'
     echo 'fe pattern        -- find and edit all the files that match pattern in or below .'
+    echo 'ge pattern        -- grep for pattern and edit all the files with matches in or below .'
     # shellcheck disable=SC2016
     echo 'we script         -- find (with which) and edit the script along $PATH'
     # shellcheck disable=SC2016
