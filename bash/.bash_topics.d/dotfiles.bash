@@ -1,12 +1,12 @@
 export DOTFILES_DIR=~/builds/dotfiles
 
 function cddf() {
-    cd "${DOTFILES_DIR}/$1" || return
+    cd "${DOTFILES_DIR}/${1}" || return
 }
 
 # shellcheck disable=SC2120
 function pushddf() {
-    pushd "${DOTFILES_DIR}/$1" || return
+    pushd "${DOTFILES_DIR}/${1}" || return
 }
 
 pushddf >/dev/null

@@ -26,7 +26,7 @@ fi
 function fcd() {
     # usage: fcd <pattern>
     # example: fcd js
-    # example: fcd '*.venv'
+    # example: fcd '*venv'
     # example: fcd --regex 'venv$'
     # find the directory with the given name, cd-ing into the first match found
     FIRST_MATCHING_DIRECTORY="$(fd --type d --glob --hidden --no-ignore --max-results 1 "$@" 2>/dev/null)"

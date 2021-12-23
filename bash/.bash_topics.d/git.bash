@@ -21,7 +21,7 @@ function cdtop() {
     # change directory to the top-level of a git working-copy, or to a path relative to that
     TOP_LEVEL="$(git rev-parse --show-toplevel)"
     if [ -n "${TOP_LEVEL}" ] ; then
-        cd "${TOP_LEVEL}/$1" || return
+        cd "${TOP_LEVEL}/${1}" || return
     fi
 }
 
@@ -30,7 +30,7 @@ function pushdtop() {
     # pushd combined with cdtop
     TOP_LEVEL="$(git rev-parse --show-toplevel)"
     if [ -n "${TOP_LEVEL}" ] ; then
-        pushd "${TOP_LEVEL}/$1" || return
+        pushd "${TOP_LEVEL}/${1}" || return
     fi
 }
 
