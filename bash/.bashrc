@@ -69,8 +69,8 @@ if [ ! "$(alias ls 2>/dev/null)" ] ; then
     alias ll="ls -Falh --color"
 fi
 
-if [ "$(command -v tree)" ] && [ ! "$(command -v fd)" ] && [ ! "$(command -v as-tree)" ] ; then
-    alias tree="tree -alC -I '.git|__pycache__|node_modules|*.venv'"
+if [ "$(command -v tree)" ] ; then
+    alias tree="tree -alC -I '.git|__pycache__|node_modules|*venv'"
 fi
 
 if [ ! "$(command -v f)" ] ; then
