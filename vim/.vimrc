@@ -286,7 +286,7 @@ augroup NERDTree_behavior
         \ quit | endif
 augroup END
 
-let g:NERDTreeIgnore=['\.git$[[dir]]', 'node_modules[[dir]]', '__pycache__[[dir]]', '.*\.venv$[[dir]]']
+let g:NERDTreeIgnore=['\.git$[[dir]]', 'node_modules[[dir]]', '__pycache__[[dir]]', '.*venv$[[dir]]']
 
 nnoremap <silent> <Leader>t :NERDTreeToggle<CR>
 nnoremap <silent> <Leader>f :NERDTreeFocus<CR>
