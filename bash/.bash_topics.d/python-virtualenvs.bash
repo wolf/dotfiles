@@ -28,6 +28,73 @@ function activate_venv() {
     fi
 }
 
+function activate_found_venv() {
+    deactivate_venv
+    if [ -d .venv ] ; then
+        VENV_DIR=.venv
+    else
+        VENV_DIR=$(command ls --color=never -d ./*venv 2>/dev/null | head -n 1)
+    fi
+    activate_venv "${VENV_DIR}"
+}
+
+function cdv() {
+    DESTINATION_DIR="${1:-"${HOME}"}"
+    deactivate_venv
+    cd "${DESTINATION_DIR}" || return
+    activate_found_venv
+}
+
+# A completion function for the cd builtin
+# based on the cd completion function from the bash_completion package
+# Adapted from: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#index-complete
+function _comp_cdv()
+{
+    local IFS=$' \t\n'    # normalize IFS
+    local cur _skipdot _cdpath
+    local i j k
+
+    # Tilde expansion, which also expands tilde to full pathname
+    case "$2" in
+    \~*)    eval cur="$2" ;;
+    *)      cur=$2 ;;
+    esac
+
+    # no cdpath or absolute pathname -- straight directory completion
+    if [[ -z "${CDPATH:-}" ]] || [[ "$cur" == @(./*|../*|/*) ]]; then
+        # compgen prints paths one per line; could also use while loop
+        IFS=$'\n'
+        COMPREPLY=( $(compgen -d -- "$cur") )
+        IFS=$' \t\n'
+    # CDPATH+directories in the current directory if not in CDPATH
+    else
+        IFS=$'\n'
+        _skipdot=false
+        # preprocess CDPATH to convert null directory names to .
+        _cdpath=${CDPATH/#:/.:}
+        _cdpath=${_cdpath//::/:.:}
+        _cdpath=${_cdpath/%:/:.}
+        for i in ${_cdpath//:/$'\n'}; do
+            if [[ $i -ef . ]]; then _skipdot=true; fi
+            k="${#COMPREPLY[@]}"
+            for j in $( compgen -d -- "$i/$cur" ); do
+                COMPREPLY[k++]=${j#$i/}        # cut off directory
+            done
+        done
+        $_skipdot || COMPREPLY+=( $(compgen -d -- "$cur") )
+        IFS=$' \t\n'
+    fi
+
+    # variable names if appropriate shell option set and no completions
+    if shopt -q cdable_vars && [[ ${#COMPREPLY[@]} -eq 0 ]]; then
+        COMPREPLY=( $(compgen -v -- "$cur") )
+    fi
+
+    return 0
+}
+
+complete -o filenames -o nospace -o bashdefault -F _comp_cdv cdv
+
 function create_venv() {
     deactivate_venv
     if [ -z "${1}" ] ; then
@@ -42,16 +109,6 @@ function create_venv() {
     if [ -n "${2}" ] && [ -f "${2}" ] ; then
         python -m pip install -r "${2}"
     fi
-}
-
-function activate_found_venv() {
-    deactivate_venv
-    if [ -d .venv ] ; then
-        VENV_DIR=.venv
-    else
-        VENV_DIR=$(command ls --color=never -d ./*venv 2>/dev/null | head -n 1)
-    fi
-    activate_venv "${VENV_DIR}"
 }
 
 function rename_venv() {
@@ -72,11 +129,6 @@ function rename_venv() {
     rm -rf "${FROM_NAME}"
 }
 
-function cdv() {
-    cd "${1}" || return
-    activate_found_venv
-}
-
-export -f create_venv
 export -f activate_found_venv
+export -f create_venv
 export -f rename_venv
