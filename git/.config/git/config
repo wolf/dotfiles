@@ -5,9 +5,10 @@
     d = diff --word-diff=color
     ec = config --local --edit
     egc = config --global --edit
-    l = log --decorate --abbrev-commit --oneline
-    l8 = log --decorate --abbrev-commit --oneline -8
+    l = log --decorate --oneline
+    l8 = log --decorate --oneline -8
     lg = log --pretty=format:'%C(yellow)%h%Creset %C(red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+    t = ! GIT_PAGER=tig git log --no-color
     st = status
     s = status -s
     n = ! git status -s | wc -l
