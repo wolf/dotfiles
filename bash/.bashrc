@@ -18,14 +18,28 @@ function present_in_path() {
     echo "${PATH}" | tr ':' '\n' | grep -e "^$1$" >/dev/null;
 }
 
-if [[ -d ~/.bash_topics.d ]]; then
-    for TOPIC in ~/.bash_topics.d/*.bash; do
+if [ -d "${HOME}/.bash_topics.d" ] ; then
+    for TOPIC in "${HOME}/.bash_topics.d/"*.bash ; do
         # shellcheck disable=SC1090
         source "${TOPIC}"
     done
+
+    UNAME="$(uname)"
+    UNAME="${UNAME,,}"
+    if [[ ${UNAME} =~ msys.* ]] ; then
+        UNAME=msys
+    elif [[ ${UNAME} =~ cygwin.* ]] ; then
+        UNAME=cygwin
+    fi
+    if [ -d "${HOME}/.bash_topics/${UNAME}" ] ; then
+        for TOPIC in "${HOME}/.bash_topics/${UNAME}/"*.bash ; do
+            # shellcheck disable=SC1090
+            source "${TOPIC}"
+        done
+    fi
 fi
 
-if [[ -f ~/.dir_colors ]]; then
+if [ -f ~/.dir_colors ] ; then
     # shellcheck disable=SC2046
     eval $(dircolors -b ~/.dir_colors)
 fi
@@ -36,12 +50,6 @@ if command -v brew >/dev/null && test -f "$(brew --prefix)/etc/bash_completion" 
 elif [ -f /etc/bash_completion ] ; then
     # shellcheck disable=SC1091
     source /etc/bash_completion
-fi
-
-if [ "$(uname)" = 'Darwin' ] ; then # if I'm on macOS...
-    if [ -z "${SSH_CONNECTION}" ] ; then
-        alias fixopenwith='/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user'
-    fi
 fi
 
 if command -v __git_ps1 >/dev/null ; then
@@ -62,83 +70,7 @@ bind '"\e[B":history-search-forward'
 
 alias h20='history 20'
 alias grep='grep --color'
-
-if [ ! "$(alias ls 2>/dev/null)" ] ; then
-    # shellcheck disable=SC2032
-    alias ls="command ls --color"
-    alias ll="ls -Falh --color"
-fi
-
-if [ "$(command -v tree)" ] ; then
-    alias tree="tree -alC -I '.git|__pycache__|node_modules|*venv'"
-fi
-
-if [ ! "$(command -v f)" ] ; then
-    # first check: is f already defined?  If so, maybe it was created by an active topic
-    # similarly check in each of the following commands as well
-
-    function f() {
-        # "find..."
-        # usage: f <name> [...]
-        # example: f Makefile
-        # example: f Makefile -type f
-        # find the filesystem object with the given name
-        find . -name "$@" 2>/dev/null
-    }
-fi
-
-if [ ! "$(command -v fll)" ] ; then
-    function fll() {
-        # "find and list files in long format"
-        # usage: fll <pattern>
-        # example: fll '*.bash'
-        # find the filesystem objects matching the given pattern in or below .
-
-        # shellcheck disable=SC2033
-        find . -name "$@" -print0 2>/dev/null | xargs -0 ls --color -Falhd
-    }
-fi
-
-if [ ! "$(command -v fcd)" ] ; then
-    function fcd() {
-        # "find and cd into..."
-        # usage: fcd <pattern>
-        # example: fcd js
-        # find the directory with the given name, cd-ing into the first match found
-        FIRST_MATCHING_DIRECTORY="$(find . -type d -name "$@" 2>/dev/null | head -n 1)"
-        if [ -d "${FIRST_MATCHING_DIRECTORY}" ]; then
-            cd "${FIRST_MATCHING_DIRECTORY}" || return
-        fi
-    }
-fi
-
-if [ ! "$(command -v fcat)" ] ; then
-    if [ "$(command -v bat)" ] ; then
-        function fcat () {
-            find . -type f -print0 -name "$@" 2>/dev/null | xargs -0 bat
-        }
-    else
-        function fcat () {
-            find . -type f -print0 -name "$@" 2>/dev/null | xargs -0 cat
-        }
-    fi
-fi
-
-if [ ! "$(command -v fe)" ] ; then
-    function fe() {
-        # "edit by name"
-        # usage: fe <name>
-        # example: fe .bashrc
-        # find the files with the given name in or below . and open them in the default editor
-        find . -type f -print0 -name "$1" 2>/dev/null | xargs -o -0 ${EDITOR}
-    }
-fi
-
-if [ ! "$(command -v ge)" ] ; then
-    function ge() {
-        grep -rl "$@" | xargs -o ${EDITOR}
-    }
-fi
+alias tree="tree -alC -I '.git|__pycache__|node_modules|*venv'"
 
 function show_path()    { echo "${PATH}" | tr ':' '\n'; }
 function hosts()        { grep -e '^Host' ~/.ssh/config; }

@@ -28,6 +28,9 @@ After you've run `vim`, the `~/.vim` directory should exist.  Now it's time to i
 stow --target=${HOME} -S ultisnips
 ```
 
+### non-standard tools
+
+For Bash, I generally have installed several command-line tools that I find helpful.  I have the complete collection on macOS and all my Linux boxes.  Some/most of these tools are not easily installed on Windows, so my Bash initialization takes platform-specific definitions into account.  See bash/README.md for details.
 
 ### local-only branch
 

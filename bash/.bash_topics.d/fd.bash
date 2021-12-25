@@ -13,15 +13,9 @@ function f() {
     fd --follow --no-ignore --hidden --glob "$@" 2>/dev/null
 }
 
-if [ "$(command -v bat)" ] ; then
-    function fcat() {
-        fd --follow --no-ignore --hidden --glob --type f "$@" --exec-batch bat
-    }
-else
-    function fcat() {
-        fd --follow --no-ignore --hidden --glob --type f "$@" --exec-batch cat
-    }
-fi
+function fcat() {
+    fd --follow --no-ignore --hidden --glob --type f "$@" --exec-batch bat
+}
 
 function fcd() {
     # usage: fcd <pattern>
@@ -40,12 +34,6 @@ function fe() {
     fd --type f --glob --follow --hidden --no-ignore "$@" --exec-batch ${EDITOR}
 }
 
-if [ "$(command -v exa)" ] ; then
-    function fll() {
-        fd --glob --follow --hidden "$@" --exec-batch exa -Fal
-    }
-else
-    function fll() {
-        fd --glob --follow --hidden "$@" --exec-batch command ls --color -Falhd
-    }
-fi
+function fll() {
+    fd --glob --follow --hidden "$@" --exec-batch exa -Fal
+}
