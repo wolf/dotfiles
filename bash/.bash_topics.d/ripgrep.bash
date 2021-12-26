@@ -8,9 +8,11 @@ function ge() { # ge <pattern> : find files in or below . whose contents somehow
 }
 
 
-function help() { # help : you're soaking in it!
-    rg --hidden --color=never --no-line-number \
+function help_commands() { # help : you're soaking in it!
+    rg --hidden --color=never --no-line-number --heading \
         -e '\s*(?:function|alias)\s+([a-z][a-z0-9_]*).*(#.*)' \
         --replace "\$1		\$2" \
-        "${DOTFILES_DIR}/bash"
+        "${DOTFILES_DIR}/bash" \
+        | rg --passthru --color=always --no-line-number --no-filename \
+        -e '^[a-z][a-z0-9_]*'
 }
