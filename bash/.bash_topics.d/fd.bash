@@ -28,6 +28,10 @@ function fll() { # fll <pattern> : find all the files in or below . whose names 
     fd --glob --follow --hidden "$@" --exec-batch exa -Fal
 }
 
+function fsource() { # fsource <pattern> : find all the files in or below . whose names match the given pattern and source them
+    fd --follow --no-ignore --hidden --glob --type f "$@" --exec-batch source
+}
+
 function ftree() { # ftree [<path> [<pattern>]] : find all the file system objects in or below <path> whose names match <pattern> and display them as a tree
     TARGET_DIR=${1:-.}
     PATTERN=${2:-.}
