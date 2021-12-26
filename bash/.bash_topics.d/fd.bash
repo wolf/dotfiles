@@ -29,7 +29,7 @@ function fll() { # fll <pattern> : find all the files in or below . whose names 
 }
 
 function fsource() { # fsource <pattern> : find all the files in or below . whose names match the given pattern and source them
-    fd --follow --no-ignore --hidden --glob --type f "$@" --exec-batch source
+    fd --follow --no-ignore --hidden --glob --type f "$@" --print0 | xargs -0 command source
 }
 
 function ftree() { # ftree [<path> [<pattern>]] : find all the file system objects in or below <path> whose names match <pattern> and display them as a tree
