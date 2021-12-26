@@ -7,14 +7,8 @@ function f() {
     find . -name "$@" 2>/dev/null
 }
 
-function fll() {
-    # "find and list files in long format"
-    # usage: fll <pattern>
-    # example: fll '*.bash'
-    # find the filesystem objects matching the given pattern in or below .
-
-    # shellcheck disable=SC2033
-    find . -name "$@" -print0 2>/dev/null | xargs -0 ls --color -Falhd
+function fcat () {
+    find . -type f -print0 -name "$@" 2>/dev/null | xargs -0 cat
 }
 
 function fcd() {
@@ -28,10 +22,6 @@ function fcd() {
     fi
 }
 
-function fcat () {
-    find . -type f -print0 -name "$@" 2>/dev/null | xargs -0 cat
-}
-
 function fe() {
     # "edit by name"
     # usage: fe <name>
@@ -40,4 +30,14 @@ function fe() {
 
     # shellcheck disable=SC2086
     find . -type f -print0 -name "$1" 2>/dev/null | xargs -o -0 ${EDITOR}
+}
+
+function fll() {
+    # "find and list files in long format"
+    # usage: fll <pattern>
+    # example: fll '*.bash'
+    # find the filesystem objects matching the given pattern in or below .
+
+    # shellcheck disable=SC2033
+    find . -name "$@" -print0 2>/dev/null | xargs -0 ls --color -Falhd
 }

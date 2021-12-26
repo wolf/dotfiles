@@ -4,7 +4,7 @@ function virtualenv_info() {
     [ -v VIRTUAL_ENV ] && echo ' ('"$(basename "${VIRTUAL_ENV}")"')';
 }
 
-function deactivate_venv() {
+function deactivate_venv() { # deactivate_venv : deactivate the currently active venv, if any, whether using pyenv-virtualenvs or not
     [ -v VIRTUAL_ENV ] || return
     if [ -v PYENV_VIRTUALENV_INIT ] ; then
         # shellcheck disable=SC1091
@@ -14,7 +14,7 @@ function deactivate_venv() {
     fi
 }
 
-function activate_venv() {
+function activate_venv() { # activate_venv <venv>
     VENV_TO_ACTIVATE="${1}"
     [ -z "${VENV_TO_ACTIVATE}" ] && return
     deactivate_venv
@@ -28,7 +28,7 @@ function activate_venv() {
     fi
 }
 
-function activate_found_venv() {
+function activate_found_venv() { # activate_found_venv : activate the venv found in the current directory
     deactivate_venv
     if [ -d .venv ] ; then
         VENV_DIR=.venv
@@ -38,15 +38,14 @@ function activate_found_venv() {
     activate_venv "${VENV_DIR}"
 }
 
-function cdv() {
+function cdv() { # cdv [<path>] : cd into <path>, if given, or else $HOME; and activate the venv found there
     DESTINATION_DIR="${1:-"${HOME}"}"
     deactivate_venv
     cd "${DESTINATION_DIR}" || return
     activate_found_venv
 }
 
-# A completion function for the cd builtin
-# based on the cd completion function from the bash_completion package
+# Based on the cd completion function from the bash_completion package
 # Adapted from: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#index-complete
 function _comp_cdv()
 {
@@ -95,7 +94,7 @@ function _comp_cdv()
 
 complete -o filenames -o nospace -o bashdefault -F _comp_cdv cdv
 
-function create_venv() {
+function create_venv() { # create_venv [<path> [requirements]] : create a venv at path, or if none given, at <cwd>/<cwd>.venv, installing packages named in <requirements>
     deactivate_venv
     if [ -z "${1}" ] ; then
         VENV_DIR="$(basename "$(pwd)")".venv
@@ -111,7 +110,7 @@ function create_venv() {
     fi
 }
 
-function rename_venv() {
+function rename_venv() { # rename_venv <path-to-existing-venv> <new-name> : rename a venv, keeping all installed packages
     FROM_NAME="${1}"
     TO_NAME="${2}"
     RANDOM_STRING=$(python -c "import uuid; print(str(uuid.uuid4()),end='')")

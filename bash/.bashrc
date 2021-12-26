@@ -14,7 +14,7 @@ umask go-wx
 export EDITOR='vim'
 export FCEDIT='vim'
 
-function present_in_path() {
+function in_path() { # in_path <path> : is <path> a directory in $PATH
     echo "${PATH}" | tr ':' '\n' | grep -e "^$1$" >/dev/null;
 }
 
@@ -68,34 +68,14 @@ bind '"\t":menu-complete'
 bind '"\e[A":history-search-backward'
 bind '"\e[B":history-search-forward'
 
-alias h20='history 20'
-alias grep='grep --color'
+alias h20='history 20'                                              # h20 : show the last 20 entries from history
 alias tree="tree -alC -I '.git|__pycache__|node_modules|*venv'"
 
-function show_path()    { echo "${PATH}" | tr ':' '\n'; }
-function hosts()        { grep -e '^Host' ~/.ssh/config; }
-function did()          { history | grep -v 'did' | grep "$1"; }
-function we()           { ${EDITOR} "$(which "$@")"; }
-function wll()          { ll "$(which "$1")"; }
-function wfile()        { file "$(which "$1")"; }
-function mkcd()         { mkdir -p "$1" && cd "$1" || return; }
-function resolve()      { cd "$(pwd -P)" || return; }
-
-function help_wolf() {
-    echo 'did pattern       -- find pattern in history'
-    echo
-    echo 'f pattern         -- find all the filesystem objects that match the pattern in or below .'
-    echo 'fll pattern       -- ls -l all the files that match pattern in or below .'
-    echo 'fcd pattern       -- cd to the first directory that matches pattern in or below .'
-    echo 'fcat pattern      -- cat all the filesystem objects that match the pattern in or below .'
-    echo 'fe pattern        -- find and edit all the files that match pattern in or below .'
-    echo 'ge pattern        -- grep for pattern and edit all the files with matches in or below .'
-    # shellcheck disable=SC2016
-    echo 'we script         -- find (with which) and edit the script along $PATH'
-    # shellcheck disable=SC2016
-    echo 'wll pattern       -- ls -l the filesystem objects matching pattern along $PATH'
-    # shellcheck disable=SC2016
-    echo 'wfile command     -- run `file` on the file matching command along $PATH'
-    echo 'mkcd path         -- create a directory (and all intervening directories) and cd into it'
-    echo 'resolve           -- make the logical current directory match the physical one'
-}
+function show_path()    { echo "${PATH}" | tr ':' '\n'; }           # show_path : display $PATH, one path per line
+function hosts()        { grep -e '^Host' ~/.ssh/config; }          # hosts : list Hosts configured in ~/.ssh/config
+function did()          { history | grep -v 'did' | grep "$1"; }    # did <pattern> : list commands from history matching <pattern>
+function we()           { ${EDITOR} "$(which "$@")"; }              # we <script> : find <script> (using which) and open it in $EDITOR
+function wll()          { ll "$(which "$1")"; }                     # wll <command> : find <command> (using which) and list it as with ls -l
+function wfile()        { file "$(which "$1")"; }                   # wfile <command> : find <command> (using which) and run file on it
+function mkcd()         { mkdir -p "$1" && cd "$1" || return; }     # mkcd <path> : create all directories needed to build <path> and cd into it
+function resolve()      { cd "$(pwd -P)" || return; }               # resolve : if <cwd> contains any symbolic links, cd to the resolved physical directory you are actually in
