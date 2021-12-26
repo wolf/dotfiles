@@ -31,8 +31,8 @@ if [ -d "${HOME}/.bash_topics.d" ] ; then
     elif [[ ${UNAME} =~ cygwin.* ]] ; then
         UNAME=cygwin
     fi
-    if [ -d "${HOME}/.bash_topics/${UNAME}" ] ; then
-        for TOPIC in "${HOME}/.bash_topics/${UNAME}/"*.bash ; do
+    if [ -d "${HOME}/.bash_topics.d/${UNAME}" ] ; then
+        for TOPIC in "${HOME}/.bash_topics.d/${UNAME}/"*.bash ; do
             # shellcheck disable=SC1090
             source "${TOPIC}"
         done
