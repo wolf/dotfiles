@@ -15,7 +15,7 @@ function deactivate_venv() { # deactivate_venv : deactivate the currently active
 }
 
 function activate_venv() { # activate_venv <venv>
-    VENV_TO_ACTIVATE="${1}"
+    local VENV_TO_ACTIVATE="${1}"
     [ -z "${VENV_TO_ACTIVATE}" ] && return
     deactivate_venv
 
@@ -29,17 +29,19 @@ function activate_venv() { # activate_venv <venv>
 }
 
 function activate_found_venv() { # activate_found_venv : activate the venv found in the current directory
+    local VENV_DIR
+
     deactivate_venv
     if [ -d .venv ] ; then
         VENV_DIR=.venv
     else
-        VENV_DIR=$(command ls --color=never -d ./*venv 2>/dev/null | head -n 1)
+        VENV_DIR="$(command ls --color=never -d ./*venv 2>/dev/null | head -n 1)"
     fi
     activate_venv "${VENV_DIR}"
 }
 
 function cdv() { # cdv [<path>] : cd into <path>, if given, or else $HOME; and activate the venv found there
-    DESTINATION_DIR="${1:-"${HOME}"}"
+    local DESTINATION_DIR="${1:-"${HOME}"}"
     deactivate_venv
     cd "${DESTINATION_DIR}" || return
     activate_found_venv
@@ -95,6 +97,8 @@ function _comp_cdv()
 complete -o filenames -o nospace -o bashdefault -F _comp_cdv cdv
 
 function create_venv() { # create_venv [<path> [requirements]] : create a venv at path, or if none given, at <cwd>/<cwd>.venv, installing packages named in <requirements>
+    local VENV_DIR
+
     deactivate_venv
     if [ -z "${1}" ] ; then
         VENV_DIR="$(basename "$(pwd)")".venv
@@ -111,10 +115,12 @@ function create_venv() { # create_venv [<path> [requirements]] : create a venv a
 }
 
 function rename_venv() { # rename_venv <path-to-existing-venv> <new-name> : rename a venv, keeping all installed packages
-    FROM_NAME="${1}"
-    TO_NAME="${2}"
-    RANDOM_STRING=$(python -c "import uuid; print(str(uuid.uuid4()),end='')")
-    TEMP_FILE_NAME=/tmp/${RANDOM_STRING}.requirements.txt
+    local RANDOM_STRING
+    RANDOM_STRING="$(python -c "import uuid; print(str(uuid.uuid4()),end='')")"
+
+    local FROM_NAME="${1}"
+    local TO_NAME="${2}"
+    local TEMP_FILE_NAME=/tmp/${RANDOM_STRING}.requirements.txt
 
     activate_venv "${FROM_NAME}"
     python -m pip freeze > "${TEMP_FILE_NAME}"

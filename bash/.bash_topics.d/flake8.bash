@@ -1,10 +1,9 @@
 command -v flake8 >/dev/null || return
-# only define flake8 commands if flake8 is available
 
-function flake8_name() {
-    fd --type f --extension py --glob --follow --hidden "$@" -X flake8
+function flake8_name() { # flake8_name [<pattern>] : find all the python files whose names match <pattern> in or below . and run them through flake8
+    fd --type f --extension py --glob --follow --hidden "$@" --exec-batch flake8
 }
 
-function flake8_since()     { since_commit "${1}" | grep '\.py$' | xargs flake8; }
-function flake8_commit()    { in_commit "${1}" | grep '\.py$' | xargs flake8; }
-function flake8_dirty()     { dirty | grep '\.py$' | xargs flake8; }
+function flake8_since()     { since_commit "${1}" | grep '\.py$' | xargs flake8; }  # flake8_since [<ref>] : like since_commit, but run found python files through flake8 instead of list
+function flake8_commit()    { in_commit "${1}" | grep '\.py$' | xargs flake8; }     # flake8_commit [<ref>] : like in_commit, but run found python files through flake8 instead of list
+function flake8_dirty()     { dirty | grep '\.py$' | xargs flake8; }                # flake8_dirty : like dirty, but run found python files through flake8 instead of list
