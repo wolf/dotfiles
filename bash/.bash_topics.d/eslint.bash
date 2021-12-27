@@ -2,7 +2,7 @@ command -v eslint >/dev/null || return
 # only define eslint commands if eslint is available
 
 function eslint_name() { # eslint_name [<pattern>] : find all the javascript files whose names match <pattern> in or below . and run them through eslint
-    fd --type f --extension js --glob --follow --hidden "$@" --exec-batch eslint
+    fd --type f --extension js --follow --hidden "$@" --exec-batch eslint
 }
 
 function eslint_since()     { since_commit "${1}" | grep '\.js$' | xargs eslint; }  # eslint_since [<ref>] : like since_commit, but run found javascript files through eslint instead of list
