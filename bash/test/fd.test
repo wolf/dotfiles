@@ -6,33 +6,127 @@ setUp() {
     source ".bash_topics.d/fd.bash"
 }
 
-test_f() {
-    FOUND="$(f --color=never fd.bash)"
-    assertEquals "file not found" "./.bash_topics.d/fd.bash" "${FOUND}"
+test_f_finds_ordinary_file() {
+    FOUND="$(f --color=never test_f_finds_ordinary_file.data)"
+    assertEquals "file not found" "./test/data/test_f_finds_ordinary_file.data" "${FOUND}"
 }
 
-# test f finds a file
-# test f finds multiple files
-# test f finds multiple files in multiple different directories at the same time
-# test f follows a symbolic link
 # test f finds a hidden file
+test_f_finds_hidden_file() {
+    FOUND="$(f --color=never test_f_finds_hidden_file.data)"
+    assertEquals "hidden file not found" "./test/.hidden_data/test_f_finds_hidden_file.data" "${FOUND}"
+}
+
+test_f_fails_silently() {
+    f "test_f_fails_silently.data"
+    assertTrue "f didn't fail silently" "[ $? ]"
+}
+
+# test f can be made to not find an ignored file
+test_f_ignores_file() {
+    cd "${DOTFILES_DIR}" || return
+    FOUND="$(f --ignore --color=never ".git")"
+    assertEquals "file was not ignored" "" "${FOUND}"
+}
+
+# test f finds multiple files in multiple different directories at the same time
+test_f_finds_multiple_files() {
+    OUTPUT="$(f --regex "^test_fe_[12]\.data$")"
+    GOLDEN_RECORD="./test/.hidden_data/test_fe_2.data"$'\n'"./test/data/test_fe_1.data"
+    assertEquals "didn't find both files" "${GOLDEN_RECORD}" "${OUTPUT}"
+}
+
+function platform() {
+    local UNAME
+
+    UNAME="$(uname)"
+    UNAME="${UNAME,,}"
+    if [[ ${UNAME} =~ msys.* ]] ; then
+        UNAME=msys
+    elif [[ ${UNAME} =~ cygwin.* ]] ; then
+        UNAME=cygwin
+    fi
+
+    echo "${UNAME}"
+}
+
+# test f follows a symbolic link
+test_f_follows_symbolic_links() {
+    [ "$(platform)" = "msys" ] && startSkipping
+
+    # make a link in /tmp that leads to test/data
+    RANDOM_STRING="$(python -c "import uuid; print(str(uuid.uuid4()),end='')")"
+    ln -s "${DOTFILES_DIR}/bash/test/data" "/tmp/${RANDOM_STRING}"
+    # search /tmp for a file in test/data
+    FOUND="$(f --color=never test_f_finds_ordinary_file.data /tmp)"
+    assertEquals "file not found" "/tmp/${RANDOM_STRING}/test_f_finds_ordinary_file.data" "${FOUND}"
+    # remove the link in /tmp
+    rm "/tmp/${RANDOM_STRING}"
+}
+
 # test f finds a file specified by a glob
-# test f works when given options and arguments for underlying fd
+test_f_finds_globs() {
+    COUNT=$(f --glob '*.data' | wc -l)
+    assertTrue "f didn't find anything that matched that glob" "(( ${COUNT} > 0 ))"
+}
+
+# test f finds a directory
+test_f_finds_a_directory() {
+    FOUND="$(f --color=never .hidden_data)"
+    assertEquals "directory not found" "./test/.hidden_data" "${FOUND}"
+}
 
 # test fcat can actually cat a file
+test_fcat() {
+    COUNT=$(fcat '*.data' | wc -l)
+    assertTrue "fcat didn't produce any output" "(( ${COUNT} > 0 ))"
+}
 
-# test fcd finds a directory
+test_fcd_changes_directory() {
+    OLD_DIR="$(pwd)"
+    fcd ".hidden_data"
+    NEW_DIR="$(pwd)"
+    assertNotEquals "should have changed directories" "${OLD_DIR}" "${NEW_DIR}"
+    assertEquals "got the wrong destination" "${HOME}/builds/dotfiles/bash/test/.hidden_data" "${NEW_DIR}"
+}
+
 # test fcd fails silently?
+test_fcd_fails_silently() {
+    OLD_DIR="$(pwd)"
+    fcd "nonexistent_directory"
+    assertTrue "fcd didn't fail silently" "[ $? ]"
+    NEW_DIR="$(pwd)"
+    assertEquals "shouldn't have changed directories" "${OLD_DIR}" "${NEW_DIR}"
+}
 
 # test fcd_of finds the parent directory of a specific file-system object
+test_fcd_of() {
+    OLD_DIR="$(pwd)"
+    fcd_of "test_f_finds_hidden_file.data"
+    NEW_DIR="$(pwd)"
+    assertNotEquals "should have changed directories" "${OLD_DIR}" "${NEW_DIR}"
+    assertEquals "got the wrong destination" "${HOME}/builds/dotfiles/bash/test/.hidden_data" "${NEW_DIR}"
+}
 
 # fe, can't test?  What if I set EDITOR to something _non_-interactive
+test_fe() {
+    # shellcheck disable=SC2034
+    local EDITOR=echo
+    OUTPUT="$(fe --regex "^test_fe_[12]\.data$")"
+    assertEquals "files weren't opened" "./test/.hidden_data/test_fe_2.data ./test/data/test_fe_1.data" "${OUTPUT}"
+}
 
 # test fll produces output
+test_fll() {
+    COUNT=$(fll '*.data' | wc -l)
+    assertTrue "fll didn't produce any output" "(( ${COUNT} > 0 ))"
+}
 
 # test fsource loads a function definition
-
-# test ftree produces output
+test_fsource() {
+    fsource 'test_fsource.data' >/dev/null
+    assertTrue "sourced definition wasn't found" "[ $(command -v test_fsource_sample_function_definition) ]"
+}
 
 # shellcheck disable=SC1090
 source "$(which shunit2)"
