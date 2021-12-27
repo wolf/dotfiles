@@ -16,6 +16,8 @@ function fcd() {
     # usage: fcd <pattern>
     # example: fcd js
     # find the directory with the given name, cd-ing into the first match found
+    local FIRST_MATCHING_DIRECTORY
+
     FIRST_MATCHING_DIRECTORY="$(find . -type d -name "$@" 2>/dev/null | head -n 1)"
     if [ -d "${FIRST_MATCHING_DIRECTORY}" ]; then
         cd "${FIRST_MATCHING_DIRECTORY}" || return

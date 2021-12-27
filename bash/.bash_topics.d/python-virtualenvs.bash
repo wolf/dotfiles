@@ -16,6 +16,7 @@ function deactivate_venv() { # deactivate_venv : deactivate the currently active
 
 function activate_venv() { # activate_venv <venv>
     local VENV_TO_ACTIVATE="${1}"
+
     [ -z "${VENV_TO_ACTIVATE}" ] && return
     deactivate_venv
 
