@@ -42,13 +42,14 @@ function fll() { # fll <pattern> : find all the files in or below . whose names 
 }
 
 function fsource() { # fsource <pattern> : find all the files in or below . whose names match the given pattern and source them
-    local FILES_TO_SOURCE
-    declare -a FILES_TO_SOURCE
-
-    readarray -d '' FILES_TO_SOURCE < <(fd --follow --no-ignore --hidden --type f --print0 "$@")
-
-    # shellcheck disable=SC1090,SC2086
-    source "${FILES_TO_SOURCE[@]}"
+    local FILE FILES
+    declare -a FILES
+    readarray -d '' FILES < <(fd --follow --no-ignore --hidden --type f --color=never --print0 "$@")
+    for FILE in "${FILES[@]}" ; do
+        echo source "\"${FILE}\""
+        # shellcheck disable=SC1090,SC2086
+        source "${FILE}"
+    done
 }
 
 function ftree() { # ftree [<path> [<pattern>]] : find all the file system objects in or below <path> whose names match <pattern> and display them as a tree

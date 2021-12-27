@@ -22,11 +22,8 @@ function in_path() { # in_path <path> : is <path> a directory in $PATH
     show_path | grep -e "^$1$" >/dev/null;
 }
 
-if [ -d "${HOME}/.bash_topics.d" ] ; then
-    for TOPIC in "${HOME}/.bash_topics.d/"*.bash ; do
-        # shellcheck disable=SC1090
-        source "${TOPIC}"
-    done
+function platform() {
+    local UNAME
 
     UNAME="$(uname)"
     UNAME="${UNAME,,}"
@@ -35,13 +32,20 @@ if [ -d "${HOME}/.bash_topics.d" ] ; then
     elif [[ ${UNAME} =~ cygwin.* ]] ; then
         UNAME=cygwin
     fi
-    if [ -d "${HOME}/.bash_topics.d/${UNAME}" ] && [[ -n $(shopt -s nullglob; echo "${HOME}/.bash_topics.d/${UNAME}/"*.bash) ]] ; then
-        for TOPIC in "${HOME}/.bash_topics.d/${UNAME}/"*.bash ; do
-            # shellcheck disable=SC1090
-            source "${TOPIC}"
-        done
-    fi
-fi
+
+    echo "${UNAME}"
+}
+
+declare -a TOPICS
+readarray -d '' TOPICS < <( \
+    find "${HOME}/.bash_topics.d/" -type f -regex '.*\.bash' -maxdepth 1 -print0 2>/dev/null; \
+    find "${HOME}/.bash_topics.d/$(platform)" -type f -regex '.*\.bash' -print0 2>/dev/null \
+)
+for TOPIC in "${TOPICS[@]}" ; do
+    # shellcheck disable=SC1090,SC2086
+    source "${TOPIC}"
+done
+unset TOPIC TOPICS
 
 if [ -f ~/.dir_colors ] ; then
     # shellcheck disable=SC2046
