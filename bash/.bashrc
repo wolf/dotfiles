@@ -14,8 +14,12 @@ umask go-wx
 export EDITOR='vim'
 export FCEDIT='vim'
 
+function show_path() { # show_path : display $PATH, one path per line
+    echo "${PATH}" | tr ':' '\n'
+}
+
 function in_path() { # in_path <path> : is <path> a directory in $PATH
-    echo "${PATH}" | tr ':' '\n' | grep -e "^$1$" >/dev/null;
+    show_path | grep -e "^$1$" >/dev/null;
 }
 
 if [ -d "${HOME}/.bash_topics.d" ] ; then
@@ -71,7 +75,6 @@ bind '"\e[B":history-search-forward'
 alias h20='history 20'                                              # h20 : show the last 20 entries from history
 alias tree="tree -alC -I '.git|__pycache__|node_modules|*venv'"
 
-function show_path()    { echo "${PATH}" | tr ':' '\n'; }           # show_path : display $PATH, one path per line
 function hosts()        { grep -e '^Host' ~/.ssh/config; }          # hosts : list Hosts configured in ~/.ssh/config
 function did()          { history | grep -v 'did' | grep "$1"; }    # did <pattern> : list commands from history matching <pattern>
 function we()           { ${EDITOR} "$(which "$@")"; }              # we <script> : find <script> (using which) and open it in $EDITOR
