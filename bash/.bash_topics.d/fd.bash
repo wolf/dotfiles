@@ -51,11 +51,3 @@ function fsource() { # fsource <pattern> : find all the files in or below . whos
         source "${FILE}"
     done
 }
-
-function ftree() { # ftree [<path> [<pattern>]] : find all the file system objects in or below <path> whose names match <pattern> and display them as a tree
-    local TARGET_DIR=${1:-.}
-    local PATTERN=${2:-.}
-
-    # Note the reversal.  This is the opposite of how fd normally works.
-    fd --follow --hidden "${PATTERN}" "${TARGET_DIR}" | as-tree
-}
