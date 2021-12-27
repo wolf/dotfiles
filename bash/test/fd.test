@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+setUp() {
+    cd "${DOTFILES_DIR}/bash" || return
+    # shellcheck disable=SC1091
+    source ".bash_topics.d/fd.bash"
+}
+
+test_f() {
+    FOUND="$(f --color=never fd.bash)"
+    assertEquals "file not found" "./.bash_topics.d/fd.bash" "${FOUND}"
+}
+
+# test f finds a file
+# test f finds multiple files
+# test f finds multiple files in multiple different directories at the same time
+# test f follows a symbolic link
+# test f finds a hidden file
+# test f finds a file specified by a glob
+# test f works when given options and arguments for underlying fd
+
+# test fcat can actually cat a file
+
+# test fcd finds a directory
+# test fcd fails silently?
+
+# test fcd_of finds the parent directory of a specific file-system object
+
+# fe, can't test?  What if I set EDITOR to something _non_-interactive
+
+# test fll produces output
+
+# test fsource loads a function definition
+
+# test ftree produces output
+
+# shellcheck disable=SC1090
+source "$(which shunit2)"
