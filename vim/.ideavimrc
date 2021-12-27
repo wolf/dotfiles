@@ -4,6 +4,9 @@ let mapleader = "\<Space>"
 
 set clipboard+=ideaput
 
+nnoremap <silent> <Leader>ev :e ~/.ideavimrc<CR>
+nnoremap <silent> <Leader>sv :action IdeaVim.ReloadVimRc.reload<CR>
+
 set easymotion
 set ideajoin
 set idearefactormode=keep
