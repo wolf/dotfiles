@@ -1,4 +1,8 @@
-command -v fd >/dev/null || return
+command -v fdfind >/dev/null || return
+
+function fd() {
+    /usr/lib/cargo/bin/fd "$@"
+}
 
 function f() { # f <pattern> : list all the files in or below . whose names match the given pattern
     fd --follow --no-ignore --hidden "$@" 2>/dev/null
