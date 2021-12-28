@@ -27,8 +27,8 @@ function platform() {
 
     UNAME="$(uname)"
     UNAME="${UNAME,,}"
-    if [[ ${UNAME} =~ msys.* ]] ; then
-        UNAME=msys
+    if [[ ${UNAME} =~ mingw.* ]] ; then
+        UNAME=mingw
     elif [[ ${UNAME} =~ cygwin.* ]] ; then
         UNAME=cygwin
     fi

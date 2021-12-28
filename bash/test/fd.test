@@ -1,18 +1,7 @@
 #!/usr/bin/env bash
 
-function platform() {
-    local UNAME
-
-    UNAME="$(uname)"
-    UNAME="${UNAME,,}"
-    if [[ ${UNAME} =~ msys.* ]] ; then
-        UNAME=msys
-    elif [[ ${UNAME} =~ cygwin.* ]] ; then
-        UNAME=cygwin
-    fi
-
-    echo "${UNAME}"
-}
+# shellcheck disable=SC1091
+source "${DOTFILES_DIR}/bash/test/platform.inc"
 
 setUp() {
     unset CDPATH
@@ -31,7 +20,8 @@ test_f_finds_ordinary_file() {
     local FOUND
     FOUND="$(f --color=never test_f_finds_ordinary_file.data)"
     FOUND="${FOUND#./}"
-    assertTrue "didn't find anything at all!" "[ "${FOUND}" ]"
+    # shellcheck disable=SC2016
+    assertTrue "didn't find anything at all!" '[ "${FOUND}" ]'
     assertEquals "didn't find the right file!" "test/data/test_f_finds_ordinary_file.data" "${FOUND}"
 }
 
@@ -40,7 +30,8 @@ test_f_finds_hidden_file() {
     local FOUND
     FOUND="$(f --color=never test_f_finds_hidden_file.data)"
     FOUND="${FOUND#./}"
-    assertTrue "didn't find anything at all!" "[ "${FOUND}" ]"
+    # shellcheck disable=SC2016
+    assertTrue "didn't find anything at all!" '[ "${FOUND}" ]'
     assertEquals "didn't find the hidden file!" "test/.hidden_data/test_f_finds_hidden_file.data" "${FOUND}"
 }
 
@@ -78,7 +69,8 @@ test_f_follows_symbolic_links() {
     ln -s "${DOTFILES_DIR}/bash/test/data" "/tmp/${RANDOM_STRING}"
     # search /tmp for a file in test/data
     FOUND="$(f --color=never test_f_finds_ordinary_file.data /tmp)"
-    assertTrue "didn't find anything at all!" "[ "${FOUND}" ]"
+    # shellcheck disable=SC2016
+    assertTrue "didn't find anything at all!" '[ "${FOUND}" ]'
     assertEquals "didn't find the right file!" "/tmp/${RANDOM_STRING}/test_f_finds_ordinary_file.data" "${FOUND}"
     # remove the link in /tmp
     rm "/tmp/${RANDOM_STRING}"
