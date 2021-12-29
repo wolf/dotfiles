@@ -117,7 +117,7 @@ function create_venv() { # create_venv [<path> [requirements]] : create a venv a
 
 function rename_venv() { # rename_venv <path-to-existing-venv> <new-name> : rename a venv, keeping all installed packages
     local RANDOM_STRING
-    RANDOM_STRING="$(python -c "import uuid; print(str(uuid.uuid4()),end='')")"
+    RANDOM_STRING="$(python3 -c "import uuid; print(str(uuid.uuid4()),end='')")"
 
     local FROM_NAME="${1}"
     local TO_NAME="${2}"
