@@ -1,4 +1,40 @@
 #!/usr/bin/env bash
 
+# deactivate_venv deactivates a normal venv
+# deactivate_venv deactivates a pyenv-virtualenv venv
+# deactivate_venv is idempotent and fails silently
+
+# activate_venv deactivates previously active venv
+# activate_venv doesn't deactivate currently active venv is there is no new venv to activate
+# activate_venv activates a normal venv
+# activate_venv activates a pyenv-virtualv venv?  It doesn't do that right now
+
+# activate_found_venv deactivates previously active venv, even if there is no venv in the current directory
+# activate_found_venv is idempostent and fails silently
+# activate_found_venv finds and activates a directory named .venv
+# activate_found_venv finds and activates a directory named venv
+# activate_found_venv finds and activates a directory named something.venv
+
+# cdv succeeds in changing directories to a directory that exists
+# cdv with no argument goes $HOME, just as cd does
+# cdv always deactivates the previously active venv, even if there is no venv in the destination directory
+# cdv deactivates the previously active venv, even if the destination directory exists
+# cdv activates finds and activates a directory named .venv
+# cdv finds and activates a directory named venv
+# cdv finds and activates a directory named something.venv
+
+# create_venv without any arguments creates a normal venv named after the current directory
+# create_venv given a path creates any intermediate directories needed and then a venv named exactly as the given path
+# create_venv deactivates any currently active venv
+# create_venv leaves the new venv activated
+# create_venv installs requirements if supplied
+# create_venv has up-to-date pip, setuptools, and wheel
+
+# rename_venv fails if you don't give it two paths
+# rename_venv doesn't delete the old venv in case of any failure
+# rename_venv creates a new venv with the same packages and versions as the old venv, except that pip, setuptools, and wheel may be newer
+# rename_venv deletes the old directory
+# rename_venv leaves you with no venv active
+
 # shellcheck disable=SC1090
 source "$(which shunit2)"
