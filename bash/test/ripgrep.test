@@ -77,7 +77,7 @@ test_ge_fails_silently() {
 
     cd "test/data" || fail "couldn't cd to the data directory"
     # shellcheck disable=SC2209
-    EDITOR=echo ge "a string that won't be found"
+    EDITOR=echo ge "a string that won't be found" >/dev/null
     assertTrue "didn't fail silently!" "[ $? ]"
 }
 
