@@ -10,7 +10,7 @@ function deactivate_venv() { # deactivate_venv : deactivate the currently active
         # shellcheck disable=SC1091
         source deactivate 2>/dev/null
     else
-        deactivate
+        deactivate 2>/dev/null
     fi
 }
 
