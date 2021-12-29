@@ -7,8 +7,6 @@ if [[ $(uname) =~ CYGWIN.* ]] ; then
 
     eval $(dircolors -b ~/.dir_colors)
 
-    export EDITOR='vim'
-
     function cdh() { cd "$WINDOWSHOME/$1"; }
     function cdw() {
         cd "$WORKSPACE";
