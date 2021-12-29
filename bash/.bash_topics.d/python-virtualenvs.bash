@@ -98,6 +98,26 @@ function _comp_cdv()
 complete -o filenames -o nospace -o bashdefault -F _comp_cdv cdv
 
 function create_venv() { # create_venv [<path> [requirements]] : create a venv at path, or if none given, at <cwd>/<cwd>.venv, installing packages named in <requirements>
+    local PYTHON=python
+    local PARSED_PARAMS
+    PARSED_PARAMS="$(getopt --longoptions python: --options p: -- "$@")"
+    eval set -- "${PARSED_PARAMS}"
+    while true ; do
+        case "${1}" in
+            -p|--python)
+                PYTHON="${2}"
+                shift 2
+                ;;
+            --)
+                shift
+                break
+                ;;
+            *)
+                echo "usage"
+                return 1
+        esac
+    done
+
     local VENV_DIR
 
     deactivate_venv
@@ -107,7 +127,7 @@ function create_venv() { # create_venv [<path> [requirements]] : create a venv a
         mkdir -p "$(dirname "${1}")"
         VENV_DIR="${1}"
     fi
-    python -m venv --copies --upgrade-deps "${VENV_DIR}"
+    "${PYTHON}" -m venv --copies --upgrade-deps "${VENV_DIR}"
     activate_venv "${VENV_DIR}"
     python -m pip install --upgrade wheel
     if [ -n "${2}" ] && [ -f "${2}" ] ; then
@@ -116,6 +136,26 @@ function create_venv() { # create_venv [<path> [requirements]] : create a venv a
 }
 
 function rename_venv() { # rename_venv <path-to-existing-venv> <new-name> : rename a venv, keeping all installed packages
+    local PYTHON=python
+    local PARSED_PARAMS
+    PARSED_PARAMS="$(getopt --longoptions python: --options p: -- "$@")"
+    eval set -- "${PARSED_PARAMS}"
+    while true ; do
+        case "${1}" in
+            -p|--python)
+                PYTHON="${2}"
+                shift 2
+                ;;
+            --)
+                shift
+                break
+                ;;
+            *)
+                echo "usage"
+                return 1
+        esac
+    done
+
     local RANDOM_STRING
     RANDOM_STRING="$(python3 -c "import uuid; print(str(uuid.uuid4()),end='')")"
 
@@ -127,12 +167,11 @@ function rename_venv() { # rename_venv <path-to-existing-venv> <new-name> : rena
     python -m pip freeze > "${TEMP_FILE_NAME}"
     deactivate_venv
 
-    create_venv "${TO_NAME}"
-    python -m pip install -r "${TEMP_FILE_NAME}"
-    deactivate 2>/dev/null
+    create_venv --python="${PYTHON}" "${TO_NAME}" "${TEMP_FILE_NAME}"
+    deactivate_venv
 
-    rm "${TEMP_FILE_NAME}"
     rm -rf "${FROM_NAME}"
+    rm "${TEMP_FILE_NAME}"
 }
 
 export -f activate_found_venv
