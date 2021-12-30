@@ -37,7 +37,7 @@ function platform() {
     echo "${UNAME}"
 }
 
-function get_topics() { # get_topics [--print0] : prints the list of topics that is or will be executed at interactive Bash startup
+function get_topics() { # get_topics [--print0] : prints the list of topics, in order, that is or will be executed at interactive Bash startup
     fd --type f --max-depth=1 "$@" '.*\.bash' "${HOME}/.bash_topics.d"
     fd --type f               "$@" '.*\.bash' "${HOME}/.bash_topics.d/$(platform)"
 }
@@ -91,10 +91,10 @@ function mkcd()         { mkdir -p "$1" && cd "$1" || return; }     # mkcd <path
 function resolve()      { cd "$(pwd -P)" || return; }               # resolve : if <cwd> contains any symbolic links, cd to the resolved physical directory you are actually in
 
 function help_commands() { # help_commands : you're soaking in it!
-    rg --hidden --color=never --no-line-number --heading --sort path \
+    ( echo "${HOME}/.bashrc" ; get_topics ) | xargs \
+        rg --hidden --color=never --no-line-number --heading --sort=path \
         -e '\s*(?:function|alias)\s+([a-z][a-z0-9_]*).*(#.*)' \
         --replace "\$1		\$2" \
-        "${DOTFILES_DIR}/bash" \
         | rg --passthru --color=always --no-line-number --no-filename \
         -e '^[a-z][a-z0-9_]*'
 }
