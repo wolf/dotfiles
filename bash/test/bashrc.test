@@ -1,4 +1,24 @@
 #!/usr/bin/env bash
 
+setUp() {
+    unset CDPATH
+    cd "${DOTFILES_DIR}/bash" || return
+
+    # shellcheck disable=SC1091
+    source ".bashrc"
+}
+
+# show_path
+# in_path
+# platform
+# get_topics
+# hosts
+# did
+# we
+# wll
+# wfile
+# mkcd
+# resolve
+
 # shellcheck disable=SC1090
 source "$(which shunit2)"
