@@ -37,11 +37,13 @@ function platform() {
     echo "${UNAME}"
 }
 
+function get_topics() { # get_topics [--print0] : prints the list of topics that is or will be executed at interactive Bash startup
+    fd --type f --max-depth=1 "$@" '.*\.bash' "${HOME}/.bash_topics.d"
+    fd --type f               "$@" '.*\.bash' "${HOME}/.bash_topics.d/$(platform)"
+}
+
 declare -a TOPICS
-readarray -d '' TOPICS < <( \
-    find "${HOME}/.bash_topics.d/" -type f -regex '.*\.bash' -maxdepth 1 -print0 2>/dev/null; \
-    find "${HOME}/.bash_topics.d/$(platform)" -type f -regex '.*\.bash' -print0 2>/dev/null \
-)
+readarray -d '' TOPICS < <( get_topics --print0 )
 for TOPIC in "${TOPICS[@]}" ; do
     # shellcheck disable=SC1090,SC2086
     source "${TOPIC}"
