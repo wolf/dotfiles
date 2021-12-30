@@ -11,7 +11,7 @@ setUp() {
     source ".bash_topics.d/ripgrep.bash"
 }
 
-test_ge() {
+test_ge_basic_functionality() {
     # finds text and opens the editor
     # finds text in a file within a hidden directory
     # finds text in multiple files
@@ -95,7 +95,8 @@ test_ge_finds_multiple_patterns_in_one_call() {
     # finds two different files each containing a different match as specified with -e <pattern>
     local OUTPUT
 
-    cd test
+    cd test || return 1
+    # shellcheck disable=SC2209
     OUTPUT="$(EDITOR=echo ge --sort=path -e unignored -e hidden)"
 
     # shellcheck disable=SC2016

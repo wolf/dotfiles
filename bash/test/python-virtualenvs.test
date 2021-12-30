@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC1091
+source "${DOTFILES_DIR}/bash/test/platform.inc"
+
+setUp() {
+    unset CDPATH
+    cd "${DOTFILES_DIR}/bash" || return
+
+    # shellcheck disable=SC1091
+    source ".bash_topics.d/python-virtualenvs.bash"
+}
+
 # deactivate_venv deactivates a normal venv
 # deactivate_venv deactivates a pyenv-virtualenv venv
 # deactivate_venv is idempotent and fails silently

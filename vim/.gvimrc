@@ -3,6 +3,6 @@ if has('mac')
     set macligatures
 endif
 set columns=148
-set lines=40
+set lines=84
 
 highlight HighlightedyankRegion guifg=Black guibg=Yellow

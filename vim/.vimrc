@@ -126,6 +126,7 @@ Plugin 'mg979/vim-visual-multi'
 
 " Temporary {{{
 " ...not experimental because I know I will be ditching these when I'm done
+Plugin 'chikamichi/mediawiki.vim'
 " }}}
 
 " Visual effects {{{
@@ -286,6 +287,7 @@ augroup NERDTree_behavior
         \ quit | endif
 augroup END
 
+let g:NERDTreeHijackNetrw=1
 let g:NERDTreeIgnore=['\.git$[[dir]]', 'node_modules[[dir]]', '__pycache__[[dir]]', '.*venv$[[dir]]']
 
 nnoremap <silent> <Leader>t :NERDTreeToggle<CR>
