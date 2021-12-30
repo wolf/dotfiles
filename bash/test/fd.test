@@ -3,6 +3,12 @@
 # shellcheck disable=SC1091
 source "${DOTFILES_DIR}/bash/test/platform.inc"
 
+if [ "$(command -v fdfind)" ] && [ ! "$(command -v fd)" ] ; then
+    function fd() {
+        /usr/lib/cargo/bin/fd "$@"
+    }
+fi
+
 setUp() {
     unset CDPATH
     cd "${DOTFILES_DIR}/bash" || return

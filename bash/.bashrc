@@ -33,6 +33,10 @@ function platform() {
     echo "${UNAME}"
 }
 
+if [ "$(command -v fdfind)" ] ; then
+    alias fd=fdfind
+fi
+
 function get_topics() { # get_topics [--print0] : prints the list of topics, in order, that is or will be executed at interactive Bash startup
     fd --type f --max-depth=1 "$@" '.*\.bash' "${HOME}/.bash_topics.d"
     fd --type f               "$@" '.*\.bash' "${HOME}/.bash_topics.d/$(platform)"
