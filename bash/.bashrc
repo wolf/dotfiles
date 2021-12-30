@@ -11,10 +11,6 @@ stty -ixon -ixoff
 
 umask go-wx
 
-export VISUAL='vim'
-export EDITOR='vim -p'
-export FCEDIT='vim'
-
 function show_path() { # show_path : display $PATH, one path per line
     echo "${PATH}" | tr ':' '\n'
 }
