@@ -87,3 +87,12 @@ function wll()          { ll "$(which "$1")"; }                     # wll <comma
 function wfile()        { file "$(which "$1")"; }                   # wfile <command> : find <command> (using which) and run file on it
 function mkcd()         { mkdir -p "$1" && cd "$1" || return; }     # mkcd <path> : create all directories needed to build <path> and cd into it
 function resolve()      { cd "$(pwd -P)" || return; }               # resolve : if <cwd> contains any symbolic links, cd to the resolved physical directory you are actually in
+
+function help_commands() { # help_commands : you're soaking in it!
+    rg --hidden --color=never --no-line-number --heading --sort path \
+        -e '\s*(?:function|alias)\s+([a-z][a-z0-9_]*).*(#.*)' \
+        --replace "\$1		\$2" \
+        "${DOTFILES_DIR}/bash" \
+        | rg --passthru --color=always --no-line-number --no-filename \
+        -e '^[a-z][a-z0-9_]*'
+}
