@@ -3,7 +3,7 @@
 # shellcheck disable=SC1091
 source "${DOTFILES_DIR}/bash/test/platform.inc"
 
-setUp() {
+function setUp() {
     unset CDPATH
     cd "${DOTFILES_DIR}/bash" || return
 
@@ -11,7 +11,7 @@ setUp() {
     source ".bash_topics.d/ripgrep.bash"
 }
 
-test_ge_basic_functionality() {
+function test_ge_basic_functionality() {
     # finds text and opens the editor
     # finds text in a file within a hidden directory
     # finds text in multiple files
@@ -23,7 +23,7 @@ test_ge_basic_functionality() {
     assertEquals "files weren't opened!" "test/.hidden_data/test_ge_2.data test/data/test_ge_1.data test/ripgrep.test" "${OUTPUT}"
 }
 
-test_ge_ignores_file() {
+function test_ge_ignores_file() {
     # won't find text in a file ignored by git
 
     # shellcheck disable=SC2034
@@ -34,7 +34,7 @@ test_ge_ignores_file() {
     assertEquals "did not ignore .git!" "bash/test/ripgrep.test" "${OUTPUT}"
 }
 
-test_ge_follows_symbolic_links() {
+function test_ge_follows_symbolic_links() {
     # follows a symbolic link to a directory and finds text in a file within that directory
 
     # shellcheck disable=SC2034
@@ -42,7 +42,7 @@ test_ge_follows_symbolic_links() {
     local OUTPUT
     local RANDOM_STRING
 
-    [ "$(platform)" = "msys" ] && startSkipping
+    [ "$(platform)" = "mingw" ] && startSkipping
 
     # make a link in /tmp that leads to test/data
     RANDOM_STRING="$(python3 -c "import uuid; print(str(uuid.uuid4()),end='')")"
@@ -62,7 +62,7 @@ test_ge_follows_symbolic_links() {
     rm -rf "${OUTER_DIRECTORY}"
 }
 
-test_ge_opens_hidden_files() {
+function test_ge_opens_hidden_files() {
     # finds text in a hidden file
 
     # shellcheck disable=SC2034
@@ -72,7 +72,7 @@ test_ge_opens_hidden_files() {
     assertEquals "files weren't opened!" "test/ripgrep.test test/data/.test_ge_opens_hidden_files.data" "${OUTPUT}"
 }
 
-test_ge_fails_silently() {
+function test_ge_fails_silently() {
     # fails silently
 
     cd "test/data" || fail "couldn't cd to the data directory"
@@ -81,7 +81,7 @@ test_ge_fails_silently() {
     assertTrue "didn't fail silently!" "[ $? ]"
 }
 
-test_ge_finds_unignored_file() {
+function test_ge_finds_unignored_file() {
     # will search a hidden file white-listed by .gitignore even with --no-hidden
 
     # shellcheck disable=SC2034
@@ -91,7 +91,7 @@ test_ge_finds_unignored_file() {
     assertEquals "files weren't opened!" "test/ripgrep.test test/data/.unignored_file.data" "${OUTPUT}"
 }
 
-test_ge_finds_multiple_patterns_in_one_call() {
+function test_ge_finds_multiple_patterns_in_one_call() {
     # finds two different files each containing a different match as specified with -e <pattern>
     local OUTPUT
 

@@ -3,7 +3,7 @@
 # shellcheck disable=SC1091
 source "${DOTFILES_DIR}/bash/test/platform.inc"
 
-setUp() {
+function setUp() {
     unset CDPATH
     cd "${DOTFILES_DIR}/bash" || return
 
@@ -11,41 +11,388 @@ setUp() {
     source ".bash_topics.d/python-virtualenvs.bash"
 }
 
-# deactivate_venv deactivates a normal venv
+function get_a_temp_dir_name() {
+    local RANDOM_STRING
+    RANDOM_STRING="$(python3 -c "import uuid; print(str(uuid.uuid4()),end='')")"
+    # shellcheck disable=SC2082
+    echo "/tmp/${RANDOM_STRING}"
+}
+
+function test_create_venv_basics() {
+    # create_venv given a path creates any intermediate directories needed and then a venv named exactly as the given path
+    # create_venv leaves the new venv activated
+    local OUTER_DIRECTORY
+    OUTER_DIRECTORY="$(get_a_temp_dir_name)"
+
+    local PREVIOUSLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test.venv" >/dev/null
+    local CURRENTLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+
+    # shellcheck disable=SC2016
+    assertTrue "no virtual environment is active!" '[ -d "${CURRENTLY_ACTIVE_VENV}" ]'
+    assertNotEquals "the active virtual environment didn't change!" "${PREVIOUSLY_ACTIVE_VENV}" "${CURRENTLY_ACTIVE_VENV}"
+    assertEquals "didn't activate the correct virtual environment!" "${OUTER_DIRECTORY}/test.venv" "${CURRENTLY_ACTIVE_VENV}"
+
+    deactivate_venv
+    rm -rf "${OUTER_DIRECTORY}"
+}
+
+function test_create_venv_without_arguments() {
+    # create_venv without any arguments creates a normal venv named after the current directory
+    local OUTER_DIRECTORY
+    OUTER_DIRECTORY="$(get_a_temp_dir_name)"
+
+    mkdir -p "${OUTER_DIRECTORY}/test"
+    # shellcheck disable=SC2016
+    assertTrue "couldn't make test directory!" '[ -d "${OUTER_DIRECTORY}/test" ]'
+    cd "${OUTER_DIRECTORY}/test" || return 1
+
+    create_venv --python=python3 >/dev/null
+
+    assertTrue "didn't create a virtual environment with the right name!" '[ -d test.venv ]'
+
+    cd "${DOTFILES_DIR}/bash" || return
+    deactivate_venv
+    rm -rf "${OUTER_DIRECTORY}"
+}
+
+function test_create_venv_deactivates_current_venv() {
+    # create_venv deactivates any currently active venv
+    local OUTER_DIRECTORY
+    OUTER_DIRECTORY="$(get_a_temp_dir_name)"
+
+    mkdir -p "${OUTER_DIRECTORY}/test"
+    # shellcheck disable=SC2016
+    assertTrue "couldn't make test directory!" '[ -d "${OUTER_DIRECTORY}/test" ]'
+    cd "${OUTER_DIRECTORY}/test" || return 1
+
+    create_venv --python=python3 previous.venv >/dev/null
+    local PREVIOUSLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertTrue "couldn't activate a starting virtual environment!" '[ -d "${PREVIOUSLY_ACTIVE_VENV}" ]'
+
+    create_venv --python=python3 next.venv >/dev/null
+    local CURRENTLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertNotEquals "didn't deactivate the existing virtual environment!" "${PREVIOUSLY_ACTIVE_VENV}" "${CURRENTLY_ACTIVE_VENV}"
+
+    cd "${DOTFILES_DIR}/bash" || return
+    deactivate_venv
+    rm -rf "${OUTER_DIRECTORY}"
+}
+
+function test_create_venv_installs_requirements() {
+    # create_venv installs requirements if supplied
+    local OUTER_DIRECTORY
+    OUTER_DIRECTORY="$(get_a_temp_dir_name)"
+
+    mkdir -p "${OUTER_DIRECTORY}/test"
+    # shellcheck disable=SC2016
+    assertTrue "couldn't make test directory!" '[ -d "${OUTER_DIRECTORY}/test" ]'
+
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test.venv" "test/data/simple_venv_requirements.txt"  >/dev/null
+
+    local INSTALLED_PACKAGES
+    # shellcheck disable=SC2034
+    INSTALLED_PACKAGES="$(pip freeze)"
+    # shellcheck disable=SC2016
+    assertTrue "requirements weren't installed!" '[[ "${INSTALLED_PACKAGES}" =~ click ]]'
+
+    deactivate_venv
+    rm -rf "${OUTER_DIRECTORY}"
+}
+
+function test_create_venv_provides_up_to_date_tools() {
+    # create_venv has up-to-date pip, setuptools, and wheel.  How to know what the up-to-date version _is_?
+    local OUTER_DIRECTORY
+    OUTER_DIRECTORY="$(get_a_temp_dir_name)"
+
+    mkdir -p "${OUTER_DIRECTORY}/test"
+    # shellcheck disable=SC2016
+    assertTrue "couldn't make test directory!" '[ -d "${OUTER_DIRECTORY}/test" ]'
+
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test.venv"  >/dev/null
+
+    local OUTDATED_PACKAGES
+    # shellcheck disable=SC2034
+    OUTDATED_PACKAGES="$(pip list --outdated)"
+    # shellcheck disable=SC2016
+    assertTrue "did not install up-to-date packages!" '[ -z "${OUTDATED_PACKAGES}" ]'
+
+    deactivate_venv
+    rm -rf "${OUTER_DIRECTORY}"
+}
+
+function test_activate_venv_basic_functionality() {
+    # activate_venv activates a normal venv
+    # activate_venv deactivates previously active venv
+    local OUTER_DIRECTORY
+    OUTER_DIRECTORY="$(get_a_temp_dir_name)"
+
+    mkdir -p "${OUTER_DIRECTORY}/test"
+    # shellcheck disable=SC2016
+    assertTrue "couldn't make test directory!" '[ -d "${OUTER_DIRECTORY}/test" ]'
+
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test1.venv" >/dev/null
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test2.venv" >/dev/null
+    local PREVIOUSLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+
+    activate_venv "${OUTER_DIRECTORY}/test/test1.venv"
+    local CURRENTLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertNotEquals "didn't deactivate the existing virtual environment!" "${PREVIOUSLY_ACTIVE_VENV}" "${CURRENTLY_ACTIVE_VENV}"
+    assertEquals "didn't activate the requested virtual environment!" "${OUTER_DIRECTORY}/test/test1.venv" "${CURRENTLY_ACTIVE_VENV}"
+
+    deactivate_venv
+    rm -rf "${OUTER_DIRECTORY}"
+}
+
+function test_activate_venv_fails_silently() {
+    # activate_venv doesn't deactivate currently active venv is there is no new venv to activate
+    local OUTER_DIRECTORY
+    OUTER_DIRECTORY="$(get_a_temp_dir_name)"
+
+    mkdir -p "${OUTER_DIRECTORY}/test"
+    # shellcheck disable=SC2016
+    assertTrue "couldn't make test directory!" '[ -d "${OUTER_DIRECTORY}/test" ]'
+
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test2.venv" >/dev/null
+    local PREVIOUSLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+
+    activate_venv "${OUTER_DIRECTORY}/test/test1.venv"
+    local CURRENTLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertEquals "incorrectly changed the current virtual environment!" "${PREVIOUSLY_ACTIVE_VENV}" "${CURRENTLY_ACTIVE_VENV}"
+
+    activate_venv
+    local CURRENTLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertEquals "incorrectly changed the current virtual environment when called with no arguments!" "${PREVIOUSLY_ACTIVE_VENV}" "${CURRENTLY_ACTIVE_VENV}"
+
+    deactivate_venv
+    rm -rf "${OUTER_DIRECTORY}"
+}
+
+# activate_venv activates a pyenv-virtualenv venv?  It doesn't do that right now
 # deactivate_venv deactivates a pyenv-virtualenv venv
-# deactivate_venv is idempotent and fails silently
 
-# activate_venv deactivates previously active venv
-# activate_venv doesn't deactivate currently active venv is there is no new venv to activate
-# activate_venv activates a normal venv
-# activate_venv activates a pyenv-virtualv venv?  It doesn't do that right now
+function test_deactivate_venv_basic_functionality() {
+    # deactivate_venv deactivates a normal venv
+    # deactivate_venv is idempotent and fails silently
+    local OUTER_DIRECTORY
+    OUTER_DIRECTORY="$(get_a_temp_dir_name)"
 
-# activate_found_venv deactivates previously active venv, even if there is no venv in the current directory
-# activate_found_venv is idempostent and fails silently
-# activate_found_venv finds and activates a directory named .venv
-# activate_found_venv finds and activates a directory named venv
-# activate_found_venv finds and activates a directory named something.venv
+    mkdir -p "${OUTER_DIRECTORY}/test"
+    # shellcheck disable=SC2016
+    assertTrue "couldn't make test directory!" '[ -d "${OUTER_DIRECTORY}/test" ]'
 
-# cdv succeeds in changing directories to a directory that exists
-# cdv with no argument goes $HOME, just as cd does
-# cdv always deactivates the previously active venv, even if there is no venv in the destination directory
-# cdv deactivates the previously active venv, even if the destination directory exists
-# cdv activates finds and activates a directory named .venv
-# cdv finds and activates a directory named venv
-# cdv finds and activates a directory named something.venv
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test.venv" >/dev/null
+    local PREVIOUSLY_ACTIVE_VENV="${VIRTUAL_ENV}"
 
-# create_venv without any arguments creates a normal venv named after the current directory
-# create_venv given a path creates any intermediate directories needed and then a venv named exactly as the given path
-# create_venv deactivates any currently active venv
-# create_venv leaves the new venv activated
-# create_venv installs requirements if supplied
-# create_venv has up-to-date pip, setuptools, and wheel
+    deactivate_venv
+    local CURRENTLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertTrue "did not deactivate the current virtual environment!" '[ -z "${CURRENTLY_ACTIVE_VENV}" ]'
 
-# rename_venv fails if you don't give it two paths
-# rename_venv doesn't delete the old venv in case of any failure
-# rename_venv creates a new venv with the same packages and versions as the old venv, except that pip, setuptools, and wheel may be newer
-# rename_venv deletes the old directory
-# rename_venv leaves you with no venv active
+    PREVIOUSLY_ACTIVE_VENV="${CURRENTLY_ACTIVE_VENV}"
+    deactivate_venv || return 1
+    CURRENTLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertEquals "no active virtual environment to deactivate, but something changed anyway!" "${PREVIOUSLY_ACTIVE_VENV}" "${CURRENTLY_ACTIVE_VENV}"
+
+    rm -rf "${OUTER_DIRECTORY}"
+}
+
+function test_activate_found_venv_basic_functionality() {
+    # activate_found_venv deactivates previously active venv, even if there is no venv in the current directory
+    # activate_found_venv is idempotent and fails silently when there is no venv in the current directory
+    # activate_found_venv finds and activates a directory named .venv
+    # activate_found_venv finds and activates a directory named venv
+    # activate_found_venv finds and activates a directory named something.venv
+
+    local OUTER_DIRECTORY
+    OUTER_DIRECTORY="$(get_a_temp_dir_name)"
+
+    mkdir -p "${OUTER_DIRECTORY}/test/test_empty"
+    # shellcheck disable=SC2016
+    assertTrue "couldn't make test directory!" '[ -d "${OUTER_DIRECTORY}/test" ]'
+
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test_with_dot/.venv" >/dev/null
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test_simple/venv" >/dev/null
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test_full/test_full.venv" >/dev/null
+
+    local PREVIOUSLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertTrue "needed an active virtual environment before proceeding and didn't get one!" '[ -n "${PREVIOUSLY_ACTIVE_VENV}" ]'
+
+    cd "${OUTER_DIRECTORY}/test/test_empty" || return 1
+    activate_found_venv || return 1
+    local CURRENTLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertTrue "changing to an empty directory did not deactivate the current virtual environment!" '[ -z "${CURRENTLY_ACTIVE_VENV}" ]'
+
+    cd "${OUTER_DIRECTORY}/test/test_with_dot" || return 1
+    activate_found_venv || return 1
+    CURRENTLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertEquals "didn't activate .venv!" "${OUTER_DIRECTORY}/test/test_with_dot/.venv" "${CURRENTLY_ACTIVE_VENV}"
+
+    cd "${OUTER_DIRECTORY}/test/test_simple" || return 1
+    activate_found_venv || return 1
+    CURRENTLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertEquals "didn't activate venv!" "${OUTER_DIRECTORY}/test/test_simple/venv" "${CURRENTLY_ACTIVE_VENV}"
+
+    cd "${OUTER_DIRECTORY}/test/test_full" || return 1
+    activate_found_venv || return 1
+    CURRENTLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertEquals "didn't activate test_full.venv!" "${OUTER_DIRECTORY}/test/test_full/test_full.venv" "${CURRENTLY_ACTIVE_VENV}"
+
+    cd "${DOTFILES_DIR}/bash" || return
+    deactivate_venv
+    rm -rf "${OUTER_DIRECTORY}"
+}
+
+function test_cdv_basic_functionality() {
+    # cdv succeeds in changing directories to a directory that exists
+    # cdv with no argument goes $HOME, just as cd does
+    # cdv always deactivates the previously active venv, even if there is no venv in the destination directory
+    # cdv finds and activates a directory named .venv
+    # cdv finds and activates a directory named venv
+    # cdv finds and activates a directory named something.venv
+
+    local OUTER_DIRECTORY
+    OUTER_DIRECTORY="$(get_a_temp_dir_name)"
+
+    mkdir -p "${OUTER_DIRECTORY}/test/test_empty"
+    # shellcheck disable=SC2016
+    assertTrue "couldn't make test directory!" '[ -d "${OUTER_DIRECTORY}/test" ]'
+
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test_with_dot/.venv" >/dev/null
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test_simple/venv" >/dev/null
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test_full/test_full.venv" >/dev/null
+
+    local PREVIOUSLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertTrue "needed an active virtual environment before proceeding and didn't get one!" '[ -n "${PREVIOUSLY_ACTIVE_VENV}" ]'
+
+    cdv "${OUTER_DIRECTORY}/test/test_empty" || return 1
+    local CURRENTLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertTrue "changing to an empty directory did not deactivate the current virtual environment!" '[ -z "${CURRENTLY_ACTIVE_VENV}" ]'
+
+    cdv "${OUTER_DIRECTORY}/test/test_with_dot" || return 1
+    CURRENTLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertEquals "didn't activate .venv!" "${OUTER_DIRECTORY}/test/test_with_dot/.venv" "${CURRENTLY_ACTIVE_VENV}"
+
+    cdv "${OUTER_DIRECTORY}/test/test_simple" || return 1
+    CURRENTLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertEquals "didn't activate venv!" "${OUTER_DIRECTORY}/test/test_simple/venv" "${CURRENTLY_ACTIVE_VENV}"
+
+    cdv "${OUTER_DIRECTORY}/test/test_full" || return 1
+    CURRENTLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertEquals "didn't activate test_full.venv!" "${OUTER_DIRECTORY}/test/test_full/test_full.venv" "${CURRENTLY_ACTIVE_VENV}"
+
+    cdv || return 1
+    local CURRENT_DIRECTORY
+    CURRENT_DIRECTORY="$(pwd)"
+    # shellcheck disable=SC2016
+    assertEquals "didn't activate test_full.venv!" "${HOME}" "${CURRENT_DIRECTORY}"
+
+    deactivate_venv
+    rm -rf "${OUTER_DIRECTORY}"
+}
+
+function test_rename_venv_basic_functionality() {
+    # rename_venv makes a new virtual environment
+    # rename_venv works on relative paths, e.g., a virtual environment in the current directory
+    # rename_venv works on paths, not just virtual environments in the current directory
+    # rename_venv deletes the old directory
+    # rename_venv leaves you with no venv active
+
+    local OUTER_DIRECTORY
+    OUTER_DIRECTORY="$(get_a_temp_dir_name)"
+
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test_full/test_full.venv" >/dev/null
+
+    local PREVIOUSLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertTrue "needed a virtual environment before proceeding and didn't get one!" '[ -n "${PREVIOUSLY_ACTIVE_VENV}" ]'
+
+    rename_venv --python=python3 "${OUTER_DIRECTORY}/test/test_full/test_full.venv" "${OUTER_DIRECTORY}/test/test_simple/venv" >/dev/null
+
+    local CURRENTLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertTrue "renaming a virtual environment left one active!" '[ -z "${CURRENTLY_ACTIVE_VENV}" ]'
+
+    # shellcheck disable=SC2016
+    assertTrue "the new virtual environment was not created!" '[ -d "${OUTER_DIRECTORY}/test/test_simple/venv" ]'
+
+    # shellcheck disable=SC2016
+    assertTrue "the old virtual environment was not deleted!" '[ ! -d "${OUTER_DIRECTORY}/test/test_full/test_full.venv" ]'
+
+    cd "${OUTER_DIRECTORY}/test/test_simple"
+
+    rename_venv --python=python3 venv renamed.venv >/dev/null
+
+    # shellcheck disable=SC2016
+    assertTrue "the new virtual environment was not created!" '[ -d "renamed.venv" ]'
+
+    # shellcheck disable=SC2016
+    assertTrue "the old virtual environment was not deleted!" '[ ! -d "venv" ]'
+
+    cd "${DOTFILES_DIR}/bash" || return
+    deactivate_venv
+    rm -rf "${OUTER_DIRECTORY}"
+}
+
+function test_rename_venv_usage() {
+    # rename_venv fails if you don't give it two paths
+    # rename_venv doesn't delete the old venv in case of any failure
+
+    local OUTER_DIRECTORY
+    OUTER_DIRECTORY="$(get_a_temp_dir_name)"
+
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test_full/test_full.venv" >/dev/null
+
+    local RENAME_FAILED=0
+    rename_venv --python=python3 "${OUTER_DIRECTORY}/test/test_full/test_full.venv" >/dev/null || RENAME_FAILED=$?
+
+    # shellcheck disable=SC2016
+    assertTrue "rename_venv didn't fail when given the wrong number of parameters!" '[ ${RENAME_FAILED} ]'
+
+    # shellcheck disable=SC2016
+    assertTrue "the old virtual environment was deleted even though there were errors!" '[ -d "${OUTER_DIRECTORY}/test/test_full/test_full.venv" ]'
+
+    deactivate_venv
+    rm -rf "${OUTER_DIRECTORY}"
+}
+
+function test_rename_venv_versioning() {
+    # rename_venv creates a new venv with the same packages and versions as the old venv, except that pip, setuptools, and wheel may be newer
+
+    local OUTER_DIRECTORY
+    OUTER_DIRECTORY="$(get_a_temp_dir_name)"
+
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test_full/test_full.venv" >/dev/null
+    pip install click==7.0 >/dev/null
+
+    rename_venv --python=python3 "${OUTER_DIRECTORY}/test/test_full/test_full.venv" "${OUTER_DIRECTORY}/test/test_simple/venv" >/dev/null
+    activate_venv "${OUTER_DIRECTORY}/test/test_simple/venv"
+
+    local INSTALLED_PACKAGES
+    # shellcheck disable=SC2034
+    INSTALLED_PACKAGES="$(pip freeze)"
+    # shellcheck disable=SC2016
+    assertEquals "package versions don't match!" 'Click==7.0' "${INSTALLED_PACKAGES}"
+
+    deactivate_venv
+    rm -rf "${OUTER_DIRECTORY}"
+}
 
 # shellcheck disable=SC1090
 source "$(which shunit2)"

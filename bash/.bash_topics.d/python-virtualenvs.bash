@@ -5,7 +5,7 @@ function virtualenv_info() {
 }
 
 function deactivate_venv() { # deactivate_venv : deactivate the currently active venv, if any, whether using pyenv-virtualenvs or not
-    [ -v VIRTUAL_ENV ] || return
+    [ -v VIRTUAL_ENV ] || return 0
     if [ -v PYENV_VIRTUALENV_INIT ] ; then
         # shellcheck disable=SC1091
         source deactivate 2>/dev/null
@@ -17,7 +17,7 @@ function deactivate_venv() { # deactivate_venv : deactivate the currently active
 function activate_venv() { # activate_venv <venv>
     local VENV_TO_ACTIVATE="${1}"
 
-    [ -z "${VENV_TO_ACTIVATE}" ] && return
+    [ -z "${VENV_TO_ACTIVATE}" ] || [ ! -d "${VENV_TO_ACTIVATE}" ] && return 0
     deactivate_venv
 
     if [ -d "${VENV_TO_ACTIVATE}/bin" ] ; then
@@ -97,7 +97,7 @@ function _comp_cdv()
 
 complete -o filenames -o nospace -o bashdefault -F _comp_cdv cdv
 
-function create_venv() { # create_venv [<path> [requirements]] : create a venv at path, or if none given, at <cwd>/<cwd>.venv, installing packages named in <requirements>
+function create_venv() { # create_venv [--python=<python>] [<path> [requirements]] : create a venv at path, or if none given, at <cwd>/<cwd>.venv, installing packages named in <requirements>
     local PYTHON=python
     local PARSED_PARAMS
     PARSED_PARAMS="$(getopt --longoptions python: --options p: -- "$@")"
@@ -155,6 +155,10 @@ function rename_venv() { # rename_venv <path-to-existing-venv> <new-name> : rena
                 return 1
         esac
     done
+
+    if [ "$#" != 2 ] ; then
+        return 1
+    fi
 
     local RANDOM_STRING
     RANDOM_STRING="$(python3 -c "import uuid; print(str(uuid.uuid4()),end='')")"
