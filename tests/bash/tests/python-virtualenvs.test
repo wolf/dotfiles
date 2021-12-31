@@ -1,14 +1,10 @@
 #!/usr/bin/env bash
 
-# shellcheck disable=SC1091
-source "${DOTFILES_DIR}/bash/test/platform.inc"
-
 function setUp() {
     unset CDPATH
-    cd "${DOTFILES_DIR}/bash" || return
-
     # shellcheck disable=SC1091
-    source ".bash_topics.d/python-virtualenvs.bash"
+    source "${HOME}/.bash_topics.d/python-virtualenvs.bash"
+    cd "${DOTFILES_DIR}/tests/bash/test-data" || return 1
 }
 
 function get_a_temp_dir_name() {
@@ -90,7 +86,7 @@ function test_create_venv_installs_requirements() {
     # shellcheck disable=SC2016
     assertTrue "couldn't make test directory!" '[ -d "${OUTER_DIRECTORY}/test" ]'
 
-    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test.venv" "test/data/simple_venv_requirements.txt" >/dev/null
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test.venv" "data/simple_venv_requirements.txt" >/dev/null
 
     local INSTALLED_PACKAGES
     # shellcheck disable=SC2034

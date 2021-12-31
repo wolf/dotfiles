@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+function oneTimeSetUp() {
+    git clone https://github.com/wolf/dotfiles.git /tmp/dotfiles-unittest-working-copy # >/dev/null 2>&1
+    git -C /tmp/dotfiles-unittest-working-copy reset --hard 283217a05797dc2c2eefc31d2ca9a6db70b74665 # >/dev/null
+}
+
+function oneTimeTearDown() {
+    cd "${HOME}" || return
+    rm -rf /tmp/dotfiles-unittest-working-copy
+}
+
+function setUp() {
+    unset CDPATH
+    # shellcheck disable=SC1091
+    source "${HOME}/.bash_topics.d/git.bash"
+    cd /tmp/dotfiles-unittest-working-copy || return 1
+}
+
+function test_tip() {
+    local EXPECTED_OUTPUT='283217a'
+    local OTHER_EXPECTED_OUTPUT='420b20e'
+    local ACTUAL_OUTPUT
+
+    ACTUAL_OUTPUT="$(tip)"
+    assertEquals "tip with no arguments didn't find the expected commit" "${EXPECTED_OUTPUT}" "${ACTUAL_OUTPUT}"
+
+    ACTUAL_OUTPUT="$(tip HEAD)"
+    assertEquals "tip of HEAD didn't find the expected commit" "${EXPECTED_OUTPUT}" "${ACTUAL_OUTPUT}"
+
+    ACTUAL_OUTPUT="$(tip main)"
+    assertEquals "tip of main didn't find the expected commit" "${EXPECTED_OUTPUT}" "${ACTUAL_OUTPUT}"
+
+    git switch -c another_branch HEAD~5 >/dev/null 2>&1
+
+    ACTUAL_OUTPUT="$(tip)"
+    assertEquals "tip on a different branch didn't find the expected commit" "${OTHER_EXPECTED_OUTPUT}" "${ACTUAL_OUTPUT}"
+
+    git switch main >/dev/null 2>&1
+
+    ACTUAL_OUTPUT="$(tip another_branch)"
+    assertEquals "tip from main against another_branch didn't find the expected commit" "${OTHER_EXPECTED_OUTPUT}" "${ACTUAL_OUTPUT}"
+
+    git branch -d another_branch >/dev/null 2>&1
+}
+
+# cdtop
+# pushdtop
+# since_commit
+# in_commit
+# dirty
+# edit_since
+# edit_commit
+# edit_dirty
+# fzf_git_show?
+
+# shellcheck disable=SC1090
+source "$(which shunit2)"

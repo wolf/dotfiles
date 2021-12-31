@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 
 # shellcheck disable=SC1091
-source "${DOTFILES_DIR}/bash/test/platform.inc"
+source "${DOTFILES_DIR}/tests/bash/tests/platform.inc"
 
 function setUp() {
     unset CDPATH
-    cd "${DOTFILES_DIR}/bash" || return
-
     # shellcheck disable=SC1091
-    source ".bash_topics.d/ripgrep.bash"
+    source "${HOME}/.bash_topics.d/ripgrep.bash"
+    cd "${DOTFILES_DIR}/tests/bash/test-data" || return 1
 }
 
 function test_ge_basic_functionality() {
@@ -20,7 +19,7 @@ function test_ge_basic_functionality() {
     local EDITOR=echo
     local OUTPUT
     OUTPUT="$(ge --sort=path 'string for rg to find')"
-    assertEquals "files weren't opened!" "test/.hidden_data/test_ge_2.data test/data/test_ge_1.data test/ripgrep.test" "${OUTPUT}"
+    assertEquals "files weren't opened!" ".hidden_data/test_ge_2.data data/test_ge_1.data" "${OUTPUT}"
 }
 
 function test_ge_ignores_file() {
@@ -31,7 +30,7 @@ function test_ge_ignores_file() {
     local OUTPUT
     cd "${DOTFILES_DIR}" || return
     OUTPUT="$(ge 'Unnamed repository')"
-    assertEquals "did not ignore .git!" "bash/test/ripgrep.test" "${OUTPUT}"
+    assertEquals "did not ignore .git!" "tests/bash/tests/ripgrep.test" "${OUTPUT}"
 }
 
 function test_ge_follows_symbolic_links() {
@@ -49,7 +48,7 @@ function test_ge_follows_symbolic_links() {
     OUTER_DIRECTORY="/tmp/${RANDOM_STRING}"
     mkdir "${OUTER_DIRECTORY}"
 
-    ln -s "${DOTFILES_DIR}/bash/test/data" "${OUTER_DIRECTORY}/data"
+    ln -s "${DOTFILES_DIR}/tests/bash/test-data/data" "${OUTER_DIRECTORY}/data"
 
     # search /tmp for a file in test/data
     OUTPUT="$(ge 'string for rg to find' "${OUTER_DIRECTORY}")"
@@ -69,13 +68,12 @@ function test_ge_opens_hidden_files() {
     local EDITOR=echo
     local OUTPUT
     OUTPUT="$(ge 'string that was hidden for rg to find')"
-    assertEquals "files weren't opened!" "test/ripgrep.test test/data/.test_ge_opens_hidden_files.data" "${OUTPUT}"
+    assertEquals "files weren't opened!" "data/.test_ge_opens_hidden_files.data" "${OUTPUT}"
 }
 
 function test_ge_fails_silently() {
     # fails silently
 
-    cd "test/data" || fail "couldn't cd to the data directory"
     # shellcheck disable=SC2209
     EDITOR=echo ge "a string that won't be found" >/dev/null
     assertTrue "didn't fail silently!" "[ $? ]"
@@ -88,20 +86,19 @@ function test_ge_finds_unignored_file() {
     local EDITOR=echo
     local OUTPUT
     OUTPUT="$(ge --no-hidden 'string that was unignored for rg to find')"
-    assertEquals "files weren't opened!" "test/ripgrep.test test/data/.unignored_file.data" "${OUTPUT}"
+    assertEquals "files weren't opened!" "data/.unignored_file.data" "${OUTPUT}"
 }
 
 function test_ge_finds_multiple_patterns_in_one_call() {
     # finds two different files each containing a different match as specified with -e <pattern>
     local OUTPUT
 
-    cd test || return 1
     # shellcheck disable=SC2209
     OUTPUT="$(EDITOR=echo ge --sort=path -e unignored -e hidden)"
 
     # shellcheck disable=SC2016
     assertTrue "didn't find anything at all!" '[ "${OUTPUT}" ]'
-    assertEquals "didn't find the right files!" "data/.gitignore data/.test_ge_opens_hidden_files.data data/.unignored_file.data fd.test ripgrep.test" "${OUTPUT}"
+    assertEquals "didn't find the right files!" "data/.gitignore data/.test_ge_opens_hidden_files.data data/.unignored_file.data" "${OUTPUT}"
 }
 
 # shellcheck disable=SC1090

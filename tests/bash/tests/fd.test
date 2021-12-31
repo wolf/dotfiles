@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # shellcheck disable=SC1091
-source "${DOTFILES_DIR}/bash/test/platform.inc"
+source "${DOTFILES_DIR}/tests/bash/tests/platform.inc"
 
 if [ "$(command -v fdfind)" ] && [ ! "$(command -v fd)" ] ; then
     function fd() {
@@ -11,15 +11,14 @@ fi
 
 function setUp() {
     unset CDPATH
-    cd "${DOTFILES_DIR}/bash" || return
-
     if [ "$(platform)" == linux ] ; then
         # shellcheck disable=SC1091
-        source ".bash_topics.d/linux/fd.bash"
+        source "${HOME}/.bash_topics.d/linux/fd.bash"
     else
         # shellcheck disable=SC1091
-        source ".bash_topics.d/fd.bash"
+        source "${HOME}/.bash_topics.d/fd.bash"
     fi
+    cd "${DOTFILES_DIR}/tests/bash/test-data" || return 1
 }
 
 function test_f_finds_ordinary_file() {
@@ -28,7 +27,7 @@ function test_f_finds_ordinary_file() {
     FOUND="${FOUND#./}"
     # shellcheck disable=SC2016
     assertTrue "didn't find anything at all!" '[ "${FOUND}" ]'
-    assertEquals "didn't find the right file!" "test/data/test_f_finds_ordinary_file.data" "${FOUND}"
+    assertEquals "didn't find the right file!" "data/test_f_finds_ordinary_file.data" "${FOUND}"
 }
 
 # test f finds a hidden file
@@ -38,7 +37,7 @@ function test_f_finds_hidden_file() {
     FOUND="${FOUND#./}"
     # shellcheck disable=SC2016
     assertTrue "didn't find anything at all!" '[ "${FOUND}" ]'
-    assertEquals "didn't find the hidden file!" "test/.hidden_data/test_f_finds_hidden_file.data" "${FOUND}"
+    assertEquals "didn't find the hidden file!" ".hidden_data/test_f_finds_hidden_file.data" "${FOUND}"
 }
 
 function test_f_fails_silently() {
@@ -59,7 +58,7 @@ function test_f_finds_multiple_files() {
     local OUTPUT
     local GOLDEN_RECORD
     OUTPUT="$(f --regex "^test_fe_[12]\.data$" | sed 's=\./==g')"
-    GOLDEN_RECORD="test/.hidden_data/test_fe_2.data"$'\n'"test/data/test_fe_1.data"
+    GOLDEN_RECORD=".hidden_data/test_fe_2.data"$'\n'"data/test_fe_1.data"
     assertEquals "didn't find both files!" "${GOLDEN_RECORD}" "${OUTPUT}"
 }
 
@@ -72,12 +71,12 @@ function test_f_follows_symbolic_links() {
 
     # make a link in /tmp that leads to test/data
     RANDOM_STRING="$(python3 -c "import uuid; print(str(uuid.uuid4()),end='')")"
-    ln -s "${DOTFILES_DIR}/bash/test/data" "/tmp/${RANDOM_STRING}"
+    ln -s "${DOTFILES_DIR}/tests/bash/test-data" "/tmp/${RANDOM_STRING}"
     # search /tmp for a file in test/data
     FOUND="$(f --color=never test_f_finds_ordinary_file.data /tmp)"
     # shellcheck disable=SC2016
     assertTrue "didn't find anything at all!" '[ "${FOUND}" ]'
-    assertEquals "didn't find the right file!" "/tmp/${RANDOM_STRING}/test_f_finds_ordinary_file.data" "${FOUND}"
+    assertEquals "didn't find the right file!" "/tmp/${RANDOM_STRING}/data/test_f_finds_ordinary_file.data" "${FOUND}"
     # remove the link in /tmp
     rm "/tmp/${RANDOM_STRING}"
 }
@@ -94,7 +93,7 @@ function test_f_finds_a_directory() {
     local FOUND
     FOUND="$(f --color=never .hidden_data)"
     FOUND="${FOUND#./}"
-    assertEquals "directory not found!" "test/.hidden_data" "${FOUND}"
+    assertEquals "directory not found!" ".hidden_data" "${FOUND}"
 }
 
 # test fcat can actually cat a file
@@ -111,7 +110,7 @@ function test_fcd_changes_directory() {
     fcd ".hidden_data"
     NEW_DIR="$(pwd)"
     assertNotEquals "should have changed directories!" "${OLD_DIR}" "${NEW_DIR}"
-    assertEquals "got the wrong destination!" "${HOME}/builds/dotfiles/bash/test/.hidden_data" "${NEW_DIR}"
+    assertEquals "got the wrong destination!" "${DOTFILES_DIR}/tests/bash/test-data/.hidden_data" "${NEW_DIR}"
 }
 
 # test fcd fails silently?
@@ -133,7 +132,7 @@ function test_fcd_of() {
     fcd_of "test_f_finds_hidden_file.data"
     NEW_DIR="$(pwd)"
     assertNotEquals "should have changed directories!" "${OLD_DIR}" "${NEW_DIR}"
-    assertEquals "got the wrong destination!" "${HOME}/builds/dotfiles/bash/test/.hidden_data" "${NEW_DIR}"
+    assertEquals "got the wrong destination!" "${DOTFILES_DIR}/tests/bash/test-data/.hidden_data" "${NEW_DIR}"
 }
 
 # fe, can't test?  What if I set EDITOR to something _non_-interactive
@@ -142,7 +141,7 @@ function test_fe() {
     local EDITOR=echo
     local OUTPUT
     OUTPUT="$(fe --regex "^test_fe_[12]\.data$" | sed 's=\./==g')"
-    assertEquals "files weren't opened!" "test/.hidden_data/test_fe_2.data test/data/test_fe_1.data" "${OUTPUT}"
+    assertEquals "files weren't opened!" ".hidden_data/test_fe_2.data data/test_fe_1.data" "${OUTPUT}"
 }
 
 # test fll produces output
