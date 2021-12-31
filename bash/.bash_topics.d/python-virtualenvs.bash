@@ -113,7 +113,7 @@ function create_venv() { # create_venv [--python=<python>] [<path> [requirements
                 break
                 ;;
             *)
-                echo "usage"
+                >&2 echo "usage"
                 return 1
         esac
     done
@@ -127,7 +127,7 @@ function create_venv() { # create_venv [--python=<python>] [<path> [requirements
         mkdir -p "$(dirname "${1}")"
         VENV_DIR="${1}"
     fi
-    "${PYTHON}" -m venv --copies --upgrade-deps "${VENV_DIR}"
+    "${PYTHON}" -m venv --copies --upgrade-deps "${VENV_DIR}" || return 1
     activate_venv "${VENV_DIR}"
     python -m pip install --upgrade wheel
     if [ -n "${2}" ] && [ -f "${2}" ] ; then
@@ -151,12 +151,13 @@ function rename_venv() { # rename_venv <path-to-existing-venv> <new-name> : rena
                 break
                 ;;
             *)
-                echo "usage"
+                >&2 echo "usage"
                 return 1
         esac
     done
 
-    if [ "$#" != 2 ] ; then
+    if [ "$#" != 2 ] || [ ! -d "${1}" ] ; then
+        >&2 echo "usage: rename_venv <from> <to>"
         return 1
     fi
 
@@ -168,6 +169,7 @@ function rename_venv() { # rename_venv <path-to-existing-venv> <new-name> : rena
     local TEMP_FILE_NAME=/tmp/${RANDOM_STRING}.requirements.txt
 
     activate_venv "${FROM_NAME}"
+
     python -m pip freeze > "${TEMP_FILE_NAME}"
     deactivate_venv
 

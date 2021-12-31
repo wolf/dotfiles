@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-setUp() {
+function setUp() {
     unset CDPATH
     cd "${DOTFILES_DIR}/bash" || return
 

@@ -90,7 +90,7 @@ function test_create_venv_installs_requirements() {
     # shellcheck disable=SC2016
     assertTrue "couldn't make test directory!" '[ -d "${OUTER_DIRECTORY}/test" ]'
 
-    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test.venv" "test/data/simple_venv_requirements.txt"  >/dev/null
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test.venv" "test/data/simple_venv_requirements.txt" >/dev/null
 
     local INSTALLED_PACKAGES
     # shellcheck disable=SC2034
@@ -111,7 +111,7 @@ function test_create_venv_provides_up_to_date_tools() {
     # shellcheck disable=SC2016
     assertTrue "couldn't make test directory!" '[ -d "${OUTER_DIRECTORY}/test" ]'
 
-    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test.venv"  >/dev/null
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test.venv" >/dev/null
 
     local OUTDATED_PACKAGES
     # shellcheck disable=SC2034
@@ -120,6 +120,24 @@ function test_create_venv_provides_up_to_date_tools() {
     assertTrue "did not install up-to-date packages!" '[ -z "${OUTDATED_PACKAGES}" ]'
 
     deactivate_venv
+    rm -rf "${OUTER_DIRECTORY}"
+}
+
+function test_create_venv_fails_with_bad_python() {
+    local OUTER_DIRECTORY
+    OUTER_DIRECTORY="$(get_a_temp_dir_name)"
+
+    mkdir -p "${OUTER_DIRECTORY}/test"
+    # shellcheck disable=SC2016
+    assertTrue "couldn't make test directory!" '[ -d "${OUTER_DIRECTORY}/test" ]'
+
+    local CREATE_FAILED=0
+    # shellcheck disable=SC2034
+    create_venv --python=python2 "${OUTER_DIRECTORY}/test/test.venv" >/dev/null || CREATE_FAILED=$?
+
+    # shellcheck disable=SC2016
+    assertTrue "create_venv didn't fail when given a bad version of python!" '[ ${CREATE_FAILED} ]'
+
     rm -rf "${OUTER_DIRECTORY}"
 }
 
@@ -335,7 +353,7 @@ function test_rename_venv_basic_functionality() {
     # shellcheck disable=SC2016
     assertTrue "the old virtual environment was not deleted!" '[ ! -d "${OUTER_DIRECTORY}/test/test_full/test_full.venv" ]'
 
-    cd "${OUTER_DIRECTORY}/test/test_simple"
+    cd "${OUTER_DIRECTORY}/test/test_simple" || return
 
     rename_venv --python=python3 venv renamed.venv >/dev/null
 
@@ -360,6 +378,7 @@ function test_rename_venv_usage() {
     create_venv --python=python3 "${OUTER_DIRECTORY}/test/test_full/test_full.venv" >/dev/null
 
     local RENAME_FAILED=0
+    # shellcheck disable=SC2034
     rename_venv --python=python3 "${OUTER_DIRECTORY}/test/test_full/test_full.venv" >/dev/null || RENAME_FAILED=$?
 
     # shellcheck disable=SC2016
@@ -369,6 +388,26 @@ function test_rename_venv_usage() {
     assertTrue "the old virtual environment was deleted even though there were errors!" '[ -d "${OUTER_DIRECTORY}/test/test_full/test_full.venv" ]'
 
     deactivate_venv
+    rm -rf "${OUTER_DIRECTORY}"
+}
+
+function test_rename_venv_fails_with_bad_python() {
+    local OUTER_DIRECTORY
+    OUTER_DIRECTORY="$(get_a_temp_dir_name)"
+
+    mkdir -p "${OUTER_DIRECTORY}/test"
+    # shellcheck disable=SC2016
+    assertTrue "couldn't make test directory!" '[ -d "${OUTER_DIRECTORY}/test" ]'
+
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test_full/test_full.venv" >/dev/null
+
+    local RENAME_FAILED=0
+    # shellcheck disable=SC2034
+    rename_venv --python=python2 "${OUTER_DIRECTORY}/test/test_full/test_full.venv" "${OUTER_DIRECTORY}/test/test.venv" >/dev/null || RENAME_FAILED=$?
+
+    # shellcheck disable=SC2016
+    assertTrue "rename_venv didn't fail when given a bad version of python!" '[ ${RENAME_FAILED} ]'
+
     rm -rf "${OUTER_DIRECTORY}"
 }
 
