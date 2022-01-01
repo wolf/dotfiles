@@ -176,64 +176,17 @@ function test_pushdtop_works_on_paths_that_need_quoting() {
     mv "/tmp/dotfiles-unittest-working-copy/neo vim" /tmp/dotfiles-unittest-working-copy/neovim
 }
 
-function test_since_commit() {
-    local GOLDEN_RECORD="bash/.bash_topics.d/fd.bash"$'\n'"bash/.bashrc"
-    local OUTPUT
-
-    OUTPUT="$(since_commit HEAD^)"
-
-    assertEquals "didn't find the right files" "${GOLDEN_RECORD}" "${OUTPUT}"
-}
-
-function test_in_commit() {
-    local GOLDEN_RECORD="bash/.bash_topics.d/fd.bash"$'\n'"bash/.bashrc"
-    local OUTPUT
-
-    OUTPUT="$(in_commit)"
-
-    assertEquals "didn't find the right files" "${GOLDEN_RECORD}" "${OUTPUT}"
-}
-
-function test_in_commit_with_commit_id() {
-    local GOLDEN_RECORD="bash/.bash_topics.d/fd.bash"$'\n'"bash/.bashrc"
-    local OUTPUT
-
-    OUTPUT="$(in_commit 283217a05797dc2c2eefc31d2ca9a6db70b74665)"
-
-    assertEquals "didn't find the right files" "${GOLDEN_RECORD}" "${OUTPUT}"
-}
-
 function test_dirty() {
     git reset --mixed HEAD~1 >/dev/null
 
     local GOLDEN_RECORD="bash/.bash_topics.d/fd.bash"$'\n'"bash/.bashrc"
     local OUTPUT
 
-    OUTPUT="$(in_commit)"
+    OUTPUT="$(dirty)"
 
     assertEquals "didn't find the right files" "${GOLDEN_RECORD}" "${OUTPUT}"
 
     git reset --hard 283217a05797dc2c2eefc31d2ca9a6db70b74665 >/dev/null
-}
-
-function test_edit_since() {
-    local GOLDEN_RECORD="bash/.bash_topics.d/fd.bash bash/.bashrc"
-    local OUTPUT
-
-    # shellcheck disable=SC2209
-    OUTPUT="$(EDITOR=echo edit_since HEAD^)"
-
-    assertEquals "didn't find the right files" "${GOLDEN_RECORD}" "${OUTPUT}"
-}
-
-function test_edit_commit() {
-    local GOLDEN_RECORD="bash/.bash_topics.d/fd.bash bash/.bashrc"
-    local OUTPUT
-
-    # shellcheck disable=SC2209
-    OUTPUT="$(EDITOR=echo edit_commit HEAD~1 HEAD)"
-
-    assertEquals "didn't find the right files" "${GOLDEN_RECORD}" "${OUTPUT}"
 }
 
 # edit_dirty
