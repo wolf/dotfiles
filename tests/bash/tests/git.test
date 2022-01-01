@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 function oneTimeSetUp() {
-    git clone https://github.com/wolf/dotfiles.git /tmp/dotfiles-unittest-working-copy # >/dev/null 2>&1
-    git -C /tmp/dotfiles-unittest-working-copy reset --hard 283217a05797dc2c2eefc31d2ca9a6db70b74665 # >/dev/null
+    git clone https://github.com/wolf/dotfiles.git /tmp/dotfiles-unittest-working-copy >/dev/null 2>&1
+    git -C /tmp/dotfiles-unittest-working-copy reset --hard 283217a05797dc2c2eefc31d2ca9a6db70b74665 >/dev/null
 }
 
 function oneTimeTearDown() {
@@ -17,7 +17,7 @@ function setUp() {
     cd /tmp/dotfiles-unittest-working-copy || return 1
 }
 
-function test_tip() {
+function test_tip_basic_functionality() {
     local EXPECTED_OUTPUT='283217a'
     local OTHER_EXPECTED_OUTPUT='420b20e'
     local ACTUAL_OUTPUT
@@ -44,15 +44,201 @@ function test_tip() {
     git branch -d another_branch >/dev/null 2>&1
 }
 
-# cdtop
-# pushdtop
-# since_commit
-# in_commit
-# dirty
-# edit_since
-# edit_commit
+function test_cdtop_basic_functionality() {
+    local EXPECTED_WORKING_COPY_ROOT="/tmp/dotfiles-unittest-working-copy"
+    local STARTING_DIRECTORY="/tmp/dotfiles-unittest-working-copy/ipython/.ipython/profile_default/startup"
+    local ACTUAL_ENDING_DIRECTORY
+
+    cd "${STARTING_DIRECTORY}" || return 1
+    assertTrue "the starting directory might be a root!" '[ ! -d .git ]'
+
+    cdtop
+    ACTUAL_ENDING_DIRECTORY="$(pwd)"
+    ACTUAL_ENDING_DIRECTORY="${ACTUAL_ENDING_DIRECTORY#/private}"
+
+    assertNotEquals "cdtop didn't change directories!" "${STARTING_DIRECTORY}" "${ACTUAL_ENDING_DIRECTORY}"
+    assertEquals "cdtop didn't find the expected working copy root" "${EXPECTED_WORKING_COPY_ROOT}" "${ACTUAL_ENDING_DIRECTORY}"
+}
+
+function test_cdtop_works_on_paths_that_need_quoting() {
+    mv /tmp/dotfiles-unittest-working-copy "/tmp/dotfiles needs quoting"
+
+    local EXPECTED_WORKING_COPY_ROOT="/tmp/dotfiles needs quoting"
+    local STARTING_DIRECTORY="/tmp/dotfiles needs quoting/ipython/.ipython/profile_default/startup"
+    local ACTUAL_ENDING_DIRECTORY
+
+    cd "${STARTING_DIRECTORY}" || return 1
+    assertTrue "the starting directory might be a root!" '[ ! -d .git ]'
+
+    cdtop
+    ACTUAL_ENDING_DIRECTORY="$(pwd)"
+    ACTUAL_ENDING_DIRECTORY="${ACTUAL_ENDING_DIRECTORY#/private}"
+
+    assertNotEquals "cdtop didn't change directories!" "${STARTING_DIRECTORY}" "${ACTUAL_ENDING_DIRECTORY}"
+    assertEquals "cdtop didn't find the expected working copy root" "${EXPECTED_WORKING_COPY_ROOT}" "${ACTUAL_ENDING_DIRECTORY}"
+
+    mv "/tmp/dotfiles needs quoting" /tmp/dotfiles-unittest-working-copy
+}
+
+function test_cdtop_follows_relative_path_down_from_the_top() {
+    local WORKING_COPY_ROOT="/tmp/dotfiles-unittest-working-copy"
+    local STARTING_DIRECTORY="${WORKING_COPY_ROOT}/ipython/.ipython/profile_default/startup"
+    local EXPECTED_ENDING_DIRECTORY="${WORKING_COPY_ROOT}/neovim/.config/nvim"
+    local ACTUAL_ENDING_DIRECTORY
+
+    cd "${STARTING_DIRECTORY}" || return 1
+    assertTrue "the starting directory might be a root!" '[ ! -d .git ]'
+
+    cdtop "neovim/.config/nvim"
+    ACTUAL_ENDING_DIRECTORY="$(pwd)"
+    ACTUAL_ENDING_DIRECTORY="${ACTUAL_ENDING_DIRECTORY#/private}"
+
+    assertNotEquals "cdtop didn't change directories!" "${STARTING_DIRECTORY}" "${ACTUAL_ENDING_DIRECTORY}"
+    assertEquals "cdtop didn't find the expected relative path from the working copy root" "${EXPECTED_ENDING_DIRECTORY}" "${ACTUAL_ENDING_DIRECTORY}"
+}
+
+function test_cdtop_works_on_relative_paths_that_need_quoting() {
+    mv /tmp/dotfiles-unittest-working-copy/neovim "/tmp/dotfiles-unittest-working-copy/neo vim"
+    mv /tmp/dotfiles-unittest-working-copy "/tmp/dotfiles needs quoting"
+
+    local WORKING_COPY_ROOT="/tmp/dotfiles needs quoting"
+    local STARTING_DIRECTORY="${WORKING_COPY_ROOT}/ipython/.ipython/profile_default/startup"
+    local EXPECTED_ENDING_DIRECTORY="${WORKING_COPY_ROOT}/neo vim/.config/nvim"
+    local ACTUAL_ENDING_DIRECTORY
+
+    cd "${STARTING_DIRECTORY}" || return 1
+    assertTrue "the starting directory might be a root!" '[ ! -d .git ]'
+
+    cdtop "neo vim/.config/nvim"
+    ACTUAL_ENDING_DIRECTORY="$(pwd)"
+    ACTUAL_ENDING_DIRECTORY="${ACTUAL_ENDING_DIRECTORY#/private}"
+
+    assertNotEquals "cdtop didn't change directories!" "${STARTING_DIRECTORY}" "${ACTUAL_ENDING_DIRECTORY}"
+    assertEquals "cdtop didn't find the expected relative path from the working copy root" "${EXPECTED_ENDING_DIRECTORY}" "${ACTUAL_ENDING_DIRECTORY}"
+
+    mv "/tmp/dotfiles needs quoting" /tmp/dotfiles-unittest-working-copy
+    mv "/tmp/dotfiles-unittest-working-copy/neo vim" /tmp/dotfiles-unittest-working-copy/neovim
+}
+
+function test_pushdtop_basic_functionality() {
+    local WORKING_COPY_ROOT="/tmp/dotfiles-unittest-working-copy"
+    local STARTING_DIRECTORY="${WORKING_COPY_ROOT}/ipython/.ipython/profile_default/startup"
+    local EXPECTED_MIDDLE_DIRECTORY="${WORKING_COPY_ROOT}/neovim/.config/nvim"
+    local ACTUAL_ENDING_DIRECTORY
+    local ACTUAL_MIDDLE_DIRECTORY
+
+    cd "${STARTING_DIRECTORY}" || return 1
+    assertTrue "the starting directory might be a root!" '[ ! -d .git ]'
+
+    pushdtop "neovim/.config/nvim" >/dev/null
+    ACTUAL_MIDDLE_DIRECTORY="$(pwd)"
+    ACTUAL_MIDDLE_DIRECTORY="${ACTUAL_MIDDLE_DIRECTORY#/private}"
+
+    assertNotEquals "pushdtop didn't change directories!" "${STARTING_DIRECTORY}" "${ACTUAL_MIDDLE_DIRECTORY}"
+    assertEquals "pushdtop didn't find the expected relative path from the working copy root" "${EXPECTED_MIDDLE_DIRECTORY}" "${ACTUAL_MIDDLE_DIRECTORY}"
+
+    popd >/dev/null || return 1
+    ACTUAL_ENDING_DIRECTORY="$(pwd)"
+    ACTUAL_ENDING_DIRECTORY="${ACTUAL_ENDING_DIRECTORY#/private}"
+
+    assertNotEquals "popd didn't change directories!" "${ACTUAL_MIDDLE_DIRECTORY}" "${ACTUAL_ENDING_DIRECTORY}"
+    assertEquals "popd didn't return to the pushed directory" "${STARTING_DIRECTORY}" "${ACTUAL_ENDING_DIRECTORY}"
+}
+
+function test_pushdtop_works_on_paths_that_need_quoting() {
+    mv /tmp/dotfiles-unittest-working-copy/neovim "/tmp/dotfiles-unittest-working-copy/neo vim"
+    mv /tmp/dotfiles-unittest-working-copy "/tmp/dotfiles needs quoting"
+
+    local WORKING_COPY_ROOT="/tmp/dotfiles needs quoting"
+    local STARTING_DIRECTORY="${WORKING_COPY_ROOT}/ipython/.ipython/profile_default/startup"
+    local EXPECTED_MIDDLE_DIRECTORY="${WORKING_COPY_ROOT}/neo vim/.config/nvim"
+    local ACTUAL_ENDING_DIRECTORY
+    local ACTUAL_MIDDLE_DIRECTORY
+
+    cd "${STARTING_DIRECTORY}" || return 1
+    assertTrue "the starting directory might be a root!" '[ ! -d .git ]'
+
+    pushdtop "neo vim/.config/nvim" >/dev/null
+    ACTUAL_MIDDLE_DIRECTORY="$(pwd)"
+    ACTUAL_MIDDLE_DIRECTORY="${ACTUAL_MIDDLE_DIRECTORY#/private}"
+
+    assertNotEquals "pushdtop didn't change directories!" "${STARTING_DIRECTORY}" "${ACTUAL_MIDDLE_DIRECTORY}"
+    assertEquals "pushdtop didn't find the expected relative path from the working copy root" "${EXPECTED_MIDDLE_DIRECTORY}" "${ACTUAL_MIDDLE_DIRECTORY}"
+
+    popd >/dev/null || return 1
+    ACTUAL_ENDING_DIRECTORY="$(pwd)"
+    ACTUAL_ENDING_DIRECTORY="${ACTUAL_ENDING_DIRECTORY#/private}"
+
+    assertNotEquals "popd didn't change directories!" "${ACTUAL_MIDDLE_DIRECTORY}" "${ACTUAL_ENDING_DIRECTORY}"
+    assertEquals "popd didn't return to the pushed directory" "${STARTING_DIRECTORY}" "${ACTUAL_ENDING_DIRECTORY}"
+
+    mv "/tmp/dotfiles needs quoting" /tmp/dotfiles-unittest-working-copy
+    mv "/tmp/dotfiles-unittest-working-copy/neo vim" /tmp/dotfiles-unittest-working-copy/neovim
+}
+
+function test_since_commit() {
+    local GOLDEN_RECORD="bash/.bash_topics.d/fd.bash"$'\n'"bash/.bashrc"
+    local OUTPUT
+
+    OUTPUT="$(since_commit HEAD^)"
+
+    assertEquals "didn't find the right files" "${GOLDEN_RECORD}" "${OUTPUT}"
+}
+
+function test_in_commit() {
+    local GOLDEN_RECORD="bash/.bash_topics.d/fd.bash"$'\n'"bash/.bashrc"
+    local OUTPUT
+
+    OUTPUT="$(in_commit)"
+
+    assertEquals "didn't find the right files" "${GOLDEN_RECORD}" "${OUTPUT}"
+}
+
+function test_in_commit_with_commit_id() {
+    local GOLDEN_RECORD="bash/.bash_topics.d/fd.bash"$'\n'"bash/.bashrc"
+    local OUTPUT
+
+    OUTPUT="$(in_commit 283217a05797dc2c2eefc31d2ca9a6db70b74665)"
+
+    assertEquals "didn't find the right files" "${GOLDEN_RECORD}" "${OUTPUT}"
+}
+
+function test_dirty() {
+    git reset --mixed HEAD~1 >/dev/null
+
+    local GOLDEN_RECORD="bash/.bash_topics.d/fd.bash"$'\n'"bash/.bashrc"
+    local OUTPUT
+
+    OUTPUT="$(in_commit)"
+
+    assertEquals "didn't find the right files" "${GOLDEN_RECORD}" "${OUTPUT}"
+
+    git reset --hard 283217a05797dc2c2eefc31d2ca9a6db70b74665 >/dev/null
+}
+
+function test_edit_since() {
+    local GOLDEN_RECORD="bash/.bash_topics.d/fd.bash bash/.bashrc"
+    local OUTPUT
+
+    # shellcheck disable=SC2209
+    OUTPUT="$(EDITOR=echo edit_since HEAD^)"
+
+    assertEquals "didn't find the right files" "${GOLDEN_RECORD}" "${OUTPUT}"
+}
+
+function test_edit_commit() {
+    local GOLDEN_RECORD="bash/.bash_topics.d/fd.bash bash/.bashrc"
+    local OUTPUT
+
+    # shellcheck disable=SC2209
+    OUTPUT="$(EDITOR=echo edit_commit HEAD~1 HEAD)"
+
+    assertEquals "didn't find the right files" "${GOLDEN_RECORD}" "${OUTPUT}"
+}
+
 # edit_dirty
-# fzf_git_show?
+# zadd?
+# zshow?
 
 # shellcheck disable=SC1090
 source "$(which shunit2)"

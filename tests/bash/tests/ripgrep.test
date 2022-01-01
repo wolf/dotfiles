@@ -71,6 +71,13 @@ function test_ge_opens_hidden_files() {
     assertEquals "files weren't opened!" "data/.test_ge_opens_hidden_files.data" "${OUTPUT}"
 }
 
+function test_ge_works_on_paths_that_need_quoting() {
+    local OUTPUT
+    # shellcheck disable=SC2209
+    OUTPUT="$(EDITOR=echo ge 'string on a path that requires quoting for rg to find')"
+    assertEquals "didn't find a string on a path that requires quoting" "quoting needed/test.data" "${OUTPUT}"
+}
+
 function test_ge_fails_silently() {
     # fails silently
 

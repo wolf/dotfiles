@@ -31,6 +31,8 @@ function test_create_venv_basics() {
 
     deactivate_venv
     rm -rf "${OUTER_DIRECTORY}"
+    # shellcheck disable=SC2016
+    assertTrue "the directory was not deleted!" '[ ! -d "${OUTER_DIRECTORY}" ]'
 }
 
 function test_create_venv_without_arguments() {
@@ -50,6 +52,8 @@ function test_create_venv_without_arguments() {
     cd "${DOTFILES_DIR}/bash" || return
     deactivate_venv
     rm -rf "${OUTER_DIRECTORY}"
+    # shellcheck disable=SC2016
+    assertTrue "the directory was not deleted!" '[ ! -d "${OUTER_DIRECTORY}" ]'
 }
 
 function test_create_venv_works_on_paths_that_need_quoting() {
@@ -68,6 +72,8 @@ function test_create_venv_works_on_paths_that_need_quoting() {
     cd "${DOTFILES_DIR}/bash" || return
     deactivate_venv
     rm -rf "${OUTER_DIRECTORY}"
+    # shellcheck disable=SC2016
+    assertTrue "the directory was not deleted!" '[ ! -d "${OUTER_DIRECTORY}" ]'
 }
 
 function test_create_venv_deactivates_current_venv() {
@@ -93,6 +99,8 @@ function test_create_venv_deactivates_current_venv() {
     cd "${DOTFILES_DIR}/bash" || return
     deactivate_venv
     rm -rf "${OUTER_DIRECTORY}"
+    # shellcheck disable=SC2016
+    assertTrue "the directory was not deleted!" '[ ! -d "${OUTER_DIRECTORY}" ]'
 }
 
 function test_create_venv_installs_requirements() {
@@ -114,6 +122,8 @@ function test_create_venv_installs_requirements() {
 
     deactivate_venv
     rm -rf "${OUTER_DIRECTORY}"
+    # shellcheck disable=SC2016
+    assertTrue "the directory was not deleted!" '[ ! -d "${OUTER_DIRECTORY}" ]'
 }
 
 function test_create_venv_provides_up_to_date_tools() {
@@ -135,6 +145,8 @@ function test_create_venv_provides_up_to_date_tools() {
 
     deactivate_venv
     rm -rf "${OUTER_DIRECTORY}"
+    # shellcheck disable=SC2016
+    assertTrue "the directory was not deleted!" '[ ! -d "${OUTER_DIRECTORY}" ]'
 }
 
 function test_create_venv_fails_with_bad_python() {
@@ -153,6 +165,8 @@ function test_create_venv_fails_with_bad_python() {
     assertTrue "create_venv didn't fail when given a bad version of python!" '[ ${CREATE_FAILED} ]'
 
     rm -rf "${OUTER_DIRECTORY}"
+    # shellcheck disable=SC2016
+    assertTrue "the directory was not deleted!" '[ ! -d "${OUTER_DIRECTORY}" ]'
 }
 
 function test_activate_venv_basic_functionality() {
@@ -177,6 +191,8 @@ function test_activate_venv_basic_functionality() {
 
     deactivate_venv
     rm -rf "${OUTER_DIRECTORY}"
+    # shellcheck disable=SC2016
+    assertTrue "the directory was not deleted!" '[ ! -d "${OUTER_DIRECTORY}" ]'
 }
 
 function test_activate_venv_works_on_paths_that_need_quoting() {
@@ -201,6 +217,8 @@ function test_activate_venv_works_on_paths_that_need_quoting() {
 
     deactivate_venv
     rm -rf "${OUTER_DIRECTORY}"
+    # shellcheck disable=SC2016
+    assertTrue "the directory was not deleted!" '[ ! -d "${OUTER_DIRECTORY}" ]'
 }
 
 function test_activate_venv_fails_silently() {
@@ -227,6 +245,8 @@ function test_activate_venv_fails_silently() {
 
     deactivate_venv
     rm -rf "${OUTER_DIRECTORY}"
+    # shellcheck disable=SC2016
+    assertTrue "the directory was not deleted!" '[ ! -d "${OUTER_DIRECTORY}" ]'
 }
 
 # activate_venv activates a pyenv-virtualenv venv?  It doesn't do that right now
@@ -257,6 +277,8 @@ function test_deactivate_venv_basic_functionality() {
     assertEquals "no active virtual environment to deactivate, but something changed anyway!" "${PREVIOUSLY_ACTIVE_VENV}" "${CURRENTLY_ACTIVE_VENV}"
 
     rm -rf "${OUTER_DIRECTORY}"
+    # shellcheck disable=SC2016
+    assertTrue "the directory was not deleted!" '[ ! -d "${OUTER_DIRECTORY}" ]'
 }
 
 function test_activate_found_venv_basic_functionality() {
@@ -316,6 +338,8 @@ function test_activate_found_venv_basic_functionality() {
     cd "${DOTFILES_DIR}/bash" || return
     deactivate_venv
     rm -rf "${OUTER_DIRECTORY}"
+    # shellcheck disable=SC2016
+    assertTrue "the directory was not deleted!" '[ ! -d "${OUTER_DIRECTORY}" ]'
 }
 
 function test_cdv_basic_functionality() {
@@ -374,8 +398,11 @@ function test_cdv_basic_functionality() {
     # shellcheck disable=SC2016
     assertEquals "didn't activate test_full.venv!" "${HOME}" "${CURRENT_DIRECTORY}"
 
+    cd "${DOTFILES_DIR}/bash" || return
     deactivate_venv
     rm -rf "${OUTER_DIRECTORY}"
+    # shellcheck disable=SC2016
+    assertTrue "the directory was not deleted!" '[ ! -d "${OUTER_DIRECTORY}" ]'
 }
 
 function test_rename_venv_basic_functionality() {
@@ -419,6 +446,8 @@ function test_rename_venv_basic_functionality() {
     cd "${DOTFILES_DIR}/bash" || return
     deactivate_venv
     rm -rf "${OUTER_DIRECTORY}"
+    # shellcheck disable=SC2016
+    assertTrue "the directory was not deleted!" '[ ! -d "${OUTER_DIRECTORY}" ]'
 }
 
 function test_rename_venv_works_on_paths_that_need_quoting() {
@@ -446,6 +475,8 @@ function test_rename_venv_works_on_paths_that_need_quoting() {
     cd "${DOTFILES_DIR}/bash" || return
     deactivate_venv
     rm -rf "${OUTER_DIRECTORY}"
+    # shellcheck disable=SC2016
+    assertTrue "the directory was not deleted!" '[ ! -d "${OUTER_DIRECTORY}" ]'
 }
 
 function test_rename_venv_usage() {
@@ -469,6 +500,8 @@ function test_rename_venv_usage() {
 
     deactivate_venv
     rm -rf "${OUTER_DIRECTORY}"
+    # shellcheck disable=SC2016
+    assertTrue "the directory was not deleted!" '[ ! -d "${OUTER_DIRECTORY}" ]'
 }
 
 function test_rename_venv_fails_with_bad_python() {
@@ -489,6 +522,8 @@ function test_rename_venv_fails_with_bad_python() {
     assertTrue "rename_venv didn't fail when given a bad version of python!" '[ ${RENAME_FAILED} ]'
 
     rm -rf "${OUTER_DIRECTORY}"
+    # shellcheck disable=SC2016
+    assertTrue "the directory was not deleted!" '[ ! -d "${OUTER_DIRECTORY}" ]'
 }
 
 function test_rename_venv_versioning() {
@@ -511,6 +546,8 @@ function test_rename_venv_versioning() {
 
     deactivate_venv
     rm -rf "${OUTER_DIRECTORY}"
+    # shellcheck disable=SC2016
+    assertTrue "the directory was not deleted!" '[ ! -d "${OUTER_DIRECTORY}" ]'
 }
 
 # shellcheck disable=SC1090
