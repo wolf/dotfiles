@@ -55,11 +55,19 @@ function test_f_ignores_file() {
 
 # test f finds multiple files in multiple different directories at the same time
 function test_f_finds_multiple_files() {
+    local GOLDEN_RECORD=".hidden_data/test_fe_2.data"$'\n'"data/test_fe_1.data"
     local OUTPUT
-    local GOLDEN_RECORD
     OUTPUT="$(f --regex "^test_fe_[12]\.data$" | sed 's=\./==g')"
-    GOLDEN_RECORD=".hidden_data/test_fe_2.data"$'\n'"data/test_fe_1.data"
     assertEquals "didn't find both files!" "${GOLDEN_RECORD}" "${OUTPUT}"
+}
+
+function test_f_finds_paths_that_need_quoting() {
+    local GOLDEN_RECORD="data/test.data"$'\n'"quoting needed/test.data"
+    local OUTPUT
+    OUTPUT="$(f --color=never test.data | sed 's=\./==g')"
+    # shellcheck disable=SC2016
+    assertTrue "didn't find anything at all!" '[ "${OUTPUT}" ]'
+    assertEquals "didn't find the path that needed quoting!" "${GOLDEN_RECORD}" "${OUTPUT}"
 }
 
 # test f follows a symbolic link
@@ -103,6 +111,12 @@ function test_fcat() {
     assertTrue "fcat didn't produce any output!" "(( ${COUNT} > 0 ))"
 }
 
+function test_fcat_can_cat_a_file_that_needs_quoting() {
+    local COUNT
+    COUNT=$(fcat --glob 'parent_needs_quoting.data' | wc -l)
+    assertTrue "fcat didn't produce any output!" "(( ${COUNT} > 0 ))"
+}
+
 function test_fcd_changes_directory() {
     local OLD_DIR
     local NEW_DIR
@@ -111,6 +125,16 @@ function test_fcd_changes_directory() {
     NEW_DIR="$(pwd)"
     assertNotEquals "should have changed directories!" "${OLD_DIR}" "${NEW_DIR}"
     assertEquals "got the wrong destination!" "${DOTFILES_DIR}/tests/bash/test-data/.hidden_data" "${NEW_DIR}"
+}
+
+function test_fcd_changes_directory_to_a_path_that_needs_quoting() {
+    local OLD_DIR
+    local NEW_DIR
+    OLD_DIR="$(pwd)"
+    fcd "quoting needed"
+    NEW_DIR="$(pwd)"
+    assertNotEquals "should have changed directories!" "${OLD_DIR}" "${NEW_DIR}"
+    assertEquals "got the wrong destination!" "${DOTFILES_DIR}/tests/bash/test-data/quoting needed" "${NEW_DIR}"
 }
 
 # test fcd fails silently?
@@ -125,7 +149,7 @@ function test_fcd_fails_silently() {
 }
 
 # test fcd_of finds the parent directory of a specific file-system object
-function test_fcd_of() {
+function test_fcd_of_basic_functionality() {
     local OLD_DIR
     local NEW_DIR
     OLD_DIR="$(pwd)"
@@ -135,8 +159,27 @@ function test_fcd_of() {
     assertEquals "got the wrong destination!" "${DOTFILES_DIR}/tests/bash/test-data/.hidden_data" "${NEW_DIR}"
 }
 
-# fe, can't test?  What if I set EDITOR to something _non_-interactive
-function test_fe() {
+function test_fcd_of_changes_directory_to_a_path_that_needs_quoting() {
+    local OLD_DIR
+    local NEW_DIR
+    OLD_DIR="$(pwd)"
+    fcd_of "parent_needs_quoting.data"
+    NEW_DIR="$(pwd)"
+    assertNotEquals "should have changed directories!" "${OLD_DIR}" "${NEW_DIR}"
+    assertEquals "got the wrong destination!" "${DOTFILES_DIR}/tests/bash/test-data/quoting needed" "${NEW_DIR}"
+}
+
+function test_fcd_of_works_on_a_file_that_needs_quoting() {
+    local OLD_DIR
+    local NEW_DIR
+    OLD_DIR="$(pwd)"
+    fcd_of "test quoting needed.data"
+    NEW_DIR="$(pwd)"
+    assertNotEquals "should have changed directories!" "${OLD_DIR}" "${NEW_DIR}"
+    assertEquals "got the wrong destination!" "${DOTFILES_DIR}/tests/bash/test-data/data" "${NEW_DIR}"
+}
+
+function test_fe_basic_functionality() {
     # shellcheck disable=SC2034
     local EDITOR=echo
     local OUTPUT
@@ -144,16 +187,36 @@ function test_fe() {
     assertEquals "files weren't opened!" ".hidden_data/test_fe_2.data data/test_fe_1.data" "${OUTPUT}"
 }
 
+function test_fe_opens_a_file_that_needs_quoting() {
+    # shellcheck disable=SC2034
+    local OUTPUT
+    # shellcheck disable=SC2209
+    OUTPUT="$(EDITOR=echo fe "test quoting needed.data")"
+    OUTPUT="${OUTPUT#./}"
+    assertEquals "files weren't opened!" "data/test quoting needed.data" "${OUTPUT}"
+}
+
 # test fll produces output
-function test_fll() {
+function test_fll_basic_functionality() {
     local COUNT
     COUNT=$(fll --glob '*.data' | wc -l)
+    assertTrue "fll didn't produce any output!" "(( ${COUNT} > 0 ))"
+}
+
+function test_fll_works_on_paths_that_need_quoting() {
+    local COUNT
+    COUNT=$(fll --glob 'parent_needs_quoting.data' | wc -l)
     assertTrue "fll didn't produce any output!" "(( ${COUNT} > 0 ))"
 }
 
 # test fsource loads a function definition
 function test_fsource() {
     fsource 'test_fsource.data' >/dev/null
+    assertTrue "sourced definition wasn't found!" "[ $(command -v test_fsource_sample_function_definition) ]"
+}
+
+function test_fsource_works_on_paths_that_need_quoting() {
+    fsource 'parent_needs_quoting.data' >/dev/null
     assertTrue "sourced definition wasn't found!" "[ $(command -v test_fsource_sample_function_definition) ]"
 }
 

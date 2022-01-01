@@ -1,0 +1,3 @@
+function test_fsource_sample_function_definition() {
+    echo "found"
+}

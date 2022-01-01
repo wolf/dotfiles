@@ -52,6 +52,24 @@ function test_create_venv_without_arguments() {
     rm -rf "${OUTER_DIRECTORY}"
 }
 
+function test_create_venv_works_on_paths_that_need_quoting() {
+    local OUTER_DIRECTORY
+    OUTER_DIRECTORY="$(get_a_temp_dir_name)"
+
+    mkdir -p "${OUTER_DIRECTORY}/test needs quoting"
+    # shellcheck disable=SC2016
+    assertTrue "couldn't make test directory!" '[ -d "${OUTER_DIRECTORY}/test needs quoting" ]'
+    cd "${OUTER_DIRECTORY}/test needs quoting" || return 1
+
+    create_venv --python=python3 >/dev/null
+
+    assertTrue "didn't create a virtual environment with the right name!" '[ -d "test needs quoting.venv" ]'
+
+    cd "${DOTFILES_DIR}/bash" || return
+    deactivate_venv
+    rm -rf "${OUTER_DIRECTORY}"
+}
+
 function test_create_venv_deactivates_current_venv() {
     # create_venv deactivates any currently active venv
     local OUTER_DIRECTORY
@@ -161,6 +179,30 @@ function test_activate_venv_basic_functionality() {
     rm -rf "${OUTER_DIRECTORY}"
 }
 
+function test_activate_venv_works_on_paths_that_need_quoting() {
+    # activate_venv activates a normal venv
+    # activate_venv deactivates previously active venv
+    local OUTER_DIRECTORY
+    OUTER_DIRECTORY="$(get_a_temp_dir_name)"
+
+    mkdir -p "${OUTER_DIRECTORY}/test needs quoting"
+    # shellcheck disable=SC2016
+    assertTrue "couldn't make test directory!" '[ -d "${OUTER_DIRECTORY}/test needs quoting" ]'
+
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test needs quoting/test1.venv" >/dev/null
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test needs quoting/test2.venv" >/dev/null
+    local PREVIOUSLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+
+    activate_venv "${OUTER_DIRECTORY}/test needs quoting/test1.venv"
+    local CURRENTLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertNotEquals "didn't deactivate the existing virtual environment!" "${PREVIOUSLY_ACTIVE_VENV}" "${CURRENTLY_ACTIVE_VENV}"
+    assertEquals "didn't activate the requested virtual environment!" "${OUTER_DIRECTORY}/test needs quoting/test1.venv" "${CURRENTLY_ACTIVE_VENV}"
+
+    deactivate_venv
+    rm -rf "${OUTER_DIRECTORY}"
+}
+
 function test_activate_venv_fails_silently() {
     # activate_venv doesn't deactivate currently active venv is there is no new venv to activate
     local OUTER_DIRECTORY
@@ -223,6 +265,7 @@ function test_activate_found_venv_basic_functionality() {
     # activate_found_venv finds and activates a directory named .venv
     # activate_found_venv finds and activates a directory named venv
     # activate_found_venv finds and activates a directory named something.venv
+    # activate_found_venv finds and activates a directory that needs quoting
 
     local OUTER_DIRECTORY
     OUTER_DIRECTORY="$(get_a_temp_dir_name)"
@@ -234,6 +277,7 @@ function test_activate_found_venv_basic_functionality() {
     create_venv --python=python3 "${OUTER_DIRECTORY}/test/test_with_dot/.venv" >/dev/null
     create_venv --python=python3 "${OUTER_DIRECTORY}/test/test_simple/venv" >/dev/null
     create_venv --python=python3 "${OUTER_DIRECTORY}/test/test_full/test_full.venv" >/dev/null
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test quoting/test quoting.venv" >/dev/null
 
     local PREVIOUSLY_ACTIVE_VENV="${VIRTUAL_ENV}"
     # shellcheck disable=SC2016
@@ -263,6 +307,12 @@ function test_activate_found_venv_basic_functionality() {
     # shellcheck disable=SC2016
     assertEquals "didn't activate test_full.venv!" "${OUTER_DIRECTORY}/test/test_full/test_full.venv" "${CURRENTLY_ACTIVE_VENV}"
 
+    cd "${OUTER_DIRECTORY}/test/test quoting" || return 1
+    activate_found_venv || return 1
+    CURRENTLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertEquals "didn't activate test_full.venv!" "${OUTER_DIRECTORY}/test/test quoting/test quoting.venv" "${CURRENTLY_ACTIVE_VENV}"
+
     cd "${DOTFILES_DIR}/bash" || return
     deactivate_venv
     rm -rf "${OUTER_DIRECTORY}"
@@ -275,6 +325,7 @@ function test_cdv_basic_functionality() {
     # cdv finds and activates a directory named .venv
     # cdv finds and activates a directory named venv
     # cdv finds and activates a directory named something.venv
+    # cdv finds and activates a directory that needs quoting
 
     local OUTER_DIRECTORY
     OUTER_DIRECTORY="$(get_a_temp_dir_name)"
@@ -286,6 +337,7 @@ function test_cdv_basic_functionality() {
     create_venv --python=python3 "${OUTER_DIRECTORY}/test/test_with_dot/.venv" >/dev/null
     create_venv --python=python3 "${OUTER_DIRECTORY}/test/test_simple/venv" >/dev/null
     create_venv --python=python3 "${OUTER_DIRECTORY}/test/test_full/test_full.venv" >/dev/null
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test quoting/test quoting.venv" >/dev/null
 
     local PREVIOUSLY_ACTIVE_VENV="${VIRTUAL_ENV}"
     # shellcheck disable=SC2016
@@ -310,6 +362,11 @@ function test_cdv_basic_functionality() {
     CURRENTLY_ACTIVE_VENV="${VIRTUAL_ENV}"
     # shellcheck disable=SC2016
     assertEquals "didn't activate test_full.venv!" "${OUTER_DIRECTORY}/test/test_full/test_full.venv" "${CURRENTLY_ACTIVE_VENV}"
+
+    cdv "${OUTER_DIRECTORY}/test/test quoting" || return 1
+    CURRENTLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertEquals "didn't activate test_full.venv!" "${OUTER_DIRECTORY}/test/test quoting/test quoting.venv" "${CURRENTLY_ACTIVE_VENV}"
 
     cdv || return 1
     local CURRENT_DIRECTORY
@@ -358,6 +415,33 @@ function test_rename_venv_basic_functionality() {
 
     # shellcheck disable=SC2016
     assertTrue "the old virtual environment was not deleted!" '[ ! -d "venv" ]'
+
+    cd "${DOTFILES_DIR}/bash" || return
+    deactivate_venv
+    rm -rf "${OUTER_DIRECTORY}"
+}
+
+function test_rename_venv_works_on_paths_that_need_quoting() {
+    local OUTER_DIRECTORY
+    OUTER_DIRECTORY="$(get_a_temp_dir_name)"
+
+    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test quoting/test_full.venv" >/dev/null
+
+    local PREVIOUSLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertTrue "needed a virtual environment before proceeding and didn't get one!" '[ -n "${PREVIOUSLY_ACTIVE_VENV}" ]'
+
+    rename_venv --python=python3 "${OUTER_DIRECTORY}/test/test quoting/test_full.venv" "${OUTER_DIRECTORY}/test/test_simple/my venv" >/dev/null
+
+    local CURRENTLY_ACTIVE_VENV="${VIRTUAL_ENV}"
+    # shellcheck disable=SC2016
+    assertTrue "renaming a virtual environment left one active!" '[ -z "${CURRENTLY_ACTIVE_VENV}" ]'
+
+    # shellcheck disable=SC2016
+    assertTrue "the new virtual environment was not created!" '[ -d "${OUTER_DIRECTORY}/test/test_simple/my venv" ]'
+
+    # shellcheck disable=SC2016
+    assertTrue "the old virtual environment was not deleted!" '[ ! -d "${OUTER_DIRECTORY}/test/test quoting/test_full.venv" ]'
 
     cd "${DOTFILES_DIR}/bash" || return
     deactivate_venv
