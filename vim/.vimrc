@@ -271,6 +271,7 @@ set expandtab
 " FZF behavior {{{
 nnoremap <silent> <Leader>o :NERDTreeClose \| FZF<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
+nnoremap <silent> <Leader>w :Windows<CR>
 nnoremap <silent> <Leader>ag :Ag<CR>
 
 nnoremap <silent> <Leader>nv :NV<CR>
@@ -365,7 +366,7 @@ function! ToggleShowWhitespaceErrors()
     endif
 endfunction
 
-nnoremap <silent> <Leader>ws :call ToggleShowWhitespaceErrors()<CR>
+nnoremap <silent> <Leader>sw :call ToggleShowWhitespaceErrors()<CR>
 " }}}
 
 " Toggle relative line numbers for easier motion math
