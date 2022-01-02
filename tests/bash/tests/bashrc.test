@@ -1,21 +1,68 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash -i
 
 function setUp() {
     unset CDPATH
     cd "${DOTFILES_DIR}/bash" || return
-
-    # shellcheck disable=SC1091
-    source ".bashrc"
 }
 
-# in_path
-# get_topics
+function test_get_topics() {
+    local PLATFORM
+    PLATFORM="$(platform)"
+
+    [ -d "${HOME}/.bash_topics.d/${PLATFORM}" ] || startSkipping
+
+    touch "${HOME}/.bash_topics.d/not-a-topic.test1.bash"
+    touch "${HOME}/.bash_topics.d/not-a-topic.test2.local-only.bash"
+    touch "${HOME}/.bash_topics.d/not-a-topic.test3.bash.do-not-load"
+    touch "${HOME}/.bash_topics.d/${PLATFORM}/not-a-topic.test4.bash"
+
+    declare -a TOPICS
+    readarray -d '' TOPICS < <( get_topics --print0 )
+
+    declare -A TOPICS_MAP
+    declare -A PLATFORMS_MAP
+    local FOUND_PLATFORM
+    for TOPIC in "${TOPICS[@]}" ; do
+        # shellcheck disable=SC2034
+        TOPICS_MAP["${TOPIC}"]=1
+
+        [[ "${TOPIC}" =~ ${HOME}/.bash_topics.d/(.+)/.* ]]
+        FOUND_PLATFORM="${BASH_REMATCH[1]}"
+        if [ -n "${FOUND_PLATFORM}" ] ; then
+            # shellcheck disable=SC2034
+            PLATFORMS_MAP["${FOUND_PLATFORM}"]=1
+        fi
+    done
+
+    # does it get all the topics?
+    # shellcheck disable=SC2016
+    assertTrue "didn't find a regular topic!" '[ "${TOPICS_MAP["${HOME}/.bash_topics.d/not-a-topic.test1.bash"]}" ]'
+    # shellcheck disable=SC2016
+    assertTrue "didn't find a local-only topic!" '[ "${TOPICS_MAP["${HOME}/.bash_topics.d/not-a-topic.test2.local-only.bash"]}" ]'
+
+    # does it find platform specific topics?
+    # shellcheck disable=SC2016
+    assertTrue "didn't find a platform-specific topic!" '[ "${TOPICS_MAP["${HOME}/.bash_topics.d/${PLATFORM}/not-a-topic.test4.bash"]}" ]'
+
+    # does it ignore .do-not-load topics?
+    # shellcheck disable=SC2016
+    assertFalse "found a do-not-load topic!" '[ "${TOPICS_MAP["${HOME}/.bash_topics.d/not-a-topic.test3.bash.do-not-load"]}" ]'
+
+    # does it _not_ get topics specific to other platforms?
+    # shellcheck disable=SC2016
+    assertTrue "found topics from different platforms!" '(( ${#PLATFORMS_MAP[@]} <= 1 ))'
+
+    fd --follow --no-ignore --hidden --glob '*not-a-topic*' "${HOME}/.bash_topics.d" --exec-batch rm
+}
+
 # hosts
-# did
-# we
-# wll
-# wfile
+    # will it print a known host?
+    # does it fail silently when there is no .ssh/ or .ssh/config?
+
 # mkcd
+    # does it create the needed intermediate directories
+    # does it make the current directory the right one?
+    # does it work when the desired directory already exists?
 
 # shellcheck disable=SC1090
 source "$(which shunit2)"
