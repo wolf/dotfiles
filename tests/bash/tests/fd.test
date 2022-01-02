@@ -11,12 +11,15 @@ fi
 
 function setUp() {
     unset CDPATH
-    if [ "$(platform)" == linux ] ; then
-        # shellcheck disable=SC1091
-        source "${HOME}/.bash_topics.d/linux/fd.bash"
-    else
-        # shellcheck disable=SC1091
-        source "${HOME}/.bash_topics.d/fd.bash"
+
+    local PLATFORM
+    PLATFORM="$(platform)"
+
+    # shellcheck disable=SC1091
+    source "${HOME}/.bash_topics.d/fd.bash"
+    if [ -f "${HOME}/.bash_topics.d/${PLATFORM}/fd.bash" ] ; then
+        # shellcheck disable=SC1090
+        source "${HOME}/.bash_topics.d/${PLATFORM}/fd.bash"
     fi
     cd "${DOTFILES_DIR}/tests/bash/test-data" || return 1
 }
