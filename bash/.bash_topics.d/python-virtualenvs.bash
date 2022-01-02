@@ -97,15 +97,20 @@ function _comp_cdv()
 
 complete -o filenames -o nospace -o bashdefault -F _comp_cdv cdv
 
-function create_venv() { # create_venv [--python=<python>] [<path> [requirements]] : create a venv at path, or if none given, at <cwd>/<cwd>.venv, installing packages named in <requirements>
+function create_venv() { # create_venv [--python=<python>] [--requirements=<requirements>] [<path>] : create a venv at path, or if none given, at <cwd>/<cwd>.venv, installing packages named in <requirements>
     local PYTHON=python
+    local REQUIREMENTS
     local PARSED_PARAMS
-    PARSED_PARAMS="$(getopt --longoptions python: --options p: -- "$@")"
+    PARSED_PARAMS="$(getopt --longoptions python:,requirements: --options p:r: -- "$@")"
     eval set -- "${PARSED_PARAMS}"
     while true ; do
         case "${1}" in
             -p|--python)
                 PYTHON="${2}"
+                shift 2
+                ;;
+            -r|--requirements)
+                REQUIREMENTS="${2}"
                 shift 2
                 ;;
             --)
@@ -130,8 +135,8 @@ function create_venv() { # create_venv [--python=<python>] [<path> [requirements
     "${PYTHON}" -m venv --copies --upgrade-deps "${VENV_DIR}" || return 1
     activate_venv "${VENV_DIR}"
     python -m pip install --upgrade wheel
-    if [ -n "${2}" ] && [ -f "${2}" ] ; then
-        python -m pip install -r "${2}"
+    if [ -f "${REQUIREMENTS}" ] ; then
+        python -m pip install -r "${REQUIREMENTS}"
     fi
 }
 
@@ -173,13 +178,15 @@ function rename_venv() { # rename_venv <path-to-existing-venv> <new-name> : rena
     python -m pip freeze > "${TEMP_FILE_NAME}"
     deactivate_venv
 
-    create_venv --python="${PYTHON}" "${TO_NAME}" "${TEMP_FILE_NAME}"
+    create_venv --python="${PYTHON}" --requirements="${TEMP_FILE_NAME}" "${TO_NAME}"
     deactivate_venv
 
     rm -rf "${FROM_NAME}"
     rm "${TEMP_FILE_NAME}"
 }
 
+export -f activate_venv
+export -f deactivate_venv
 export -f activate_found_venv
 export -f create_venv
 export -f rename_venv

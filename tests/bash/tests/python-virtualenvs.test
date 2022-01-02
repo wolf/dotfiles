@@ -112,7 +112,7 @@ function test_create_venv_installs_requirements() {
     # shellcheck disable=SC2016
     assertTrue "couldn't make test directory!" '[ -d "${OUTER_DIRECTORY}/test" ]'
 
-    create_venv --python=python3 "${OUTER_DIRECTORY}/test/test.venv" "data/simple_venv_requirements.txt" >/dev/null
+    create_venv --python=python3 --requirements="data/simple_venv_requirements.txt" "${OUTER_DIRECTORY}/test/test.venv" >/dev/null
 
     local INSTALLED_PACKAGES
     # shellcheck disable=SC2034
