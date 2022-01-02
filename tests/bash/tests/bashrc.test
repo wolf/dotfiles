@@ -8,9 +8,7 @@ function setUp() {
     source ".bashrc"
 }
 
-# show_path
 # in_path
-# platform
 # get_topics
 # hosts
 # did
@@ -18,7 +16,6 @@ function setUp() {
 # wll
 # wfile
 # mkcd
-# resolve
 
 # shellcheck disable=SC1090
 source "$(which shunit2)"

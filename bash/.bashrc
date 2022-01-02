@@ -38,12 +38,12 @@ if [ "$(command -v fdfind)" ] ; then
 fi
 
 function get_topics() { # get_topics [--print0] : prints the list of topics, in order, that is or will be executed at interactive Bash startup
-    fd --type f --max-depth=1 "$@" '.*\.bash$' "${HOME}/.bash_topics.d"
-    fd --type f               "$@" '.*\.bash$' "${HOME}/.bash_topics.d/$(platform)"
+    fd --follow --no-ignore --hidden "$@" --max-depth=1 --type f --regex '.*\.bash$' "${HOME}/.bash_topics.d"
+    fd --follow --no-ignore --hidden "$@"               --type f --regex '.*\.bash$' "${HOME}/.bash_topics.d/$(platform)"
 }
 
 declare -a TOPICS
-readarray -d '' TOPICS < <( get_topics --no-ignore --print0 )
+readarray -d '' TOPICS < <( get_topics --print0 )
 for TOPIC in "${TOPICS[@]}" ; do
     # shellcheck disable=SC1090,SC2086
     source "${TOPIC}"
@@ -95,7 +95,7 @@ function wfile()    { file "$(which "${1}")"; }                     # wfile <com
 function mkcd()     { mkdir -p "${1}" && cd "${1}" || return; }     # mkcd <path> : create all directories needed to build <path> and cd into it
 
 function help_commands() { # help_commands : you're soaking in it!
-    ( echo -ne "${HOME}/.bashrc\x00" ; get_topics --no-ignore --print0 ) | xargs -0 \
+    ( echo -ne "${HOME}/.bashrc\x00" ; get_topics --print0 ) | xargs -0 \
         rg --hidden --color=never --no-line-number --heading --sort=path \
         -e '\s*(?:function|alias)\s+([a-z][a-z0-9_]*).*(#.*)' \
         --replace "\$1		\$2" \
