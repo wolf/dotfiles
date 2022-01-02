@@ -38,12 +38,12 @@ if [ "$(command -v fdfind)" ] ; then
 fi
 
 function get_topics() { # get_topics [--print0] : prints the list of topics, in order, that is or will be executed at interactive Bash startup
-    fd --type f --max-depth=1 "$@" '.*\.bash' "${HOME}/.bash_topics.d"
-    fd --type f               "$@" '.*\.bash' "${HOME}/.bash_topics.d/$(platform)"
+    fd --type f --max-depth=1 "$@" '.*\.bash$' "${HOME}/.bash_topics.d"
+    fd --type f               "$@" '.*\.bash$' "${HOME}/.bash_topics.d/$(platform)"
 }
 
 declare -a TOPICS
-readarray -d '' TOPICS < <( get_topics --print0 )
+readarray -d '' TOPICS < <( get_topics --no-ignore --print0 )
 for TOPIC in "${TOPICS[@]}" ; do
     # shellcheck disable=SC1090,SC2086
     source "${TOPIC}"
@@ -82,16 +82,20 @@ bind '"\e[B":history-search-forward'
 alias h20='history 20'                                              # h20 : show the last 20 entries from history
 alias tree="tree -alC -I '.git|__pycache__|node_modules|*venv'"
 
-function hosts()        { grep -e '^Host' ~/.ssh/config; }          # hosts : list Hosts configured in ~/.ssh/config
-function did()          { history | grep -v 'did' | grep "$1"; }    # did <pattern> : list commands from history matching <pattern>
-function we()           { ${EDITOR} "$(which "$@")"; }              # we <script> : find <script> (using which) and open it in $EDITOR
-function wll()          { ll "$(which "$1")"; }                     # wll <command> : find <command> (using which) and list it as with ls -l
-function wfile()        { file "$(which "$1")"; }                   # wfile <command> : find <command> (using which) and run file on it
-function mkcd()         { mkdir -p "$1" && cd "$1" || return; }     # mkcd <path> : create all directories needed to build <path> and cd into it
-function resolve()      { cd "$(pwd -P)" || return; }               # resolve : if <cwd> contains any symbolic links, cd to the resolved physical directory you are actually in
+function hosts() {  # hosts : list Hosts configured in ~/.ssh/config
+    if [ -f "${HOME}/.ssh/config" ] ; then
+        grep -e '^Host' "${HOME}/.ssh/config"
+    fi
+}
+
+function did()      { history | grep -v 'did' | grep "${1}"; }      # did <pattern> : list commands from history matching <pattern>
+function we()       { ${EDITOR} "$(which "$@")"; }                  # we <script> : find <script> (using which) and open it in $EDITOR
+function wll()      { ll "$(which "${1}")"; }                       # wll <command> : find <command> (using which) and list it as with ls -l
+function wfile()    { file "$(which "${1}")"; }                     # wfile <command> : find <command> (using which) and run file on it
+function mkcd()     { mkdir -p "${1}" && cd "${1}" || return; }     # mkcd <path> : create all directories needed to build <path> and cd into it
 
 function help_commands() { # help_commands : you're soaking in it!
-    ( echo "${HOME}/.bashrc" ; get_topics ) | xargs \
+    ( echo -ne "${HOME}/.bashrc\x00" ; get_topics --no-ignore --print0 ) | xargs -0 \
         rg --hidden --color=never --no-line-number --heading --sort=path \
         -e '\s*(?:function|alias)\s+([a-z][a-z0-9_]*).*(#.*)' \
         --replace "\$1		\$2" \
