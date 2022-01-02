@@ -15,6 +15,10 @@ function show_path() { # show_path : display $PATH, one path per line
     echo "${PATH}" | tr ':' '\n'
 }
 
+function show_cdpath() { # show_cdpath : display $CDPATH, one path per line
+    echo "${CDPATH}" | tr ':' '\n'
+}
+
 function in_path() { # in_path <path> : is <path> a directory in $PATH
     show_path | grep -e "^$1$" >/dev/null;
 }
@@ -73,7 +77,7 @@ export SUDO_PS1='\n\u@\h:\[\e[35m\]\w\[\e[0m\]\n\$ '
 
 export HISTSIZE=10000
 export HISTIGNORE="&:ls:[bf]g:exit:history:h20:..:pwd:ll:did"
-shopt -s histappend cdspell autocd
+shopt -s histappend cdspell autocd histreedit
 
 bind '"\t":menu-complete'
 bind '"\e[A":history-search-backward'
@@ -88,13 +92,13 @@ function hosts() {  # hosts : list Hosts configured in ~/.ssh/config
     fi
 }
 
-function did()      { history | grep -v 'did' | grep "${1}"; }      # did <pattern> : list commands from history matching <pattern>
-function we()       { ${EDITOR} "$(which "$@")"; }                  # we <script> : find <script> (using which) and open it in $EDITOR
-function wll()      { ll "$(which "${1}")"; }                       # wll <command> : find <command> (using which) and list it as with ls -l
-function wfile()    { file "$(which "${1}")"; }                     # wfile <command> : find <command> (using which) and run file on it
-function mkcd()     { mkdir -p "${1}" && cd "${1}" || return; }     # mkcd <path> : create all directories needed to build <path> and cd into it
+function did()      { history | grep -v 'did' | grep "${1}"; }  # did <pattern> : list commands from history matching <pattern>
+# shellcheck disable=SC2086
+function we()       { which "$@" | xargs -o ${EDITOR}; }        # we <script> : find <script> (using which) and open it in $EDITOR
+function wfile()    { which "$@" | file -f -; }                 # wfile <command> : find <command> (using which) and run file on it
+function mkcd()     { mkdir -p "$@" && cd "${1}" || return; }   # mkcd <path> : create all directories needed to build <path> and cd into it
 
-function help_commands() { # help_commands : you're soaking in it!
+function show_help() { # show_help : you're soaking in it!
     ( echo -ne "${HOME}/.bashrc\x00" ; get_topics --print0 ) | xargs -0 \
         rg --hidden --color=never --no-line-number --heading --sort=path \
         -e '\s*(?:function|alias)\s+([a-z][a-z0-9_]*).*(#.*)' \

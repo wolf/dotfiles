@@ -1,11 +1,11 @@
 export DOTFILES_DIR=~/builds/dotfiles
 
-function cddf() {
+function cddf() { # cddf [<relative-path>] : cd into root of the working copy of dotfiles, or to a path relative to that
     cd "${DOTFILES_DIR}/${1}" || return
 }
 
 # shellcheck disable=SC2120
-function pushddf() {
+function pushddf() { # pushddf [<relative-path>] : pushd combined with cddf
     pushd "${DOTFILES_DIR}/${1}" || return
 }
 
