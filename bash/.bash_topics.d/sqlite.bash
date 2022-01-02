@@ -1,1 +1,4 @@
-alias sqlite="$(fd '^sqlite3$' "$(brew --prefix)/Cellar/sqlite")"
+if [ -d "$(brew --prefix)/Cellar/sqlite" ] ; then
+    # shellcheck disable=SC2139
+    alias sqlite="$(fd '^sqlite3$' "$(brew --prefix)/Cellar/sqlite")"
+fi

@@ -4,4 +4,6 @@ function black_name() { # black_name [<pattern>] : find all the python files who
     fd --follow --hidden --type f --extension py "$@" --exec-batch black
 }
 
-function black_dirty()      { dirty | grep '\.py$' | xargs black; }                 # black_dirty : like dirty, but run found python files through black instead of list
+function black_dirty() { # black_dirty : like dirty, but run found python files through black instead of list
+    dirty | grep '\.py$' | xargs black
+}

@@ -4,4 +4,6 @@ function flake8_name() { # flake8_name [<pattern>] : find all the python files w
     fd --follow --hidden --type f --extension py "$@" --exec-batch flake8
 }
 
-function flake8_dirty()     { dirty | grep '\.py$' | xargs flake8; }                # flake8_dirty : like dirty, but run found python files through flake8 instead of list
+function flake8_dirty() { # flake8_dirty : like dirty, but run found python files through flake8 instead of list
+    dirty | grep '\.py$' | xargs flake8
+}
