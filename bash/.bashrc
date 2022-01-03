@@ -11,17 +11,8 @@ stty -ixon -ixoff
 
 umask go-wx
 
-function show_path() { # show_path : display $PATH, one path per line
-    echo "${PATH}" | tr ':' '\n'
-}
-
-function show_cdpath() { # show_cdpath : display $CDPATH, one path per line
-    echo "${CDPATH}" | tr ':' '\n'
-}
-
-function in_path() { # in_path <path> : is <path> a directory in $PATH
-    show_path | grep -e "^$1$" >/dev/null;
-}
+function show_path() { echo "${PATH}" | tr ':' '\n'; }      # show_path : display $PATH, one path per line
+function show_cdpath() { echo "${CDPATH}" | tr ':' '\n'; }  # show_cdpath : display $CDPATH, one path per line
 
 function platform() {
     local UNAME
@@ -93,9 +84,6 @@ function hosts() {  # hosts : list Hosts configured in ~/.ssh/config
 }
 
 function did()      { history | grep -v 'did' | grep "${1}"; }  # did <pattern> : list commands from history matching <pattern>
-# shellcheck disable=SC2086
-function we()       { which "$@" | xargs -o ${EDITOR}; }        # we <script> : find <script> (using which) and open it in $EDITOR
-function wfile()    { which "$@" | file -f -; }                 # wfile <command> : find <command> (using which) and run file on it
 function mkcd()     { mkdir -p "$@" && cd "${1}" || return; }   # mkcd <path> : create all directories needed to build <path> and cd into it
 
 function show_help() { # show_help : you're soaking in it!
