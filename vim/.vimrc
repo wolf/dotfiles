@@ -272,7 +272,7 @@ set expandtab
 nnoremap <silent> <Leader>o :NERDTreeClose \| FZF<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
 nnoremap <silent> <Leader>w :Windows<CR>
-nnoremap <silent> <Leader>ag :Ag<CR>
+nnoremap <silent> <Leader>rg :Rg<CR>
 
 nnoremap <silent> <Leader>nv :NV<CR>
 " }}}
@@ -370,7 +370,7 @@ nnoremap <silent> <Leader>sw :call ToggleShowWhitespaceErrors()<CR>
 " }}}
 
 " Toggle relative line numbers for easier motion math
-nnoremap <silent> <Leader>r :set relativenumber!<CR>
+nnoremap <silent> <Leader>rn :set relativenumber!<CR>
 " Toggle list view
 nnoremap <silent> <Leader>l :set list!<CR>
 set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+,eol:$
