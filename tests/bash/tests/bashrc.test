@@ -5,6 +5,13 @@ function setUp() {
     cd "${DOTFILES_DIR}/bash" || return
 }
 
+function get_a_temp_dir_name() {
+    local RANDOM_STRING
+    RANDOM_STRING="$(python3 -c "import uuid; print(str(uuid.uuid4()),end='')")"
+    # shellcheck disable=SC2082
+    echo "/tmp/${RANDOM_STRING}"
+}
+
 function test_get_topics() {
     local PLATFORM
     PLATFORM="$(platform)"
@@ -55,14 +62,45 @@ function test_get_topics() {
     fd --follow --no-ignore --hidden --glob '*not-a-topic*' "${HOME}/.bash_topics.d" --exec-batch rm
 }
 
-# hosts
-    # will it print a known host?
-    # does it fail silently when there is no .ssh/ or .ssh/config?
+function test_mkcd() {
+    local OUTER_DIRECTORY
+    OUTER_DIRECTORY="$(get_a_temp_dir_name)"
+    local DESTINATION_DIR="${OUTER_DIRECTORY}/top/middle/bottom"
 
-# mkcd
-    # does it create the needed intermediate directories
-    # does it make the current directory the right one?
+    mkdir -p "${DESTINATION_DIR}"
+    # shellcheck disable=SC2016
+    assertTrue "the test directory we require to actually perform the tests was not created!" '[ -d "${DESTINATION_DIR}" ]'
+
     # does it work when the desired directory already exists?
+    local PREVIOUS_DIRECTORY
+    PREVIOUS_DIRECTORY="$(pwd)"
+
+    mkcd "${DESTINATION_DIR}"
+
+    local CURRENT_DIRECTORY
+    CURRENT_DIRECTORY="$(pwd)"
+    assertNotEquals "didn't change directories, when the destination already exists!" "${PREVIOUS_DIRECTORY}" "${CURRENT_DIRECTORY}"
+    assertEquals "didn't change to the correct directory, when the destination already exists!" "${DESTINATION_DIR}" "${CURRENT_DIRECTORY}"
+
+    # does it create the needed intermediate directories
+    cd "${PREVIOUS_DIRECTORY}" || return
+    CURRENT_DIRECTORY="$(pwd)"
+    assertEquals "didn't return to our original directory!" "${PREVIOUS_DIRECTORY}" "${CURRENT_DIRECTORY}"
+    rm -rf "${OUTER_DIRECTORY}"
+    # shellcheck disable=SC2016
+    assertFalse "couldn't destroy our test directory!" '[ -d "${DESTINATION_DIR}" ]'
+
+    mkcd "${DESTINATION_DIR}"
+
+    CURRENT_DIRECTORY="$(pwd)"
+    assertNotEquals "didn't change directories!" "${PREVIOUS_DIRECTORY}" "${CURRENT_DIRECTORY}"
+    assertEquals "didn't change to the correct directory!" "${DESTINATION_DIR}" "${CURRENT_DIRECTORY}"
+
+    cd "${PREVIOUS_DIRECTORY}" || return
+    rm -rf "${OUTER_DIRECTORY}"
+    # shellcheck disable=SC2016
+    assertFalse "couldn't destroy all our temporary directories!" '[ -d "${OUTER_DIRECTORY}" ]'
+}
 
 # shellcheck disable=SC1090
 source "$(which shunit2)"
