@@ -37,13 +37,18 @@ function get_topics() { # get_topics [--print0] : prints the list of topics, in 
     fd --follow --no-ignore --hidden "$@"               --type f --regex '.*\.bash$' "${HOME}/.bash_topics.d/$(platform)"
 }
 
-declare -a TOPICS
-readarray -d '' TOPICS < <( get_topics --print0 )
-for TOPIC in "${TOPICS[@]}" ; do
-    # shellcheck disable=SC1090,SC2086
-    source "${TOPIC}"
-done
-unset TOPIC TOPICS
+function source_topics() { # source_topics : sources each of the files returned by get_topics, in order
+    local TOPIC TOPICS
+    declare -a TOPICS
+    readarray -d '' TOPICS < <( get_topics --print0 )
+    for TOPIC in "${TOPICS[@]}" ; do
+        echo source "\"${TOPIC}\""
+        # shellcheck disable=SC1090,SC2086
+        source "${TOPIC}"
+    done
+}
+
+source_topics >/dev/null
 
 if [ -f ~/.dir_colors ] ; then
     # shellcheck disable=SC2046
