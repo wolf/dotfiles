@@ -83,8 +83,9 @@ function hosts() {  # hosts : list Hosts configured in ~/.ssh/config
     fi
 }
 
-function did()      { history | grep -v 'did' | grep "${1}"; }  # did <pattern> : list commands from history matching <pattern>
-function mkcd()     { mkdir -p "$@" && cd "${1}" || return; }   # mkcd <path> : create all directories needed to build <path> and cd into it
+function did()  { history | grep -v 'did' | grep "${1}"; }  # did <pattern> : list commands from history matching <pattern>
+function mkcd() { mkdir -p "$@" && cd "${1}" || return; }   # mkcd <path> : create all directories needed to build <path> and cd into it
+function be()   { sudo su -l "$@"; }                        # be <user> : login as user, but using your own sudo password
 
 function show_help() { # show_help : you're soaking in it!
     ( echo -ne "${HOME}/.bashrc\x00" ; get_topics --print0 ) | xargs -0 \

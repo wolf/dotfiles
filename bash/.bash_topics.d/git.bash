@@ -43,19 +43,21 @@ function edit_dirty() { # edit_dirty : like dirty, but open in $EDITOR instead o
     dirty "$@" -z | xargs -o -0 ${EDITOR}
 }
 
-function zadd() { # zadd : brings up multi-select fzf over the set of files you can add.  Choose whichever ones you want, and they are added
-    git ls-files --modified --others --exclude-standard --deduplicate -z \
-        | fzf --read0 --print0 --multi --preview-window='60%' --preview='bat --color=always --style=header,changes,grid {}' \
-        | xargs -0 git add
-}
+if [ "$(command -v fzf)" ] ; then
+    function zadd() { # zadd : brings up multi-select fzf over the set of files you can add.  Choose whichever ones you want, and they are added
+        git ls-files --modified --others --exclude-standard --deduplicate -z \
+            | fzf --read0 --print0 --multi --preview-window='60%' --preview='bat --color=always --style=header,changes,grid {}' \
+            | xargs -0 git add
+    }
 
-function zshow() { # zshow [git-log-options...] : brings up fzf over a log of selected commits, then shows the chosen one
-    # example: zshow
-    # example: zshow --author=Wolf --since="{2 days ago}"
-    local COMMIT_TO_SHOW
+    function zshow() { # zshow [git-log-options...] : brings up fzf over a log of selected commits, then shows the chosen one
+        # example: zshow
+        # example: zshow --author=Wolf --since="{2 days ago}"
+        local COMMIT_TO_SHOW
 
-    COMMIT_TO_SHOW="$(git log --abbrev-commit --oneline "$@" | fzf | cut -d ' ' -f 1)"
-    if [ -n "${COMMIT_TO_SHOW}" ] ; then
-        git show "${COMMIT_TO_SHOW}"
-    fi
-}
+        COMMIT_TO_SHOW="$(git log --abbrev-commit --oneline "$@" | fzf | cut -d ' ' -f 1)"
+        if [ -n "${COMMIT_TO_SHOW}" ] ; then
+            git show "${COMMIT_TO_SHOW}"
+        fi
+    }
+fi
