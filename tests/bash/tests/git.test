@@ -120,6 +120,22 @@ function test_cdtop_works_on_relative_paths_that_need_quoting() {
     mv "/tmp/dotfiles-unittest-working-copy/neo vim" /tmp/dotfiles-unittest-working-copy/neovim
 }
 
+function test_cdtop_works_within_dot_git_directory() {
+    local EXPECTED_WORKING_COPY_ROOT="/tmp/dotfiles-unittest-working-copy"
+    local STARTING_DIRECTORY="/tmp/dotfiles-unittest-working-copy/.git/refs/heads"
+    local ACTUAL_ENDING_DIRECTORY
+
+    cd "${STARTING_DIRECTORY}" || return 1
+    assertTrue "the starting directory might be a root!" '[ ! -d .git ]'
+
+    cdtop
+    ACTUAL_ENDING_DIRECTORY="$(pwd)"
+    ACTUAL_ENDING_DIRECTORY="${ACTUAL_ENDING_DIRECTORY#/private}"
+
+    assertNotEquals "cdtop didn't change directories!" "${STARTING_DIRECTORY}" "${ACTUAL_ENDING_DIRECTORY}"
+    assertEquals "cdtop didn't find the expected working copy root" "${EXPECTED_WORKING_COPY_ROOT}" "${ACTUAL_ENDING_DIRECTORY}"
+}
+
 function test_pushdtop_basic_functionality() {
     local WORKING_COPY_ROOT="/tmp/dotfiles-unittest-working-copy"
     local STARTING_DIRECTORY="${WORKING_COPY_ROOT}/ipython/.ipython/profile_default/startup"
@@ -174,6 +190,31 @@ function test_pushdtop_works_on_paths_that_need_quoting() {
 
     mv "/tmp/dotfiles needs quoting" /tmp/dotfiles-unittest-working-copy
     mv "/tmp/dotfiles-unittest-working-copy/neo vim" /tmp/dotfiles-unittest-working-copy/neovim
+}
+
+function test_pushdtop_works_within_the_dot_git_directory() {
+    local WORKING_COPY_ROOT="/tmp/dotfiles-unittest-working-copy"
+    local STARTING_DIRECTORY="${WORKING_COPY_ROOT}/.git/refs/heads"
+    local EXPECTED_MIDDLE_DIRECTORY="${WORKING_COPY_ROOT}/.git/hooks"
+    local ACTUAL_ENDING_DIRECTORY
+    local ACTUAL_MIDDLE_DIRECTORY
+
+    cd "${STARTING_DIRECTORY}" || return 1
+    assertTrue "the starting directory might be a root!" '[ ! -d .git ]'
+
+    pushdtop ".git/hooks" >/dev/null
+    ACTUAL_MIDDLE_DIRECTORY="$(pwd)"
+    ACTUAL_MIDDLE_DIRECTORY="${ACTUAL_MIDDLE_DIRECTORY#/private}"
+
+    assertNotEquals "pushdtop didn't change directories!" "${STARTING_DIRECTORY}" "${ACTUAL_MIDDLE_DIRECTORY}"
+    assertEquals "pushdtop didn't find the expected relative path from the working copy root" "${EXPECTED_MIDDLE_DIRECTORY}" "${ACTUAL_MIDDLE_DIRECTORY}"
+
+    popd >/dev/null || return 1
+    ACTUAL_ENDING_DIRECTORY="$(pwd)"
+    ACTUAL_ENDING_DIRECTORY="${ACTUAL_ENDING_DIRECTORY#/private}"
+
+    assertNotEquals "popd didn't change directories!" "${ACTUAL_MIDDLE_DIRECTORY}" "${ACTUAL_ENDING_DIRECTORY}"
+    assertEquals "popd didn't return to the pushed directory" "${STARTING_DIRECTORY}" "${ACTUAL_ENDING_DIRECTORY}"
 }
 
 function test_dirty() {
