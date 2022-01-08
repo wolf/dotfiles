@@ -334,6 +334,15 @@ augroup filetype_python
 augroup END
 " }}}
 
+" Bash files {{{
+augroup filetype_sh
+    autocmd!
+    autocmd FileType sh let b:surround_{char2nr("v")} = "\"${\r}\""
+    autocmd FileType sh let b:surround_{char2nr("s")} = "\"$(\r)\""
+    autocmd FileType sh let b:surround_{char2nr("S")} = "\"$( \r )\""
+augroup END
+" }}}
+
 " The commit message in Git {{{
 augroup filetype_edit_commitmessage
     autocmd!
