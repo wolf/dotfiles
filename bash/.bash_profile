@@ -5,6 +5,8 @@ elif [ -f /home/linuxbrew/.linuxbrew/bin/brew ] ; then
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
+export PATH="${HOME}/.bash_tools.bin:${PATH}"
+
 if [ -f ~/.bashrc ]; then
     source ~/.bashrc
 fi

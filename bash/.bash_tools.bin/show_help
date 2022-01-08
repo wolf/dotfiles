@@ -1,0 +1,47 @@
+#!/usr/bin/env -S bash -i
+
+function print0_definition_files() {
+    echo -ne "${HOME}/.bashrc\x00"
+    get_topics --color=never --print0
+}
+
+function print_proposed_commands() {
+    print0_definition_files \
+        | xargs -0 \
+            rg --hidden --color=never --no-heading --no-line-number --no-messages --only-matching \
+            --regexp '\s*(?:function|alias)\s+([a-z][a-z0-9_]*).*(#.*)' \
+            --replace "\$1:\$2"
+}
+
+function print_individual_declares() {
+    shopt -s extdebug
+
+    declare -a DEFINED_COMMANDS
+    readarray DEFINED_COMMANDS < <( print_proposed_commands )
+
+    declare -A ALREADY_PRINTED
+    for COMMAND in "${DEFINED_COMMANDS[@]}" ; do
+        COMMAND=$(echo "${COMMAND}" | cut -d ':' -f 2)
+        DECLARE="$(declare -F "${COMMAND}")"
+        if [[ "${DECLARE}" =~ ^([a-z_]+) ]] ; then
+            COMMAND_NAME="${BASH_REMATCH[1]}"
+            if [[ ! -v ALREADY_PRINTED["${COMMAND_NAME}"] ]] ; then
+                ALREADY_PRINTED["${COMMAND_NAME}"]=1
+                echo "${DECLARE}"
+            fi
+        fi
+    done
+}
+
+function print_exported_commands() {
+    declare -f | rg --color=never --regexp '^declare -fx (.+)' --replace "\$1"
+}
+
+show_help_helper.py \
+    <( print0_definition_files ) \
+    <( print_proposed_commands ) \
+    <( print_individual_declares ) \
+    <( print_exported_commands ) \
+    "${1}" \
+    | rg --passthru --color=always --no-line-number --no-filename \
+        -e '^[a-z][a-z0-9_]*'

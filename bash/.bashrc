@@ -32,10 +32,13 @@ if [ "$(command -v fdfind)" ] ; then
     alias fd=fdfind
 fi
 
-function get_topics() { # get_topics [--print0] : prints the list of topics, in order, that is or will be executed at interactive Bash startup
+function get_topics() { # get_topics [--print0] : prints the list of topics, in order, to be executed at interactive Bash startup
     fd --follow --no-ignore --hidden "$@" --max-depth=1 --type f --regex '.*\.bash$' "${HOME}/.bash_topics.d"
     fd --follow --no-ignore --hidden "$@"               --type f --regex '.*\.bash$' "${HOME}/.bash_topics.d/$(platform)"
 }
+
+export -f platform
+export -f get_topics
 
 function source_topics() { # source_topics : sources each of the files returned by get_topics, in order
     local TOPIC TOPICS
@@ -90,13 +93,4 @@ function hosts() {  # hosts : list Hosts configured in ~/.ssh/config
 
 function did()  { history | grep -v 'did' | grep "${1}"; }  # did <pattern> : list commands from history matching <pattern>
 function mkcd() { mkdir -p "$@" && cd "${1}" || return; }   # mkcd <path> : create all directories needed to build <path> and cd into it
-function be()   { sudo su -l "$@"; }                        # be <user> : login as user, but using your own sudo password
-
-function show_help() { # show_help : you're soaking in it!
-    ( echo -ne "${HOME}/.bashrc\x00" ; get_topics --print0 ) | xargs -0 \
-        rg --hidden --color=never --no-line-number --heading --sort=path \
-        -e '\s*(?:function|alias)\s+([a-z][a-z0-9_]*).*(#.*)' \
-        --replace "\$1		\$2" \
-        | rg --passthru --color=always --no-line-number --no-filename \
-        -e '^[a-z][a-z0-9_]*'
-}
+function be()   { sudo su -l "$@"; }                        # be <user> : start a login shell as user, but using your own sudo password
