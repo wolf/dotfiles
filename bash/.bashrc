@@ -1,5 +1,3 @@
-export CDPATH=.
-
 [[ "$-" != *i* ]] && return
 
 if [ -f /etc/bashrc ] ; then
@@ -10,6 +8,8 @@ fi
 stty -ixon -ixoff
 
 umask go-wx
+
+export CDPATH=.
 
 function show_path() { echo "${PATH}" | tr ':' '\n'; }      # show_path : display $PATH, one path per line
 function show_cdpath() { echo "${CDPATH}" | tr ':' '\n'; }  # show_cdpath : display $CDPATH, one path per line
