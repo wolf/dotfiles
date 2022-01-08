@@ -19,7 +19,7 @@ function time_since_last_commit {
 function cdtop() { # cdtop [<relative-path>] : cd to the top-level of the current git working-copy, or to a path relative to that
     local TOP_LEVEL
 
-    if [[ "$(pwd)" =~ ^(.*)/.git[[:\>:]] ]] ; then
+    if [[ "$(pwd)" =~ ^(.*)/.git([^[:alnum:]_]|$) ]] ; then
         TOP_LEVEL="${BASH_REMATCH[1]}"
     else
         TOP_LEVEL="$(git rev-parse --show-toplevel)"
@@ -32,7 +32,7 @@ function cdtop() { # cdtop [<relative-path>] : cd to the top-level of the curren
 function pushdtop() { # usage: pushdtop [<relative-path>] : pushd combined with cdtop
     local TOP_LEVEL
 
-    if [[ "$(pwd)" =~ ^(.*)/.git[[:\>:]] ]] ; then
+    if [[ "$(pwd)" =~ ^(.*)/.git([^[:alnum:]_]|$) ]] ; then
         TOP_LEVEL="${BASH_REMATCH[1]}"
     else
         TOP_LEVEL="$(git rev-parse --show-toplevel)"
