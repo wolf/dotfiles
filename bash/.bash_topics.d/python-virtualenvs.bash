@@ -97,7 +97,7 @@ function _comp_cdv()
 
 complete -o filenames -o nospace -o bashdefault -F _comp_cdv cdv
 
-function create_venv() { # create_venv [--python=<python>] [--requirements=<requirements>] [<path>] : create a venv at path, or if none given, at <cwd>/<cwd>.venv, installing packages named in <requirements>
+function create_venv() { # create_venv [-p <python>] [-r <requirements>] [<path>] : create a venv at path, or else in <cwd>, installing packages named in <requirements>
     local PYTHON=python
     local REQUIREMENTS
     local PARSED_PARAMS

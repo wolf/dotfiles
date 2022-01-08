@@ -40,7 +40,7 @@ function get_topics() { # get_topics [--print0] : prints the list of topics, in 
 export -f platform
 export -f get_topics
 
-function source_topics() { # source_topics : sources each of the files returned by get_topics, in order
+function source_topics() { # source_topics : sources each of the files returned by get_topics, in order.  Does not source .bashrc
     local TOPIC TOPICS
     declare -a TOPICS
     readarray -d '' TOPICS < <( get_topics --print0 )
