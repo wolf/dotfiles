@@ -47,3 +47,9 @@ function fsource() { # fsource <glob> : find all the files in or below . whose n
         source "${FILE}"
     done
 }
+
+if [ "$(command -v as-tree)" ] ; then
+    function ftree() { # ftree <glob> : find all the files in or below . whose names match <glob> and display them as a tree
+        fd --follow --hidden --glob "$@" | as-tree
+    }
+fi

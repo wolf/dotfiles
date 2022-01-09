@@ -47,3 +47,9 @@ function fsource() { # fsource <regexp> : find all the files in or below . whose
         source "${FILE}"
     done
 }
+
+if [ "$(command -v as-tree)" ] ; then
+    function ftree() { # ftree <regexp> : find all the files in or below . whose names match <regexp> and display them as a tree
+        fd --follow --hidden "$@" | as-tree
+    }
+fi
