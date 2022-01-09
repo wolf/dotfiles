@@ -38,14 +38,10 @@ function fll() { # fll <regexp> : find all the files in or below . whose names m
 }
 
 function fsource() { # fsource <regexp> : find all the files in or below . whose names match <regexp> and source them
-    local FILE FILES
+    local FILES
     declare -a FILES
     readarray -d '' FILES < <(fd --follow --hidden --type f --color=never --print0 "$@")
-    for FILE in "${FILES[@]}" ; do
-        echo source "\"${FILE}\""
-        # shellcheck disable=SC1090,SC2086
-        source "${FILE}"
-    done
+    source_all "${FILES[@]}"
 }
 
 if [ "$(command -v as-tree)" ] ; then

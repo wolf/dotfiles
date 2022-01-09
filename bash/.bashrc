@@ -37,18 +37,23 @@ function get_topics() { # get_topics [--print0] : prints the list of topics, in 
     fd --follow --no-ignore --hidden "$@"               --type f --regex '.*\.bash$' "${HOME}/.bash_topics.d/$(platform)"
 }
 
+function source_all() {
+    local FILE
+    for FILE in "$@" ; do
+        echo source "\"${FILE}\""
+        # shellcheck disable=SC1090,SC2086
+        source "${FILE}"
+    done
+}
+
 export -f platform
 export -f get_topics
 
 function source_topics() { # source_topics : sources each of the files returned by get_topics, in order.  Does not source .bashrc
-    local TOPIC TOPICS
+    local TOPICS
     declare -a TOPICS
     readarray -d '' TOPICS < <( get_topics --print0 )
-    for TOPIC in "${TOPICS[@]}" ; do
-        echo source "\"${TOPIC}\""
-        # shellcheck disable=SC1090,SC2086
-        source "${TOPIC}"
-    done
+    source_all "${TOPICS[@]}"
 }
 
 source_topics >/dev/null
