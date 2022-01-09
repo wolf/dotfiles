@@ -68,11 +68,17 @@ if [ "$(command -v fzf)" ] ; then
     function zshow() { # zshow [git-log-options...] : brings up fzf over a log of selected commits, then shows the chosen one
         # example: zshow
         # example: zshow --author=Wolf --since="{2 days ago}"
-        local COMMIT_TO_SHOW
+        local COMMITS_TO_SHOW
 
-        COMMIT_TO_SHOW="$(git log --abbrev-commit --oneline "$@" | fzf | cut -d ' ' -f 1)"
-        if [ -n "${COMMIT_TO_SHOW}" ] ; then
-            git show "${COMMIT_TO_SHOW}"
+        # shellcheck disable=SC2016
+        COMMITS_TO_SHOW="$( \
+            git log --abbrev-commit --oneline "$@" \
+            | fzf --multi --preview-window='60%' --preview='git show --color=always $(echo {} | cut -d " " -f 1)' \
+            | cut -d ' ' -f 1 \
+        )"
+        if [ -n "${COMMITS_TO_SHOW}" ] ; then
+            # shellcheck disable=SC2086
+            git show ${COMMITS_TO_SHOW}
         fi
     }
 fi
