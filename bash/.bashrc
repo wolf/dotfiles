@@ -91,6 +91,6 @@ function hosts() {  # hosts : list Hosts configured in ~/.ssh/config
     fi
 }
 
-function did()  { history | grep -v 'did' | grep "${1}"; }  # did <pattern> : list commands from history matching <pattern>
+function did()  { history | grep -v 'did' | grep "$@"; }    # did <regexp> : list commands from history matching <regexp>
 function mkcd() { mkdir -p "$@" && cd "${1}" || return; }   # mkcd <path> : create all directories needed to build <path> and cd into it
 function be()   { sudo su -l "$@"; }                        # be <user> : start a login shell as user, but using your own sudo password
