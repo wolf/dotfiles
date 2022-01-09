@@ -1,26 +1,22 @@
 command -v fd >/dev/null || return
 
-function f() { # f <pattern> : list all the files in or below . whose names match the given pattern
+function f() { # f <regexp> : list all the files in or below . whose names match <regexp>.  You can give options to fd with all the f-commands
     fd --follow --hidden "$@" 2>/dev/null
 }
 
-function fcat() { # fcat <pattern> : find all the files in or below . whose names match the given pattern and cat them
+function fcat() { # fcat <regexp> : find all the files in or below . whose names match <regexp> and cat them
     fd --follow --hidden --type f "$@" --exec-batch bat
 }
 
-function fcd() { # fcd <pattern> : find the first directory in or below . whose name matches the given pattern and cd into it
-    # example: fcd js
-    # example: fcd '*venv'
-    # example: fcd --regex 'venv$'
+function fcd() { # fcd <regexp> : find the first directory in or below . whose name matches <regexp> and cd into it
     local FIRST_MATCHING_DIRECTORY
-
     FIRST_MATCHING_DIRECTORY="$(fd --follow --hidden --type d --color=never "$@" 2>/dev/null | head -n 1)"
     if [ -d "${FIRST_MATCHING_DIRECTORY}" ]; then
         cd "${FIRST_MATCHING_DIRECTORY}" || return
     fi
 }
 
-function fcd_of { # fcd_of <pattern> : find the first file-system object in or below . whose name matches the given pattern, and cd into the directory that contains it
+function fcd_of { # fcd_of <regexp> : find the first file-system object in or below . whose name matches <regexp>, and cd into its parent
     local FIRST_MATCH
     local PARENT_OF_FIRST_MATCH
 
@@ -32,16 +28,16 @@ function fcd_of { # fcd_of <pattern> : find the first file-system object in or b
     fi
 }
 
-function fe() { # fe <pattern> : find all the files in or below . whose names match the given pattern and open them in $EDITOR
+function fe() { # fe <regexp> : find all the files in or below . whose names match <regexp> and open them in $EDITOR
     # shellcheck disable=SC2086
     fd --follow --hidden --type f "$@" --exec-batch ${EDITOR}
 }
 
-function fll() { # fll <pattern> : find all the files in or below . whose names match the given pattern, and list them as would ls -l
+function fll() { # fll <regexp> : find all the files in or below . whose names match <regexp>, and list them as would ls -l
     fd --follow --hidden "$@" --exec-batch exa -Fal
 }
 
-function fsource() { # fsource <pattern> : find all the files in or below . whose names match the given pattern and source them
+function fsource() { # fsource <regexp> : find all the files in or below . whose names match <regexp> and source them
     local FILE FILES
     declare -a FILES
     readarray -d '' FILES < <(fd --follow --hidden --type f --color=never --print0 "$@")
