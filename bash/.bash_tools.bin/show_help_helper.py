@@ -101,10 +101,7 @@ if __name__ == "__main__":
                 print(" [EXPORTED]", end="")
             print()
     else:
-        padding_needed = max([
-            len(name) for path in commands_grouped_by_path for name in commands_grouped_by_path[path].keys()
-        ])
-
+        padding_needed = max([len(name) for name in commands.keys()])
         section_separator = ""
         for path in list_of_definition_files:
             if path in commands_grouped_by_path:
