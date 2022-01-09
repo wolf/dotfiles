@@ -1,8 +1,12 @@
 #!/usr/bin/env -S bash -i
 
 function print0_definition_files() {
-    echo -ne "${HOME}/.bashrc\x00"
-    get_topics --color=never --print0
+    if [ -v DEFINITION_SOURCE ] ; then
+        echo -ne "${DEFINITION_SOURCE}\x00"
+    else
+        echo -ne "${HOME}/.bashrc\x00"
+        get_topics --color=never --print0
+    fi
 }
 
 function print_proposed_commands() {
@@ -37,11 +41,37 @@ function print_exported_commands() {
     declare -f | rg --color=never --regexp '^declare -fx (.+)' --replace "\$1"
 }
 
-show_help_helper.py \
-    <( print0_definition_files ) \
-    <( print_proposed_commands ) \
-    <( print_individual_declares ) \
-    <( print_exported_commands ) \
-    "${1}" \
-    | rg --passthru --color=always --no-line-number --no-filename \
-        -e '^[a-z][a-z0-9_]*'
+PARSED_PARAMS="$(getopt --longoptions source:,aliases --options s:a -- "$@")"
+eval set -- "${PARSED_PARAMS}"
+while true ; do
+    case "${1}" in
+        -s|--source)
+            DEFINITION_SOURCE="${2/#\~/"${HOME}"}"
+            shift 2
+            ;;
+        -a|--aliases)
+            SHOW_ALIASES_INSTEAD=1
+            shift
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            >&2 echo "usage"
+            return 1
+    esac
+done
+
+if [ -v SHOW_ALIASES_INSTEAD ] ; then
+    echo aliases
+else
+    show_help_helper.py \
+        <( print0_definition_files ) \
+        <( print_proposed_commands ) \
+        <( print_individual_declares ) \
+        <( print_exported_commands ) \
+        "${1}" \
+        | rg --passthru --color=always --no-line-number --no-filename \
+            -e '^[a-z][a-z0-9_]*'
+fi
