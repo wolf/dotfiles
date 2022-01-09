@@ -83,7 +83,7 @@ bind '"\e[A":history-search-backward'
 bind '"\e[B":history-search-forward'
 
 alias h20='history 20'                                              # h20 : show the last 20 entries from history
-alias tree="tree -alC -I '.git|__pycache__|node_modules|*venv'"
+alias tree="tree -alC -I '.git|.mypy_cache|__pycache__|node_modules|*venv'"
 
 function hosts() {  # hosts : list Hosts configured in ~/.ssh/config
     if [ -f "${HOME}/.ssh/config" ] ; then
