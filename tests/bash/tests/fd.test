@@ -52,7 +52,7 @@ function test_f_fails_silently() {
 function test_f_ignores_file() {
     local FOUND
     cd "${DOTFILES_DIR}" || return
-    FOUND="$(f --ignore --color=never --glob ".git")"
+    FOUND="$(f --color=never --glob ".git")"
     assertEquals "did not ignore .git!" "" "${FOUND}"
 }
 
