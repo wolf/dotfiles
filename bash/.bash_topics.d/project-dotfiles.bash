@@ -10,7 +10,8 @@ function pushddf() { # pushddf [<relative-path>] : pushd combined with cddf
 }
 
 pushddf >/dev/null
-if [[ $(git branch --show-current) != local-only ]] ; then
-    echo "WARNING: dotfiles is not on the local-only branch"
+CURRENT_BRANCH="$(git branch --show-current)"
+if [[ "${CURRENT_BRANCH}" == main ]] ; then
+    echo "WARNING: dotfiles is not on the local-only or dev branches"
 fi
 popd >/dev/null || return
