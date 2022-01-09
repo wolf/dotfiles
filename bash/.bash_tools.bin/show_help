@@ -72,6 +72,6 @@ else
         <( print_individual_declares ) \
         <( print_exported_commands ) \
         "${1}" \
-        | rg --passthru --color=always --no-line-number --no-filename \
+        | rg --passthru --color=auto --no-line-number --no-filename \
             -e '^[a-z][a-z0-9_]*'
 fi
