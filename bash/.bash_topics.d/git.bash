@@ -52,9 +52,16 @@ function edit_dirty() { # edit_dirty : like dirty, but open in $EDITOR instead o
 }
 
 if [ "$(command -v fzf)" ] ; then
-    function zadd() { # zadd : brings up multi-select fzf over the set of files you can add.  Choose whichever ones you want, and they are added
-        git ls-files --modified --others --exclude-standard --deduplicate -z \
-            | fzf --read0 --print0 --multi --preview-window='60%' --preview='bat --color=always --style=header,changes,grid {}' \
+    function zadd() { # zadd [<regexp>] : multi-select fzf over modified files filtered by <regexp>.  Choose the ones you want, and they are staged
+        declare -a RG_ARGUMENTS
+        if (( ! $# )) ; then
+            RG_ARGUMENTS=(".")
+        else
+            RG_ARGUMENTS=("$@")
+        fi
+        git ls-files --modified --others --exclude-standard --deduplicate \
+            | rg "${RG_ARGUMENTS[@]}" \
+            | fzf --print0 --multi --preview-window='60%' --preview='bat --color=always --style=header,changes,grid {}' \
             | xargs -0 git add
     }
 
