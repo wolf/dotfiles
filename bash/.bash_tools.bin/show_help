@@ -12,8 +12,8 @@ function print0_definition_files() {
 function print_proposed_commands() {
     print0_definition_files \
         | xargs -0 \
-            rg --hidden --color=never --no-heading --no-line-number --no-messages --only-matching \
-            --regexp '\s*(?:function|alias)\s+([a-z][a-z0-9_]*).*(#.*)' \
+            rg --hidden --color=never --no-heading --with-filename --no-line-number --no-messages --only-matching \
+            --regexp '\s*(?:function)\s+([a-z][a-z0-9_]*).*(#.*)' \
             --replace "\$1:\$2"
 }
 
