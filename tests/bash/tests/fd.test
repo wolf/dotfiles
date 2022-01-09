@@ -48,12 +48,25 @@ function test_f_fails_silently() {
     assertTrue "didn't fail silently!" "[ $? ]"
 }
 
-# test f can be made to not find an ignored file
 function test_f_ignores_file() {
     local FOUND
     cd "${DOTFILES_DIR}" || return
     FOUND="$(f --color=never --glob ".git")"
     assertEquals "did not ignore .git!" "" "${FOUND}"
+}
+
+function test_f_ignores_deeper_file() {
+    local FOUND
+    cd "${DOTFILES_DIR}" || return
+    FOUND="$(f --color=never --glob HEAD)"
+    assertEquals "did not ignore .git!" "" "${FOUND}"
+}
+
+function test_f_finds_ignored_file() {
+    local FOUND
+    cd "${DOTFILES_DIR}" || return
+    FOUND="$(f --no-ignore --color=never --glob HEAD)"
+    assertNotEquals "did not ignore .git!" "" "${FOUND}"
 }
 
 # test f finds multiple files in multiple different directories at the same time

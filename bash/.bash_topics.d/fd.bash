@@ -1,7 +1,7 @@
 command -v fd >/dev/null || return
 
 function f() { # f <pattern> : list all the files in or below . whose names match <pattern>.  You can give options to fd with all the f-commands
-    fd --follow --hidden --glob --exclude ".git" "$@" 2>/dev/null
+    fd --follow --hidden --glob "$@" 2>/dev/null
 }
 
 function fcat() { # fcat <pattern> : find all the files in or below . whose names match <pattern> and cat them
