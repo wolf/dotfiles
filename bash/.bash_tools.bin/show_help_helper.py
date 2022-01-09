@@ -38,7 +38,7 @@ def read_exported_commands(exported_commands_file: str) -> set[str]:
 def read_proposed_commands(proposed_commands_file: str) -> dict[str, dict[str, str]]:
     HELP_LINE_RE = re.compile("(?P<path>[^:]+):(?P<command>\w+):(?P<help>.*)")
 
-    proposed_commands_grouped_by_path = defaultdict(dict)
+    proposed_commands_grouped_by_path: dict[str, dict[str, str]] = defaultdict(dict)
     with open(proposed_commands_file, "r") as f:
         for line in f:
             m = HELP_LINE_RE.match(line)
@@ -53,8 +53,8 @@ def read_proposed_commands(proposed_commands_file: str) -> dict[str, dict[str, s
 def get_defined_commands(declares_file: str, exported_commands: set[str], help: dict[str, dict[str, str]]):
     DECLARATION_WITH_PATH_RE = re.compile("(?P<command>\w+) (?P<line_number>\d+) (?P<path>.*)")
 
-    defined_commands = {}
-    defined_commands_grouped_by_path = defaultdict(dict)
+    defined_commands: dict[str, BashFunction] = {}
+    defined_commands_grouped_by_path: dict[str, dict[str, BashFunction]] = defaultdict(dict)
     with open(declares_file, "r") as f:
         for line in f:
             m = DECLARATION_WITH_PATH_RE.match(line)
@@ -66,7 +66,7 @@ def get_defined_commands(declares_file: str, exported_commands: set[str], help: 
                     is_exported=command in exported_commands,
                     help=help[path][command],
                     definition_file=path,
-                    line_number=m.group("line_number")
+                    line_number=int(m.group("line_number"))
                 )
                 defined_commands_grouped_by_path[path][command] = bash_function
                 defined_commands[command] = bash_function
@@ -78,7 +78,7 @@ if __name__ == "__main__":
     proposed_commands_file = sys.argv[2]
     declares_file = sys.argv[3]
     exported_commands_file = sys.argv[4]
-    single_command_to_lookup = None
+    single_command_to_lookup: str | None = None
     if len(sys.argv) > 5:
         single_command_to_lookup = sys.argv[5]
 
