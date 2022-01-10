@@ -56,13 +56,6 @@ function source_topics() { # source_topics : sources each of the files returned 
     source_all "${TOPICS[@]}"
 }
 
-source_topics >/dev/null
-
-if [ -f ~/.dir_colors ] ; then
-    # shellcheck disable=SC2046
-    eval $(dircolors -b ~/.dir_colors)
-fi
-
 if command -v brew >/dev/null && test -f "$(brew --prefix)/etc/bash_completion" ; then
     # shellcheck disable=SC1091
     source "$(brew --prefix)"/etc/bash_completion
@@ -70,6 +63,13 @@ elif [ -f /etc/bash_completion ] ; then
     # shellcheck disable=SC1091
     source /etc/bash_completion
 fi
+
+if [ -f ~/.dir_colors ] ; then
+    # shellcheck disable=SC2046
+    eval $(dircolors -b ~/.dir_colors)
+fi
+
+source_topics >/dev/null
 
 if command -v __git_ps1 >/dev/null ; then
     export PS1='\n\u@\h:\[\e[35m\]\w\[\e[0m\]$(virtualenv_info) $(__git_ps1 "\[\e[32m\][$(time_since_last_commit) %s $(tip)]\[\e[0m\]")'$'\n\$ '
