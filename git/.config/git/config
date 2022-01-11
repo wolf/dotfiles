@@ -3,6 +3,7 @@
     ci = commit
     br = branch
     d = diff --word-diff=color
+    di = diff --ignore-all-space
     ec = config --local --edit
     egc = config --global --edit
     l = log --decorate --oneline
