@@ -73,7 +73,7 @@ if [ "$(command -v fzf)" ] ; then
         # shellcheck disable=SC2016
         COMMITS_TO_SHOW="$( \
             git log --abbrev-commit --oneline "$@" \
-            | fzf --multi --preview-window='60%' --preview='git show --color=always $(echo {} | cut -d " " -f 1)' \
+            | fzf --multi --preview-window='60%' --preview='git show --ignore-all-space --color=always $(echo {} | cut -d " " -f 1)' \
             | cut -d ' ' -f 1 \
         )"
         if [ -n "${COMMITS_TO_SHOW}" ] ; then
