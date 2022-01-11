@@ -62,7 +62,7 @@ if !has('win32') && !has('win32unix')
     Plugin 'SirVer/ultisnips'
     Plugin 'honza/vim-snippets'
     let g:SuperTabDefaultCompletionType = '<C-N>'
-    let g:SuperTabCrMapping = 1
+    let g:SuperTabCrMapping = 0
     " let g:ycm_extra_conf_globlist = ['~/work/*']
     " let g:ycm_key_list_select_completion = ['<C-J>', '<C-N>', '<Down>']
     " let g:ycm_key_list_previous_completion = ['<C-K>', '<C-P>', '<Up>']
