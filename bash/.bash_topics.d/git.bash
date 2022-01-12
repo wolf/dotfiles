@@ -51,7 +51,7 @@ function edit_dirty() { # edit_dirty : like dirty, but open in $EDITOR instead o
     dirty "$@" -z | xargs -o -0 ${EDITOR}
 }
 
-if [ "$(command -v fzf)" ] ; then
+if [ "$(command -v fzf)" ] && [ ! -d "${FORGIT_INSTALL_DIR}" ] ; then
     function zadd() { # zadd [<regexp>] : multi-select fzf over modified files filtered by <regexp>.  Choose the ones you want, and they are staged
         declare -a RG_ARGUMENTS
         if (( ! $# )) ; then
