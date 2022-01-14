@@ -121,6 +121,7 @@ Plugin 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 Plugin 'nelstrom/vim-visual-star-search'
+Plugin 'wellle/targets.vim'
 " }}}
 
 " Temporary {{{
