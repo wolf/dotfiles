@@ -139,7 +139,10 @@ Plugin 'NLKNguyen/papercolor-theme'
 
 " Airline {{{
 Plugin 'vim-airline/vim-airline'
-let g:airline#extensions#fzf#enabled = 0
+let g:airline#extensions#branch#format = 1
+let g:airline#extensions#branch#vcs_checks = ['untracked', 'dirty']
+let g:airline#extensions#virtualenv#enabled = 1
+let g:airline#extensions#wordcount#enabled = 0
 
 Plugin 'vim-airline/vim-airline-themes'
 
