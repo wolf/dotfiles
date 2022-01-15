@@ -337,6 +337,7 @@ augroup END
 " Bash files {{{
 augroup filetype_sh
     autocmd!
+    autocmd! BufRead,BufNewFile *.bash.inc set filetype=sh
     autocmd FileType sh let b:surround_{char2nr("v")} = "\"${\r}\""
     autocmd FileType sh let b:surround_{char2nr("s")} = "\"$(\r)\""
     autocmd FileType sh let b:surround_{char2nr("S")} = "\"$( \r )\""

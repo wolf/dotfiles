@@ -14,47 +14,8 @@ export CDPATH=.
 function show_path() { echo "${PATH}" | tr ':' '\n'; }      # show_path : display $PATH, one path per line
 function show_cdpath() { echo "${CDPATH}" | tr ':' '\n'; }  # show_cdpath : display $CDPATH, one path per line
 
-function platform() {
-    local UNAME
-
-    UNAME="$(uname)"
-    UNAME="${UNAME,,}"
-    if [[ ${UNAME} =~ mingw.* ]] ; then
-        UNAME=mingw
-    elif [[ ${UNAME} =~ cygwin.* ]] ; then
-        UNAME=cygwin
-    fi
-
-    echo "${UNAME}"
-}
-
-if [ "$(command -v fdfind)" ] ; then
-    alias fd=fdfind
-fi
-
-function get_topics() { # get_topics [--print0] : prints the list of topics, in order, to be executed at interactive Bash startup
-    fd --follow --no-ignore --hidden "$@" --max-depth=1 --type f --regex '.*\.bash$' "${HOME}/.bash_topics.d"
-    fd --follow --no-ignore --hidden "$@"               --type f --regex '.*\.bash$' "${HOME}/.bash_topics.d/$(platform)"
-}
-
-function source_all() {
-    local FILE
-    for FILE in "$@" ; do
-        echo source "\"${FILE}\""
-        # shellcheck disable=SC1090,SC2086
-        source "${FILE}"
-    done
-}
-
-export -f platform
-export -f get_topics
-
-function source_topics() { # source_topics : sources each of the files returned by get_topics, in order.  Does not source .bashrc
-    local TOPICS
-    declare -a TOPICS
-    readarray -d '' TOPICS < <( get_topics --print0 )
-    source_all "${TOPICS[@]}"
-}
+# shellcheck disable=SC1091
+source "${HOME}/.bash_topics.d/required_functions.bash.inc"
 
 if command -v brew >/dev/null && test -f "$(brew --prefix)/etc/bash_completion" ; then
     # shellcheck disable=SC1091
@@ -97,5 +58,4 @@ function hosts() {  # hosts : list Hosts configured in ~/.ssh/config
 }
 
 function did()  { history | grep -v 'did' | grep "$@"; }    # did <regexp> : list commands from history matching <regexp>
-function mkcd() { mkdir -p "$@" && cd "${1}" || return; }   # mkcd <path> : create all directories needed to build <path> and cd into it
 function be()   { sudo su -l "$@"; }                        # be <user> : start a login shell as user, but using your own sudo password

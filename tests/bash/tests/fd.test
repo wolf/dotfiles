@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # shellcheck disable=SC1091
-source "${DOTFILES_DIR}/tests/bash/tests/platform.inc"
+source "${HOME}/.bash_topics.d/required_functions.bash.inc"
 
 if [ "$(command -v fdfind)" ] && [ ! "$(command -v fd)" ] ; then
     function fd() {
