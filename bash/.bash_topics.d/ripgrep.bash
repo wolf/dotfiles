@@ -11,5 +11,5 @@ alias grep='g'
 
 function ge() { # ge <regexp> : find files in or below . whose contents somehow match <regexp>, and open them in $EDITOR
     # shellcheck disable=SC2086
-    rg --follow --hidden --smart-case --files-with-matches "$@" | xargs -o ${EDITOR}
+    rg --follow --hidden --smart-case --files-with-matches -0 "$@" | xargs -0 -o ${EDITOR}
 }
