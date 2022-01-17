@@ -5,6 +5,7 @@ function print0_definition_files() {
         echo -ne "${DEFINITION_SOURCE}\x00"
     else
         echo -ne "${HOME}/.bashrc\x00"
+        echo -ne "${HOME}/.bash_topics.d/required_functions.bash.inc\x00"
         get_topics --color=never --print0
     fi
 }
