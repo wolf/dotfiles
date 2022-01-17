@@ -26,7 +26,7 @@ function get_topics() { # get_topics [--print0] : prints the list of topics, in 
 export -f platform
 export -f get_topics
 
-function source_all() {
+function source_all() { # source_all file... : sources, in turn, each file given
     local FILE
     for FILE in "$@" ; do
         echo source "\"${FILE}\""
