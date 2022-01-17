@@ -263,6 +263,7 @@ else
     set clipboard=unnamed
 endif
 
+set complete+=i,kspell
 set cpoptions+=>
 set cursorline
 
