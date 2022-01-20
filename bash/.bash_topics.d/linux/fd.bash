@@ -16,7 +16,7 @@ function fcd() { # fcd <regexp> : find the first directory in or below . whose n
     fi
 }
 
-function fcd_of { # fcd_of <regexp> : find the first file-system object in or below . whose name matches <regexp>, and cd into its parent
+function fcd_of() { # fcd_of <regexp> : find the first file-system object in or below . whose name matches <regexp>, and cd into its parent
     local FIRST_MATCH
     local PARENT_OF_FIRST_MATCH
 

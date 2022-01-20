@@ -16,7 +16,7 @@ function fcd() { # fcd <glob> : find the first directory in or below . whose nam
     fi
 }
 
-function fcd_of { # fcd_of <glob> : find the first file-system object in or below . whose name matches <glob>, and cd into its parent
+function fcd_of() { # fcd_of <glob> : find the first file-system object in or below . whose name matches <glob>, and cd into its parent
     local FIRST_MATCH
     local PARENT_OF_FIRST_MATCH
 
