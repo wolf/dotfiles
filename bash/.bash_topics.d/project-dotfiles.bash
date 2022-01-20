@@ -9,9 +9,11 @@ function pushddf() { # pushddf [<relative-path>] : pushd combined with cddf
     pushd "${DOTFILES_DIR}/${1}" || return
 }
 
-pushddf >/dev/null
-CURRENT_BRANCH="$(git branch --show-current)"
-if [[ "${CURRENT_BRANCH}" == main ]] ; then
+function df_branch() { # df_branch : report what branch the dotfiles repo has currently checked out
+    git -C "${DOTFILES_DIR}" branch --show-current
+}
+
+CURRENT_BRANCH="$(df_branch)"
+if [[ "${CURRENT_BRANCH}" != local-only ]] && [[ "${CURRENT_BRANCH}" != dev ]] ; then
     echo "WARNING: dotfiles is not on the local-only or dev branches"
 fi
-popd >/dev/null || return
