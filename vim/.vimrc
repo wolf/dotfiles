@@ -342,6 +342,7 @@ augroup END
 augroup filetype_markdown
     autocmd!
     autocmd FileType markdown let b:surround_{char2nr("c")} = "-> \r <-"
+    autocmd FileType markdown let b:surround_{char2nr("l")} = "[\r]()"
 augroup END
 " }}}
 
