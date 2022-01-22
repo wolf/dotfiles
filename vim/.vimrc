@@ -405,6 +405,9 @@ nnoremap g0 0
 vnoremap > >gv
 vnoremap < <gv
 
+" Double anything else applies to the whole line, why not v?
+nnoremap vv V
+
 " }}}
 
 " Modelines {{{
