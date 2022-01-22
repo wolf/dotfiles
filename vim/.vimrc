@@ -338,6 +338,13 @@ augroup filetype_python
 augroup END
 " }}}
 
+" Markdown files {{{
+augroup filetype_markdown
+    autocmd!
+    autocmd FileType markdown let b:surround_{char2nr("c")} = "-> \r <-"
+augroup END
+" }}}
+
 " Bash files {{{
 augroup filetype_sh
     autocmd!
