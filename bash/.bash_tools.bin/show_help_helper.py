@@ -100,13 +100,12 @@ if __name__ == "__main__":
             if bash_function.is_exported:
                 print(" [EXPORTED]", end="")
             print()
-    else:
-        if commands.keys():
-            padding_needed = max([len(name) for name in commands.keys()])
-            section_separator = ""
-            for path in list_of_definition_files:
-                if path in commands_grouped_by_path:
-                    print(f"{section_separator}{path}")
-                    section_separator = "\n"
-                    for bash_function in sorted(commands_grouped_by_path[path].values(), key=lambda x: x.name):
-                        print(f"{bash_function.name:<{padding_needed}}  {bash_function.help}")
+    elif commands:
+        padding_needed = max([len(name) for name in commands.keys()])
+        section_separator = ""
+        for path in list_of_definition_files:
+            if path in commands_grouped_by_path:
+                print(f"{section_separator}{path}")
+                section_separator = "\n"
+                for bash_function in sorted(commands_grouped_by_path[path].values(), key=lambda x: x.name):
+                    print(f"{bash_function.name:<{padding_needed}}  {bash_function.help}")
