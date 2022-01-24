@@ -93,6 +93,8 @@ let g:ale_linters = {
 \    'python': ['flake8', 'mypy', 'pyright']
 \}
 let g:ale_linters_explicit = 1
+let g:ale_fixers = {}
+let g:ale_fixers.python = ['black']
 
 if has('python3')
     Plugin 'python-mode/python-mode'
@@ -171,6 +173,9 @@ let g:airline#extensions#tabline#left_alt_sep = ''
 Plugin 'tpope/vim-endwise'
 Plugin 'tweekmonster/braceless.vim'
 let g:braceless_line_continuation = 0
+
+Plugin 'psf/black'
+let g:black_linelength = 120
 " }}}
 
 call vundle#end()   " required
