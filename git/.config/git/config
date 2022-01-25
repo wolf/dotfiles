@@ -59,7 +59,7 @@
     autocorrect = 20
 [merge]
     tool = opendiff
-    conflictstyle = diff3
+    conflictstyle = zdiff3
     renameLimit = 65000
     directoryRename = true
 [mergetool]
