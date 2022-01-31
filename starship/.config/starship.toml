@@ -1,7 +1,8 @@
 add_newline = true
 
 [character]
-error_symbol = "[✗](bold red) "
+success_symbol = "[\\$](bold)"
+error_symbol = "[\\$](bold red) "
 
 [directory]
 truncation_length = 8
