@@ -46,8 +46,17 @@
     untracked = cyan
 [core]
     editor = vim
+    pager = delta
     legacyheaders = false
     whitespace = trailing-space,space-before-tab,cr-at-eol
+[delta]
+    features = wolf-normal
+[delta "interactive"]
+    keep-plus-minus-markers = false
+[delta "wolf-normal"]
+    light = true
+    line-numbers = true
+    syntax-theme = GitHub
 [diff]
     renames = copy
     mnemonicprefix = true
@@ -57,6 +66,8 @@
     prompt = false
 [help]
     autocorrect = 20
+[interactive]
+    diffFilter = delta --color-only --features=interactive
 [merge]
     tool = opendiff
     conflictstyle = zdiff3
