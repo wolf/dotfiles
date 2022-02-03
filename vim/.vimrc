@@ -44,6 +44,8 @@ Plugin 'haya14busa/incsearch-easymotion.vim'
 " Between files...
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
+let g:fzf_history_dir = '~/.vim/fzf_history/'
+
 Plugin 'preservim/nerdtree'
 
 if !has('win32') && !has('win32unix')
