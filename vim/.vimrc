@@ -45,13 +45,15 @@ Plugin 'haya14busa/incsearch-easymotion.vim'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 let g:fzf_history_dir = '~/.vim/fzf_history/'
+let g:fzf_buffers_jump = 1
+let g:fzf_tags_command = "ctags -R --exclude='.git' --exclude='.mypy_cache' --exclude='__pycache__' --exclude='node_modules' --exclude='*venv'"
 
 Plugin 'preservim/nerdtree'
 
 if !has('win32') && !has('win32unix')
     " Between notes...
     Plugin 'alok/notational-fzf-vim'
-    let g:nv_search_paths = ['~/Vaults/Notes', './notes']
+    let g:nv_search_paths = ['~/Vaults/Notes', '~/Vaults/LAZ']
     let g:nv_create_note_window = 'split'
 endif
 " }}}
@@ -280,8 +282,9 @@ set expandtab
 " }}}
 
 " FZF behavior {{{
-nnoremap <silent> <Leader>o :NERDTreeClose \| FZF<CR>
 nnoremap <silent> <Leader>b :Buffers<CR>
+nnoremap <silent> <Leader>o :NERDTreeClose \| FZF<CR>
+nnoremap <silent> <Leader>t :Tags<CR>
 nnoremap <silent> <Leader>w :Windows<CR>
 nnoremap <silent> <Leader>rg :Rg<CR>
 
@@ -300,10 +303,10 @@ augroup NERDTree_behavior
 augroup END
 
 let g:NERDTreeHijackNetrw=1
-let g:NERDTreeIgnore=['\.git$[[dir]]', 'node_modules[[dir]]', '__pycache__[[dir]]', '.*venv$[[dir]]']
+let g:NERDTreeIgnore=['\.git$[[dir]]', '\.mypy_cache[[dir]]', '__pycache__[[dir]]', 'node_modules[[dir]]', '.*venv$[[dir]]']
 
-nnoremap <silent> <Leader>t :NERDTreeToggle<CR>
-nnoremap <silent> <Leader>f :NERDTreeFocus<CR>
+nnoremap <silent> <Leader>nt :NERDTreeToggle<CR>
+nnoremap <silent> <Leader>nf :NERDTreeFocus<CR>
 " }}}
 
 " All files {{{
