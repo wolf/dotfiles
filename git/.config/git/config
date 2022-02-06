@@ -60,7 +60,7 @@
 [diff]
     renames = copy
     mnemonicprefix = true
-    tool = opendiff
+    tool = vimdiff
     renamelimit = 1428
 [difftool]
     prompt = false
@@ -69,12 +69,14 @@
 [interactive]
     diffFilter = delta --color-only --features=interactive
 [merge]
-    tool = opendiff
+    tool = fugitive
     conflictstyle = zdiff3
     renameLimit = 65000
     directoryRename = true
 [mergetool]
     prompt = false
+[mergetool "fugitive"]
+    cmd = vim -f -c "Gdiff" "$MERGED"
 [pull]
     rebase = merges
 [push]
