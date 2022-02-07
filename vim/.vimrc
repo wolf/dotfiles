@@ -423,6 +423,10 @@ vnoremap < <gv
 " Double anything else applies to the whole line, why not v?
 nnoremap vv V
 
+" Convenient for copy/paste of shell commands from a script during demos.
+" Maybe temporary
+nnoremap Y 0y$
+
 " }}}
 
 " Modelines {{{
