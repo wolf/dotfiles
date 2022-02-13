@@ -13,6 +13,8 @@ function platform() {
         UNAME=mingw
     elif [[ ${UNAME} =~ cygwin.* ]] ; then
         UNAME=cygwin
+    elif [[ ${UNAME} =~ linux ]] && [[ $(uname -r 2>/dev/null) =~ .*WSL2 ]] ; then
+        UNAME=wsl
     fi
 
     echo "${UNAME}"
