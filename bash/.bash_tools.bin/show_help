@@ -2,7 +2,13 @@
 
 function print0_definition_files() {
     if [ -v DEFINITION_SOURCE ] ; then
-        echo -ne "${DEFINITION_SOURCE}\x00"
+        if [ -f "${HOME}/.bash_topics.d/${DEFINITION_SOURCE}" ] ; then
+            echo -ne "${HOME}/.bash_topics.d/${DEFINITION_SOURCE}\00"
+        elif [ -f "${HOME}/${DEFINITION_SOURCE}" ] ; then
+            echo -ne "${HOME}/${DEFINITION_SOURCE}\00"
+        elif [ -f "${DEFINITION_SOURCE}" ] ; then
+            echo -ne "${DEFINITION_SOURCE}\x00"
+        fi
     else
         echo -ne "${HOME}/.bashrc\x00"
         echo -ne "${HOME}/.bash_topics.d/required_functions.bash.inc\x00"
