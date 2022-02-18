@@ -3,7 +3,7 @@ command_timeout = 2000
 
 [character]
 success_symbol = "[\\$](bold)"
-error_symbol = "[\\$](bold red) "
+error_symbol = "[\\$](bold red)"
 
 [directory]
 truncation_length = 8
