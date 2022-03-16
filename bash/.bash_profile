@@ -1,6 +1,6 @@
 if [ -f /opt/homebrew/bin/brew ]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
-    export PATH="/opt/homebrew/opt/ruby/bin:/opt/homebrew/opt/gnu-getopt/bin:${PATH}:/opt/homebrew/opt/coreutils/libexec/gnubin"
+    export PATH="/opt/homebrew/opt/ruby/bin:/opt/homebrew/opt/gnu-getopt/bin:${PATH}:/opt/homebrew/opt/coreutils/libexec/gnubin:/opt/homebrew/opt/sphinx-doc/bin"
 elif [ -f /home/linuxbrew/.linuxbrew/bin/brew ] ; then
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
