@@ -1,4 +1,4 @@
-def _resolve_git_relative_path(relative_path):
+def _resolve_git_relative_path(rel_path):
     from pathlib import Path
     import re
 
@@ -10,10 +10,7 @@ def _resolve_git_relative_path(relative_path):
     else:
         top = Path($(git rev-parse --show-toplevel).strip())
 
-    if relative_path:
-        return top / relative_path
-    
-    return top
+    return top / rel_path if rel_path else top
 
 
 def _cdtop(args):
