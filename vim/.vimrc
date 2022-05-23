@@ -180,6 +180,8 @@ let g:braceless_line_continuation = 0
 
 Plugin 'psf/black'
 let g:black_linelength = 120
+
+Plugin 'meatballs/vim-xonsh'
 " }}}
 
 call vundle#end()   " required
