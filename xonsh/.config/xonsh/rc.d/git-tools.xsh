@@ -1,11 +1,12 @@
-def _resolve_git_relative_path(rel_path):
+def _resolve_git_relative_path(args):
     from pathlib import Path
     import re
 
-    git_path_re = re.compile(r"(.*)/\.git(?:/.*)?$")
+    inside_git_dir = re.compile(r"(.*)/\.git(?:/.*)?$")
 
+    rel_path = args[0] if args else None
     here = str(Path.cwd())
-    if m := git_path_re.match(here):
+    if m := inside_git_dir.match(here):
         top = Path(m.group(1))
     else:
         top = Path($(git rev-parse --show-toplevel).strip())
@@ -14,13 +15,11 @@ def _resolve_git_relative_path(rel_path):
 
 
 def _cdtop(args):
-    relative_path = args[0] if args else None
-    ![cd @(_resolve_git_relative_path(relative_path))]
- 
+    ![cd @(_resolve_git_relative_path(args))]
+
 
 def _pushdtop(args):
-    relative_path = args[0] if args else None
-    ![pushd @(_resolve_git_relative_path(relative_path))]
+    ![pushd @(_resolve_git_relative_path(args))]
 
 
 def _dirty(args):
