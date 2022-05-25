@@ -14,25 +14,15 @@ def _resolve_git_relative_path(args):
     return top / rel_path if rel_path else top
 
 
-def _cdtop(args):
-    ![cd @(_resolve_git_relative_path(args))]
-
-
+# Why does _pushdtop have to be a separate function?
+# Because when it's a lambda, it prints the stack twice.
 def _pushdtop(args):
     ![pushd @(_resolve_git_relative_path(args))]
 
 
-def _dirty(args):
-    return $(git ls-files --modified --deduplicate @(args)).strip().split()
-
-
-def _edit_dirty(args):
-    ![git ls-files --modified --deduplicate -z @(args) | xargs -o -0 mvim -p]
-
-
 aliases |= {
-    "cdtop": _cdtop,
+    "cdtop": lambda args: ![cd @(_resolve_git_relative_path(args))],
     "pushdtop": _pushdtop,
-    "dirty": _dirty,
-    "edit_dirty": _edit_dirty
+    "dirty": lambda args: $(git ls-files --modified --deduplicate @(args)).strip().split(),
+    "edit_dirty": lambda args: ![git ls-files --modified --deduplicate -z @(args) | xargs -o -0 mvim -p]
 }
