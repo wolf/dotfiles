@@ -5,3 +5,5 @@ $VISUAL = "vim"
 
 xontrib load homebrew
 xontrib load prompt_starship
+xontrib load vox
+xontrib load autovox
