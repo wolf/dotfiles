@@ -1,4 +1,4 @@
 command -v go >/dev/null || return
 
-export GOPATH=~/work/go
+export GOPATH=/Volumes/Mercury/resources/go
 export PATH="${PATH}:${GOPATH}/bin"
