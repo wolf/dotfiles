@@ -117,7 +117,7 @@ function test_f_finds_a_directory() {
     local FOUND
     FOUND="$(f --color=never .hidden_data)"
     FOUND="${FOUND#./}"
-    assertEquals "directory not found!" ".hidden_data" "${FOUND}"
+    assertEquals "directory not found!" ".hidden_data/" "${FOUND}"
 }
 
 # test fcat can actually cat a file
@@ -200,7 +200,7 @@ function test_fe_basic_functionality() {
     local EDITOR=echo
     local OUTPUT
     OUTPUT="$(fe --regex "^test_fe_[12]\.data$" | sed 's=\./==g')"
-    assertEquals "files weren't opened!" ".hidden_data/test_fe_2.data data/test_fe_1.data" "${OUTPUT}"
+    assertEquals "files weren't opened!" "data/test_fe_1.data .hidden_data/test_fe_2.data" "${OUTPUT}"
 }
 
 function test_fe_opens_a_file_that_needs_quoting() {
