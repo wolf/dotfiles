@@ -70,7 +70,7 @@
     diffFilter = delta --color-only --features=interactive
 [merge]
     tool = fugitive
-    conflictstyle = zdiff3
+	conflictstyle = diff3
     renameLimit = 65000
     directoryRename = true
 [mergetool]
