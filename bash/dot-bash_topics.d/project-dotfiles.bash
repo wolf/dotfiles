@@ -1,4 +1,4 @@
-export DOTFILES_DIR=~/builds/dotfiles
+export DOTFILES_DIR=~/brain/projects/dotfiles
 
 function cddf() { # cddf [<relative-path>] : cd into root of the working copy of dotfiles, or to a path relative to that
     cd "${DOTFILES_DIR}/${1}" || return
