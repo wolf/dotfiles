@@ -1,10 +1,10 @@
 # shellcheck disable=SC2034
 
-[ -f ~/builds/forgit/forgit.plugin.sh ] || return
+[ -f ~/brain/resources/forgit/forgit.plugin.zsh ] || return
 
 export FORGIT_FZF_DEFAULT_OPTS='--reverse'
 
 # shellcheck disable=SC1090
-source ~/builds/forgit/forgit.plugin.sh
+source ~/brain/resources/forgit/forgit.plugin.zsh
 
 export PATH="${PATH}:${FORGIT_INSTALL_DIR}/bin"

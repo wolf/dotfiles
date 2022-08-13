@@ -1,4 +1,4 @@
-$DOTFILES_DIR = p"~/builds/dotfiles"
+$DOTFILES_DIR = p"~/brain/projects/dotfiles"
 
 
 aliases |= {
