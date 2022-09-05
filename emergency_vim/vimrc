@@ -9,6 +9,7 @@ set cmdheight=2
 set complete-=i
 set display+=lastline
 set expandtab
+set history=200
 set hlsearch
 set incsearch
 set laststatus=2
@@ -30,6 +31,6 @@ set wildmenu
 let mapleader = "\<Space>"
 let maplocalleader = "\\"
 
-nnoremap <silent> <C-L> :nohlsearch<CR>
+nnoremap <silent> <C-L> :<C-U>nohlsearch<CR><C-L>
 nnoremap <silent> <Leader>r :set relativenumber!<CR>
 nnoremap <silent> <Leader>l :set list!<CR>

@@ -267,6 +267,7 @@ set notimeout ttimeout ttimeoutlen=200
 "set pastetoggle=<F11>
 set sessionoptions+=resize,unix,slash
 set shortmess-=S
+set history=200
 
 if has('nvim')
     set clipboard=unnamedplus
@@ -379,7 +380,8 @@ augroup END
 iabbrev ehome Wolf@zv.cx
 iabbrev ework Wolf@learninga-z.com
 
-nnoremap <silent> <C-L> :nohlsearch<CR>
+" Prepend hiding search matches (until the next search) to redrawing the screen
+nnoremap <silent> <C-L> :<C-U>nohlsearch<CR><C-L>
 
 " Edit my ~/.vimrc in a new tab, source it
 nnoremap <silent> <Leader>ev :tabnew $HOME/.vimrc<CR>
