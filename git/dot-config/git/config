@@ -95,3 +95,4 @@
     required = true
 [init]
     defaultBranch = main
+    templatedir = ~/.config/git/template
