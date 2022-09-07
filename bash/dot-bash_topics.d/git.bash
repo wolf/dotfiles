@@ -16,14 +16,19 @@ function time_since_last_commit() {
     git log --no-walk --format="%ar" 2>/dev/null | sed 's/\([0-9]\) \(.\).*/\1\2/';
 }
 
-function cdtop() { # cdtop [<relative-path>] : cd to the top-level of the current git working-copy, or to a path relative to that
+function git_top_level() {
     local TOP_LEVEL
-
     if [[ "$(pwd)" =~ ^(.*)/.git([^[:alnum:]_]|$) ]] ; then
         TOP_LEVEL="${BASH_REMATCH[1]}"
     else
         TOP_LEVEL="$(git rev-parse --show-toplevel)"
     fi
+    echo "${TOP_LEVEL}"
+}
+
+function cdtop() { # cdtop [<relative-path>] : cd to the top-level of the current git working-copy, or to a path relative to that
+    local TOP_LEVEL
+    TOP_LEVEL="$(git_top_level)"
     if [ -n "${TOP_LEVEL}" ] ; then
         cd "${TOP_LEVEL}/${1}" || return
     fi
@@ -31,12 +36,7 @@ function cdtop() { # cdtop [<relative-path>] : cd to the top-level of the curren
 
 function pushdtop() { # usage: pushdtop [<relative-path>] : pushd combined with cdtop
     local TOP_LEVEL
-
-    if [[ "$(pwd)" =~ ^(.*)/.git([^[:alnum:]_]|$) ]] ; then
-        TOP_LEVEL="${BASH_REMATCH[1]}"
-    else
-        TOP_LEVEL="$(git rev-parse --show-toplevel)"
-    fi
+    TOP_LEVEL="$(git_top_level)"
     if [ -n "${TOP_LEVEL}" ] ; then
         pushd "${TOP_LEVEL}/${1}" || return
     fi
