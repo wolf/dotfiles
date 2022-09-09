@@ -89,7 +89,6 @@ Plugin 'inkarkat/vim-ReplaceWithSameIndentRegister'
 Plugin 'michaeljsmith/vim-indent-object'
 
 Plugin 'prettier/vim-prettier'
-Plugin 'scrooloose/syntastic'
 
 " let g:ale_disable_lsp = 1
 Plugin 'dense-analysis/ale'
@@ -282,6 +281,15 @@ set cursorline
 set shiftwidth=4
 set softtabstop=4
 set expandtab
+" }}}
+
+" ALE behavior {{{
+" in the style of unimpaired, as per Modern Vim
+nnoremap <silent> [W <Plug>(ale_first)
+nnoremap <silent> [w <Plug>(ale_previous)
+nnoremap <silent> ]w <Plug>(ale_next)
+nnoremap <silent> ]W <Plug>(ale_last)
+
 " }}}
 
 " FZF behavior {{{
