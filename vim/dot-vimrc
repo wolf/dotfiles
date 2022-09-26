@@ -48,8 +48,6 @@ let g:fzf_history_dir = '~/.vim/fzf_history/'
 let g:fzf_buffers_jump = 1
 let g:fzf_tags_command = "ctags -R --exclude='.git' --exclude='.mypy_cache' --exclude='__pycache__' --exclude='node_modules' --exclude='*venv'"
 
-Plugin 'preservim/nerdtree'
-
 if !has('win32') && !has('win32unix')
     " Between notes...
     Plugin 'alok/notational-fzf-vim'
@@ -81,11 +79,6 @@ Plugin 'mattn/emmet-vim'
 " Experimental {{{
 " ...that is, plugins I don't know that I will keep
 
-Plugin 'inkarkat/vim-visualrepeat'
-Plugin 'inkarkat/vim-ingo-library'
-Plugin 'inkarkat/vim-ReplaceWithRegister'
-Plugin 'inkarkat/vim-ReplaceWithSameIndentRegister'
-
 Plugin 'michaeljsmith/vim-indent-object'
 
 Plugin 'prettier/vim-prettier'
@@ -108,19 +101,6 @@ endif
 
 Plugin 'pangloss/vim-javascript'
 Plugin 'HerringtonDarkholme/yats.vim'
-Plugin 'Xuyuanp/nerdtree-git-plugin'
-let g:NERDTreeGitStatusIndicatorMapCustom = {
-    \ 'Modified'    :'*',
-    \ 'Staged'      :'+',
-    \ 'Untracked'   :'%',
-    \ 'Renamed'     :'➜',
-    \ 'Unmerged'    :'=',
-    \ 'Deleted'     :'-',
-    \ 'Dirty'       :'.',
-    \ 'Ignored'     :'!',
-    \ 'Clean'       :'✔︎',
-    \ 'Unknown'     :'?',
-    \ }
 
 Plugin 'editorconfig/editorconfig-vim'
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
@@ -135,7 +115,6 @@ Plugin 'mhinz/vim-grepper'
 
 " Temporary {{{
 " ...not experimental because I know I will be ditching these when I'm done
-Plugin 'chikamichi/mediawiki.vim'
 " }}}
 
 " Visual effects {{{
@@ -298,30 +277,12 @@ nnoremap <silent> ]W <Plug>(ale_last)
 
 " FZF behavior {{{
 nnoremap <silent> <Leader>b :Buffers<CR>
-nnoremap <silent> <Leader>o :NERDTreeClose \| FZF<CR>
+nnoremap <silent> <Leader>o :FZF<CR>
 nnoremap <silent> <Leader>t :Tags<CR>
 nnoremap <silent> <Leader>w :Windows<CR>
 nnoremap <silent> <Leader>rg :Rg<CR>
 
 nnoremap <silent> <Leader>nv :NV<CR>
-" }}}
-
-" NERDTree behavior {{{
-augroup NERDTree_behavior
-    autocmd!
-"     autocmd StdinReadPre * let s:std_in=1
-"     autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
-
-    " Exit Vim if NERDTree is the only window left.
-    autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
-        \ quit | endif
-augroup END
-
-let g:NERDTreeHijackNetrw=1
-let g:NERDTreeIgnore=['\.git$[[dir]]', '\.mypy_cache[[dir]]', '__pycache__[[dir]]', 'node_modules[[dir]]', '.*venv$[[dir]]']
-
-nnoremap <silent> <Leader>nt :NERDTreeToggle<CR>
-nnoremap <silent> <Leader>nf :NERDTreeFocus<CR>
 " }}}
 
 " Grepper behavior {{{
