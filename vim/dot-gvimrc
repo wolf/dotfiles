@@ -1,6 +1,8 @@
-set guifont=JetBrainsMono-Regular:h20
 if has('mac')
+    set guifont=JetBrainsMono-Regular:h20
     set macligatures
+else
+    set guifont=JetBrains_Mono:h20:cANSI:qDRAFT
 endif
 set columns=148
 set lines=84
