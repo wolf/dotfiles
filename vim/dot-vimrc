@@ -127,6 +127,10 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 Plugin 'nelstrom/vim-visual-star-search'
 Plugin 'wellle/targets.vim'
+
+" While reading "Modern Vim" by Drew Neil
+Plugin 'mhinz/vim-grepper'
+
 " }}}
 
 " Temporary {{{
@@ -318,6 +322,19 @@ let g:NERDTreeIgnore=['\.git$[[dir]]', '\.mypy_cache[[dir]]', '__pycache__[[dir]
 
 nnoremap <silent> <Leader>nt :NERDTreeToggle<CR>
 nnoremap <silent> <Leader>nf :NERDTreeFocus<CR>
+" }}}
+
+" Grepper behavior {{{
+let g:grepper       = {}
+let g:grepper.tools = ['grep', 'git', 'rg']
+
+" Search for the current word
+nnoremap <Leader>* :Grepper -cword -noprompt<CR>
+
+" Search for the current selection
+nmap gs <plug>(GrepperOperator)
+xmap gs <plug>(GrepperOperator)
+
 " }}}
 
 " All files {{{
