@@ -10,3 +10,5 @@ export PATH="${HOME}/.bash_tools.bin:${HOME}/.local/bin:${PATH}"
 if [ -f ~/.bashrc ]; then
     source ~/.bashrc
 fi
+
+# vim: set ft=sh ts=8 sw=4 tw=0 et noai :
