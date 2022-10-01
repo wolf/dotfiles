@@ -21,8 +21,8 @@ function platform() {
 }
 
 function get_topics() { # get_topics [--print0] : prints the list of topics, in order, to be executed at interactive Bash startup
-    fd --follow --no-ignore --hidden "$@" --max-depth=1 --type f --regex '.*\.bash$' "${HOME}/.bash_topics.d"
-    fd --follow --no-ignore --hidden "$@"               --type f --regex '.*\.bash$' "${HOME}/.bash_topics.d/$(platform)"
+    fd --follow --no-ignore --hidden "$@" --max-depth=1 --type f --extension bash . "${HOME}/.bash_topics.d"
+    fd --follow --no-ignore --hidden "$@"               --type f --extension bash . "${HOME}/.bash_topics.d/$(platform)"
 }
 
 export -f platform
