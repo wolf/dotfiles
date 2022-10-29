@@ -44,7 +44,7 @@ fi
 
 export HISTSIZE=10000
 export HISTIGNORE="&:ls:[bf]g:exit:history:h20:..:pwd:ll:did"
-export HISTTIMEFORMAT='%a, %m %b %Y, %H:%M:%S '
+# export HISTTIMEFORMAT='%a, %m %b %Y, %H:%M:%S '
 shopt -s histappend cdspell autocd histreedit
 
 bind '"\t":menu-complete'
