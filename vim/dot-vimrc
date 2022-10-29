@@ -86,11 +86,15 @@ Plugin 'prettier/vim-prettier'
 " let g:ale_disable_lsp = 1
 Plugin 'dense-analysis/ale'
 let g:ale_linters = {
-\    'python': ['flake8', 'mypy', 'pyright']
+\    'python': ['flake8', 'mypy', 'pyright'],
+\    'elixir': ['elixir-ls']
 \}
 let g:ale_linters_explicit = 1
 let g:ale_fixers = {}
 let g:ale_fixers.python = ['black']
+let g:ale_fixers.elixir = ['mix_format']
+
+let g:ale_elixir_elixir_ls_release = '/opt/homebrew/Cellar/elixir-ls/0.11.0/libexec'
 
 if has('python3')
     Plugin 'python-mode/python-mode'
@@ -164,6 +168,8 @@ Plugin 'psf/black'
 let g:black_linelength = 120
 
 Plugin 'meatballs/vim-xonsh'
+
+Plugin 'elixir-editors/vim-elixir'
 " }}}
 
 call vundle#end()   " required
