@@ -370,7 +370,7 @@ augroup END
 
 " Mappings and abbreviations {{{
 iabbrev ehome Wolf@zv.cx
-iabbrev ework Wolf@learninga-z.com
+iabbrev ework Wolf@genomenon.com
 
 " Prepend hiding search matches (until the next search) to redrawing the screen
 nnoremap <silent> <C-L> :<C-U>nohlsearch<CR><C-L>

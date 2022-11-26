@@ -87,7 +87,7 @@
     enabled = true
 [user]
     name = Wolf
-    email = Wolf@learninga-z.com
+    email = Wolf@genomenon.com
 [filter "lfs"]
     clean = git-lfs clean -- %f
     smudge = git-lfs smudge -- %f
