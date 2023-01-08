@@ -1,7 +1,10 @@
 *~
 .DS_Store
 .*.sw?
+.python-version
 __pycache__/
 .mypy_cache/
 node_modules/
 *venv/
+.idea/
+tags
