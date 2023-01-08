@@ -84,7 +84,7 @@ if __name__ == "__main__":
     proposed_commands_file = sys.argv[2]
     declares_file = sys.argv[3]
     exported_commands_file = sys.argv[4]
-    single_command_to_lookup: str | None = None
+    single_command_to_lookup = None
     if len(sys.argv) > 5:
         single_command_to_lookup = sys.argv[5]
 
