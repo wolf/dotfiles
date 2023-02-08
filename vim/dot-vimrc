@@ -335,6 +335,13 @@ augroup filetype_help
 augroup END
 " }}}
 
+" JSON files {{{
+augroup filetype_json
+    autocmd!
+    autocmd FileType json setlocal foldmethod=syntax foldlevelstart=0
+augroup END
+" }}}
+
 " Python files {{{
 augroup filetype_python
     autocmd!
