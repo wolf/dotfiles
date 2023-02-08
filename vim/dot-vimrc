@@ -57,7 +57,7 @@ endif
 " }}}
 
 " Autocomplete and friends {{{
-if has('mac')
+if has('mac') && !has('nvim')
     " Yeah.  Even with Python3, this stuff has trouble on Windows.
     Plugin 'ervandew/supertab'
     Plugin 'Valloric/YouCompleteMe'
