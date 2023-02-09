@@ -54,22 +54,6 @@ endif
 " }}}
 
 " Autocomplete and friends {{{
-if has('mac') && !has('nvim')
-    " Yeah.  Even with Python3, this stuff has trouble on Windows.
-    Plug 'ervandew/supertab'
-    Plug 'Valloric/YouCompleteMe'
-    " let g:ycm_extra_conf_globlist = ['~/work/*']
-    let g:ycm_key_list_select_completion = ['<C-J>', '<C-N>', '<Down>']
-    let g:ycm_key_list_previous_completion = ['<C-K>', '<C-P>', '<Up>']
-    Plug 'SirVer/ultisnips'
-    Plug 'honza/vim-snippets'
-    let g:SuperTabDefaultCompletionType = '<C-N>'
-    let g:SuperTabCrMapping = 0
-    let g:UltiSnipsExpandTrigger = '<Tab>'
-    let g:UltiSnipsJumpForwardTrigger = '<Tab>'
-    let g:UltiSnipsJumpBackwardTrigger = '<S-Tab>'
-endif
-
 Plug 'mattn/emmet-vim'
 " }}}
 
