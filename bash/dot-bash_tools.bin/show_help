@@ -1,20 +1,26 @@
 #!/usr/bin/env -S bash -i
+#
+declare DEFINITION_SOURCE
 
 function print0_definition_files() {
+    local RESOLVED_PATH
     if [ -v DEFINITION_SOURCE ] ; then
-        if [ -f "${HOME}/.bash_topics.d/${DEFINITION_SOURCE}" ] ; then
-            echo -ne "${HOME}/.bash_topics.d/${DEFINITION_SOURCE}\00"
-        elif [ -f "${HOME}/${DEFINITION_SOURCE}" ] ; then
-            echo -ne "${HOME}/${DEFINITION_SOURCE}\00"
-        elif [ -f "${DEFINITION_SOURCE}" ] ; then
-            echo -ne "${DEFINITION_SOURCE}\x00"
+        if [ -e "${HOME}/.bash_topics.d/${DEFINITION_SOURCE}" ] ; then
+            RESOLVED_PATH="$(readlink -fn "${HOME}/.bash_topics.d/${DEFINITION_SOURCE}")"
+        elif [ -e "${HOME}/${DEFINITION_SOURCE}" ] ; then
+            RESOLVED_PATH="${HOME}/$(readlink -fn "${HOME}/${DEFINITION_SOURCE}")"
+        elif [ -e "${DEFINITION_SOURCE}" ] ; then
+            RESOLVED_PATH="$(readlink -fn "${DEFINITION_SOURCE}")"
         fi
+
+        echo -ne "${RESOLVED_PATH}"
     else
         echo -ne "${HOME}/.bashrc\x00"
         echo -ne "${HOME}/.bash_topics.d/required_functions.bash.inc\x00"
         get_topics --color=never --print0
     fi
 }
+
 
 function print_proposed_commands() {
     print0_definition_files \
@@ -26,6 +32,10 @@ function print_proposed_commands() {
 
 function print_individual_declares() {
     shopt -s extdebug
+
+    local DECLARE
+    local COMMAND
+    local COMMAND_NAME
 
     declare -a DEFINED_COMMANDS
     readarray DEFINED_COMMANDS < <( print_proposed_commands )
