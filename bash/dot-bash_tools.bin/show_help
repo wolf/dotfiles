@@ -6,14 +6,14 @@ function print0_definition_files() {
     local RESOLVED_PATH
     if [ -v DEFINITION_SOURCE ] ; then
         if [ -e "${HOME}/.bash_topics.d/${DEFINITION_SOURCE}" ] ; then
-            RESOLVED_PATH="$(readlink -fn "${HOME}/.bash_topics.d/${DEFINITION_SOURCE}")"
+            RESOLVED_PATH="${HOME}/.bash_topics.d/${DEFINITION_SOURCE}"
         elif [ -e "${HOME}/${DEFINITION_SOURCE}" ] ; then
-            RESOLVED_PATH="${HOME}/$(readlink -fn "${HOME}/${DEFINITION_SOURCE}")"
+            RESOLVED_PATH="${HOME}/${HOME}/${DEFINITION_SOURCE}"
         elif [ -e "${DEFINITION_SOURCE}" ] ; then
-            RESOLVED_PATH="$(readlink -fn "${DEFINITION_SOURCE}")"
+            RESOLVED_PATH="${DEFINITION_SOURCE}"
         fi
 
-        echo -ne "${RESOLVED_PATH}"
+        echo -ne "${RESOLVED_PATH}\x00"
     else
         echo -ne "${HOME}/.bashrc\x00"
         echo -ne "${HOME}/.bash_topics.d/required_functions.bash.inc\x00"
