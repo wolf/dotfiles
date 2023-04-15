@@ -95,6 +95,7 @@ if has('nvim')
     Plug 'glacambre/firenvim'
 endif
 
+Plug 'vim-scripts/argtextobj.vim'
 " }}}
 
 " Temporary {{{
