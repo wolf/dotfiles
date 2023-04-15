@@ -36,7 +36,7 @@ def read_exported_commands(exported_commands_file: str) -> set[str]:
 
 
 def read_proposed_commands(proposed_commands_file: str) -> dict[str, dict[str, str]]:
-    HELP_LINE_RE = re.compile("(?P<path>[^:]+):(?P<command>\w+):(?P<help>.*)")
+    HELP_LINE_RE = re.compile(r"(?P<path>[^:]+):(?P<command>\w+):(?P<help>.*)")
 
     proposed_commands_grouped_by_path: dict[str, dict[str, str]] = defaultdict(dict)
     with open(proposed_commands_file, "r") as f:
@@ -54,7 +54,7 @@ def get_defined_commands(
     declares_file: str, exported_commands: set[str], help: dict[str, dict[str, str]]
 ):
     DECLARATION_WITH_PATH_RE = re.compile(
-        "(?P<command>\w+) (?P<line_number>\d+) (?P<path>.*)"
+        r"(?P<command>\w+) (?P<line_number>\d+) (?P<path>.*)"
     )
 
     defined_commands: dict[str, BashFunction] = {}
