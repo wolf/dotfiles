@@ -45,7 +45,7 @@
     changed = green
     untracked = cyan
 [core]
-    editor = vim
+    editor = hx
     pager = delta
     legacyheaders = false
     whitespace = trailing-space,space-before-tab,cr-at-eol
@@ -60,7 +60,7 @@
 [diff]
     renames = copy
     mnemonicprefix = true
-    tool = vimdiff
+    tool = opendiff
     renamelimit = 1428
 [difftool]
     prompt = false
