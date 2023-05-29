@@ -4,6 +4,7 @@
 .python-version
 __pycache__/
 .mypy_cache/
+.pytest_cache/
 node_modules/
 *venv/
 .idea/
