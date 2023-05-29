@@ -96,3 +96,5 @@
 [init]
     defaultBranch = main
     templatedir = ~/.config/git/template
+[blame]
+	ignoreRevsFile = .git-blame-ignore-revs
