@@ -9,3 +9,4 @@ node_modules/
 *venv/
 .idea/
 tags
+LOCAL-*.md
