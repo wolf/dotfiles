@@ -1,11 +1,12 @@
 theme = "papercolor-wolf"
 
 [editor]
-true-color = true
 bufferline = "multiple"
+line-number = "relative"
 rulers = [88, 120]
 scrolloff = 3
 shell = ["bash", "-c"]
+true-color = true
 
 [editor.cursor-shape]
 insert = "bar"
