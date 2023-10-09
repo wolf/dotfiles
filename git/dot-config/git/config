@@ -98,3 +98,5 @@
     templatedir = ~/.config/git/template
 [blame]
 	ignoreRevsFile = .git-blame-ignore-revs
+[includeIf "gitdir:~/Genomenon/"]
+    path = ~/.config/git/config-Genomenon
