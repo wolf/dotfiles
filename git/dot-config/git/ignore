@@ -5,8 +5,9 @@
 __pycache__/
 .mypy_cache/
 .pytest_cache/
+.ruff_cache/
 node_modules/
 *venv/
 .idea/
 tags
-LOCAL-*.md
+LOCAL-*

@@ -11,7 +11,7 @@
     lg = log --pretty=format:'%C(yellow)%h%Creset %C(red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
     t = ! GIT_PAGER=tig git log --no-color
     st = status
-    s = status -s
+    s = status -s -b
     n = ! git status -s | wc -l
     unstage = restore --staged
     aliases = ! git config --list | grep alias
@@ -45,7 +45,7 @@
     changed = green
     untracked = cyan
 [core]
-    editor = hx
+    editor = mvim
     pager = delta
     legacyheaders = false
     whitespace = trailing-space,space-before-tab,cr-at-eol
@@ -70,7 +70,7 @@
     diffFilter = delta --color-only --features=interactive
 [merge]
     tool = fugitive
-	conflictstyle = diff3
+    conflictstyle = zdiff3
     renameLimit = 65000
     directoryRename = true
 [mergetool]
@@ -97,6 +97,6 @@
     defaultBranch = main
     templatedir = ~/.config/git/template
 [blame]
-	ignoreRevsFile = .git-blame-ignore-revs
+    ignoreRevsFile = .git-blame-ignore-revs
 [includeIf "gitdir:~/Genomenon/"]
     path = ~/.config/git/config-Genomenon
