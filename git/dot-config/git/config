@@ -45,7 +45,7 @@
     changed = green
     untracked = cyan
 [core]
-    editor = mvim
+    editor = vim
     pager = delta
     legacyheaders = false
     whitespace = trailing-space,space-before-tab,cr-at-eol
@@ -54,10 +54,13 @@
 [delta "interactive"]
     keep-plus-minus-markers = false
 [delta "wolf-normal"]
+    hyperlinks = true
     light = true
     line-numbers = true
-    syntax-theme = GitHub
+    navigate = true
+    syntax-theme = Monokai Extended Light
 [diff]
+    colorMoved = default
     renames = copy
     mnemonicprefix = true
     tool = opendiff
