@@ -1,1 +1,6 @@
+# Case insensitive unless pattern contains upper-case characters
+--smart-case
+# Search hidden files by default, but not Git data directories
 --hidden
+--glob
+!.git
