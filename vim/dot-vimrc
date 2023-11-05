@@ -172,9 +172,9 @@ else
     colorscheme peachpuff
 endif
 
-if !has('nvim') && &term !~ 'builtin_gui'
-    set ttymouse=xterm2
-endif
+" if !has('nvim') && &term !~ 'builtin_gui'
+"     set ttymouse=xterm2
+" endif
 
 " Set the cursor shape appropriately, see https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
 if has('mac')
