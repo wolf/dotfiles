@@ -34,7 +34,7 @@ function fe() { # fe <regexp> : find all the files in or below . whose names mat
 }
 
 function fll() { # fll <regexp> : find all the files in or below . whose names match <regexp>, and list them as would ls -l
-    fd --follow --hidden "$@" --exec-batch exa -Fal
+    fd --follow --hidden "$@" --exec-batch eza -alF
 }
 
 function fsource() { # fsource <regexp> : find all the files in or below . whose names match <regexp> and source them

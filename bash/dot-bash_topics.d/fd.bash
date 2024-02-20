@@ -34,7 +34,7 @@ function fe() { # fe <glob> : find all the files in or below . whose names match
 }
 
 function fll() { # fll <glob> : find all the files in or below . whose names match <glob>, and list them as would ls -l
-    fd --follow --hidden --glob "$@" --exec-batch exa -Fal
+    fd --follow --hidden --glob "$@" --exec-batch eza -alF
 }
 
 function fsource() { # fsource <glob> : find all the files in or below . whose names match <glob> and source them
