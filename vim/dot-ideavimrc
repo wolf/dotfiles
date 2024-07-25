@@ -2,10 +2,6 @@ source ~/.vimrc
 
 let mapleader = "\<Space>"
 
-set clipboard+=ideaput
-set ideajoin
-set idearefactormode=keep
-
 nnoremap <silent> <Leader>ev :e ~/.ideavimrc<CR>
 nnoremap <silent> <Leader>sv :action IdeaVim.ReloadVimRc.reload<CR>
 
@@ -13,11 +9,13 @@ Plug easymotion
 Plug sneak
 Plug surround
 
+set clipboard+=ideaput
+set ideajoin
+set idearefactormode=keep
+set surround
+set sneak
+
 nmap <silent> <C-l> :action EditorToggleShowWhitespaces<CR>
 
 nmap [m :action MethodUp<CR>
 nmap ]m :action MethodDown<CR>
-
-Plug NERDTree
-let g:NERDTreeMapActivateNode='l'
-let g:NERDTreeMapJumpParent='h'
