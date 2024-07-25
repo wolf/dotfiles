@@ -90,7 +90,7 @@
     enabled = true
 [user]
     name = Wolf
-    email = Wolf@genomenon.com
+    email = Wolf@zv.cx
 [filter "lfs"]
     clean = git-lfs clean -- %f
     smudge = git-lfs smudge -- %f
@@ -99,5 +99,3 @@
 [init]
     defaultBranch = main
     templatedir = ~/.config/git/template
-[blame]
-    ignoreRevsFile = .git-blame-ignore-revs
