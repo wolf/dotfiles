@@ -1,6 +1,6 @@
 ## README
 
-This is collection of my various configuration files, originally arranged for use with gnu `stow` but now I use my own tool: `dotx`.  `dotx` is written in Python and published on PyPI.  You can install `dotx` using `pip` or `pipx`.  Here is its [page on PyPI](https://pypi.org/project/dotx/) in case you need the current version.  Before you unpack the configuration files with `dotx`, you do two things, (1) launch and exit `ipython` once so it creates its configuration directory hierarchy; and (2) create a `~/.config` directory.  You install these configurations by `cd`ing into your checked-out copy of `dotfiles` (a checked-out copy you will be keeping around) and executing the command:
+This is collection of my various configuration files, originally arranged for use with gnu `stow` but now I use my own tool: `dotx`.  `dotx` is written in Python and published on PyPI.  You can install `dotx` using `pip` or `pipx`.  I actually use `uv`.  Here is its [page on PyPI](https://pypi.org/project/dotx/) in case you need the current version.  Before you unpack the configuration files with `dotx`, you do two things, (1) launch and exit `ipython` once so it creates its configuration directory hierarchy; and (2) create a `~/.config` directory.  You install these configurations by `cd`ing into your checked-out copy of `dotfiles` (a checked-out copy you will be keeping around) and executing the command:
 
 ```
 dotx --target=${HOME} \
@@ -8,17 +8,18 @@ dotx --target=${HOME} \
     install bash git readline tmux vim
 ```
 
-...modulo the exact parts you want to install.  This makes symbolic-links from your home directory to the top-level items inside each of the listed directories.  For example, inside the `dotfiles/bash` directory is a `.bashrc`, `.bash_profile` and a directory: `.bash_topics.d`.  Each of those gets a same-named symbolic-link in your home directory; and that lets bash start-up with our custom configuration.  Because the links are symbolic, you need to keep your `dotfiles` directory around forever.  So make sure you put it someplace reasonable.
+...modulo the exact parts you want to install.  This makes symbolic-links from your home directory to the top-level items inside each of the listed directories.  For example, inside the `dotfiles/bash` directory is a `dot-bashrc`, `dot-bash_profile` and a directory: `dot-bash_topics.d`.  Each of those gets a symbolic-link in your home directory, though with an actual `.`, not the word "dot" (that's a feature of `dotx`); and that lets bash start-up with our custom configuration.  Because the links are symbolic, you need to keep your `dotfiles` directory around forever.  So make sure you put it someplace reasonable.
 
 ### Vim
 
-`vim` is special, you need to do a little extra work to get its plugins downloaded.
+`vim` is special, you need to do a little extra work to get its plugins downloaded.  I use `vim-plug.`  So we'll start by getting the file that makes that work.  This is directly from the `vim-plug` project on [GitHub](https://github.com/junegunn/vim-plug) under the installation instructions for Unix.  If you are on a different OS, install as appropriate.
 
 ```
-git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 ```
 
-Then launch `vim` and type `:PluginInstall`.  There's a good progress indicator but expect the install to take a couple of minutes.
+Then launch/relaunch `vim` and type `:PlugInstall`.  There's a good progress indicator but expect the install to take a couple of minutes.
 
 `emergency_vim/vimrc` is a file you can source while loading `vim` on a machine where you don't have all your special configuration files.  E.g., `vim -u vimrc some-file.js`.
 
@@ -32,10 +33,10 @@ dotx --target=${HOME} install ultisnips
 
 ### non-standard tools
 
-For Bash, I generally have installed several command-line tools that I find helpful.  I have the complete collection on macOS and all my Linux boxes.  Some/most of these tools are not easily installed on Windows, so my Bash initialization takes platform-specific definitions into account.  See bash/README.md for details.
+For Bash, I generally have installed several command-line tools that I find helpful.  I have the complete collection on macOS and all my Linux boxes.  Some/most of these tools are not easily installed on Windows, so my Bash initialization takes platform-specific definitions into account.  See `bash/README.md` for details.
 
 ### local-only branch
 
-This repo comprises the things that are the same between my various machines, but some things are different per machine or secret and should not be uploaded.  Therefore, when I clone the repo, I immediately make a branch named `local-only` that contains things like my work email address in the global `.gitconfig`, or a GitHub token to make `brew` work better, or platform specific paths that I haven't factored out yet, etc.  With no remote, an accidental `git push` just fails when `local-only` is checked out; so no secrets get published.  As changes come down to `main`, you choose which you want in `local-only` with `cherry-pick`.  I highly recommend this technique.
+This repo comprises the things that are the same between my various machines, but some things are different per machine or secret and should not be uploaded.  Therefore, when I clone the repo, I immediately make a branch named `local-only` that contains things like my work email address in the global Git config, or a GitHub token to make `brew` work better, or platform specific paths that I haven't factored out yet, etc.  With no remote, an accidental `git push` just fails when `local-only` is checked out; so no secrets get published.  As changes come down to `main`, you choose which you want in `local-only` with `cherry-pick`.  I highly recommend this technique.  By the way, I don't keep my global Git config in `~/.gitconfig`.  I keep it in `~/.config/git/dot-config/git/config`.  That's the new hotness.
 
-By the way: don't upload your `.ssh` directory or any of the private keys it contains.
+Another by the way: don't upload your `.ssh` directory or any of the private keys it contains.
