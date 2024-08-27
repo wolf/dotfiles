@@ -171,6 +171,10 @@ if has('mac')
         let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
         let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
     endif
+elseif has('unix')
+    let &t_SI = "\<Esc>[6 q"
+    let &t_SR = "\<Esc>[4 q"
+    let &t_EI = "\<Esc>[2 q"
 endif
 " }}}
 
@@ -275,6 +279,7 @@ augroup open_and_close
 
     " Use the current background color
     autocmd VimEnter * set t_ut=
+    " autocmd VimEnter * silent !echo -ne "\<Esc>[2 q"
 
     " When opening a buffer, restore the exact cursor position if it still
     " exists
