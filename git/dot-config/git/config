@@ -84,6 +84,7 @@
     rebase = merges
 [push]
     default = nothing
+	autoSetupRemote = true
 [repack]
     usedeltabaseoffset = true
 [rerere]
