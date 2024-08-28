@@ -51,6 +51,7 @@ endif
 
 " Experimental {{{
 " ...that is, plugins I don't know that I will keep
+Plug 'awvalenti/vim-simple-guifont'
 
 Plug 'michaeljsmith/vim-indent-object'
 
