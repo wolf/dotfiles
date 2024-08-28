@@ -48,6 +48,8 @@ export HISTSIZE=10000
 export HISTIGNORE="&:ls:[bf]g:exit:history:h20:..:pwd:ll:did"
 # export HISTTIMEFORMAT='%a, %m %b %Y, %H:%M:%S '
 shopt -s histappend cdspell autocd histreedit
+export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+trap 'history -a' EXIT
 
 bind '"\t":menu-complete'
 bind '"\e[A":history-search-backward'
