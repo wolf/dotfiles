@@ -12,6 +12,7 @@
     t = ! GIT_PAGER=tig git log --no-color
     st = status
     s = status -s -b
+    switch-recent = !git branch --sort=-committerdate --format='%(refname:short)' | fzf --preview='git log --date=relative --color main..{}' | xargs git switch
     n = ! git status -s | wc -l
     unstage = restore --staged
     aliases = ! git config --list | grep alias
