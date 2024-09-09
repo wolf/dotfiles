@@ -10,8 +10,7 @@
     l8 = log --decorate --oneline -8
     lg = log --pretty=format:'%C(yellow)%h%Creset %C(red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
     t = ! GIT_PAGER=tig git log --no-color
-    st = status
-    s = status -s -b
+    st = status -sb
     switch-recent = !git branch --sort=-committerdate --format='%(refname:short)' | fzf --preview='git log --date=relative --color main..{}' | xargs git switch
     n = ! git status -s | wc -l
     unstage = restore --staged
@@ -61,6 +60,8 @@
     navigate = true
     syntax-theme = Monokai Extended Light
 [diff]
+    algorithm = histogram
+    interHunkContext = 3
     colorMoved = default
     renames = copy
     mnemonicprefix = true
@@ -68,6 +69,8 @@
     renamelimit = 1428
 [difftool]
     prompt = false
+[fetch]
+    prune = true
 [help]
     autocorrect = 20
 [interactive]
