@@ -75,6 +75,7 @@
     autocorrect = 20
 [interactive]
     diffFilter = delta --color-only --features=interactive
+    singleKey = true
 [merge]
     tool = fugitive
     conflictstyle = zdiff3
