@@ -66,10 +66,13 @@
     renames = copy
     mnemonicprefix = true
     noprefix = true
-    tool = mvimdiff
+    tool = difftastic
+    external = difft
     renamelimit = 1428
 [difftool]
     prompt = false
+[difftool "difftastic"]
+    cmd = difft "$LOCAL" "$REMOTE" 
 [fetch]
     prune = true
 [help]
@@ -86,6 +89,8 @@
     prompt = false
 [mergetool "fugitive"]
     cmd = vim -f -c "Gdiff" "$MERGED"
+[pager]
+    difftool = true 
 [pull]
     rebase = merges
 [push]
