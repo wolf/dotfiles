@@ -45,7 +45,7 @@
     changed = green
     untracked = cyan
 [core]
-    editor = mvim -f
+    editor = vim
     pager = delta
     legacyheaders = false
     whitespace = trailing-space,space-before-tab,cr-at-eol
@@ -66,7 +66,7 @@
     renames = copy
     mnemonicprefix = true
     noprefix = true
-    tool = mvimdiff
+    tool = vimdiff
     renamelimit = 1428
 [difftool]
     prompt = false
@@ -89,7 +89,7 @@
 [pull]
     rebase = merges
 [push]
-    default = nothing
+    default = upstream
     autoSetupRemote = true
 [rebase]
     autoStash = true
