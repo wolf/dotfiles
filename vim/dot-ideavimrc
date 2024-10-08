@@ -3,19 +3,27 @@ source ~/.vimrc
 let mapleader = "\<Space>"
 
 nnoremap <silent> <Leader>ev :e ~/.ideavimrc<CR>
-nnoremap <silent> <Leader>sv :action IdeaVim.ReloadVimRc.reload<CR>
+nnoremap <silent> <Leader>sv <Action>(IdeaVim.ReloadVimRc.reload)
 
-Plug easymotion
-Plug sneak
-Plug surround
+Plug 'justinmk/vim-sneak'
 
+set argtextobj
 set clipboard+=ideaput
+set commentary
+set easymotion
+set exchange
+set highlightedyank
+set hlsearch
 set ideajoin
 set idearefactormode=keep
+set ReplaceWithRegister
 set surround
 set sneak
 
-nmap <silent> <C-l> :action EditorToggleShowWhitespaces<CR>
+nmap <silent> <C-l> <Action>(EditorToggleShowWhitespace)
 
-nmap [m :action MethodUp<CR>
-nmap ]m :action MethodDown<CR>
+nmap [m <Action>(MethodUp)
+nmap ]m <Action>(MethodDown)
+
+nmap gq <Action>(EditorFillParagraph)
+vmap gq <Action>(EditorFillParagraph)
