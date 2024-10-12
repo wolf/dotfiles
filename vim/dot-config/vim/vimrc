@@ -10,7 +10,7 @@ let maplocalleader = "\\"
 " Plugins {{{
 filetype off
 
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.config/vim/plugged')
 
 " Basics {{{
 Plug 'tpope/vim-sensible'
@@ -37,7 +37,7 @@ Plug 'haya14busa/incsearch-easymotion.vim'
 " Between files...
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-let g:fzf_history_dir = '~/.vim/fzf_history/'
+let g:fzf_history_dir = '~/.config/vim/fzf_history/'
 let g:fzf_buffers_jump = 1
 let g:fzf_tags_command = "ctags -R --exclude='.git' --exclude='.mypy_cache' --exclude='__pycache__' --exclude='node_modules' --exclude='*venv'"
 
@@ -350,9 +350,9 @@ iabbrev ework wolf@dmp-maps.com
 " Prepend hiding search matches (until the next search) to redrawing the screen
 nnoremap <silent> <C-L> :<C-U>nohlsearch<CR><C-L>
 
-" Edit my ~/.vimrc in a new tab, source it
-nnoremap <silent> <Leader>ev :tabnew $HOME/.vimrc<CR>
-nnoremap <silent> <Leader>sv :source $HOME/.vimrc<CR>
+" Edit my $MYVIMRC in a new tab, source it
+nnoremap <silent> <Leader>ev :tabnew $MYVIMRC<CR>
+nnoremap <silent> <Leader>sv :source $MYVIMRC<CR>
 if has('gui')
     nnoremap <silent> <Leader>eg :tabnew $MYGVIMRC<CR>
     nnoremap <silent> <Leader>sg :source $MYGVIMRC<CR>
@@ -423,7 +423,7 @@ nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 
 " Undo {{{
 if has('persistent_undo')
-    set undodir=~/.vim/undo/
+    set undodir=~/.config/vim/undo/
     set undofile
 endif
 
