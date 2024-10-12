@@ -28,7 +28,7 @@ def start():
             'expand_frame_repr': False,
             'max_rows': 14,
             'max_seq_items': 50,
-            'precision': 4,
+            'precision': 6,
             'show_dimensions': False
         },
         'mode': {
