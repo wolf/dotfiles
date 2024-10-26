@@ -1,0 +1,6 @@
+# ignore everything
+*
+
+# ...except the startup directory (and of course we _do_ want to commit .gitignore)
+!startup/
+!.gitignore
