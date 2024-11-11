@@ -29,10 +29,14 @@ Plug 'tpope/vim-unimpaired'
 
 " Navigation {{{
 " Within a file...
-Plug 'justinmk/vim-sneak'
+if has('nvim')
+    Plug 'smoka7/hop.nvim'
+else
+    Plug 'justinmk/vim-sneak'
+    Plug 'easymotion/vim-easymotion'
+    Plug 'haya14busa/incsearch-easymotion.vim'
+endif
 Plug 'haya14busa/incsearch.vim'
-Plug 'easymotion/vim-easymotion'
-Plug 'haya14busa/incsearch-easymotion.vim'
 
 " Between files...
 Plug 'junegunn/fzf'
@@ -41,6 +45,7 @@ let g:fzf_history_dir = '~/.config/vim/fzf_history/'
 let g:fzf_buffers_jump = 1
 let g:fzf_tags_command = "ctags -R --exclude='.git' --exclude='.mypy_cache' --exclude='__pycache__' --exclude='node_modules' --exclude='*venv'"
 
+" Why isn't this just if has('mac')?
 if !has('win32') && !has('win32unix') && (substitute(system('uname'), '\n', '', '') != 'Linux')
     " Between notes...
     Plug 'alok/notational-fzf-vim'
@@ -62,7 +67,7 @@ Plug 'vim-scripts/argtextobj.vim'
 " let g:ale_disable_lsp = 1
 Plug 'dense-analysis/ale'
 let g:ale_linters = {
-\    'python': ['ruff', 'flake8', 'mypy', 'pyright']
+\    'python': ['ruff']
 \}
 let g:ale_linters_explicit = 1
 let g:ale_fixers = {}
@@ -181,7 +186,8 @@ endif
 
 " Settings {{{
 if has('nvim')
-    let g:python3_host_prog = '~/.pyenv/versions/nvim/bin/python'
+    let g:python_host_prog = '~/.config/vim/nvim_venv/bin/python'
+    let g:python3_host_prog = '~/.config/vim/nvim_venv/bin/python'
 endif
 
 set pyxversion=3
@@ -294,7 +300,7 @@ augroup END
 " Vim files {{{
 augroup filetype_vim
     autocmd!
-    autocmd FileType vim setlocal foldmethod=marker foldlevelstart=0
+    autocmd FileType vim setlocal foldmethod=marker foldlevelstart=1 foldlevel=1
 augroup END
 
 augroup filetype_help
@@ -340,6 +346,13 @@ augroup END
 augroup filetype_edit_commitmessage
     autocmd!
     autocmd BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+augroup END
+" }}}
+
+" Files on Dropbox {{{
+augroup filetype_on_dropbox
+    autocmd!
+    autocmd BufEnter ~/Dropbox/* :set noswapfile
 augroup END
 " }}}
 
@@ -423,7 +436,11 @@ nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 
 " Undo {{{
 if has('persistent_undo')
-    set undodir=~/.config/vim/undo/
+    if has('nvim')
+        set undodir=~/.config/nvim/undo/
+    else
+        set undodir=~/.config/vim/undo/
+    endif
     set undofile
 endif
 
