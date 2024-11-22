@@ -1,2 +1,2 @@
 [ -f ~/.dircolors ] || return
-eval "$(dircolors ~/.dircolors)"
+eval "$(dircolors -b ~/.dircolors)"
