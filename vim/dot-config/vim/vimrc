@@ -71,7 +71,7 @@ let g:ale_linters = {
 \}
 let g:ale_linters_explicit = 1
 let g:ale_fixers = {}
-let g:ale_fixers.python = ['black']
+let g:ale_fixers.python = ['ruff']
 
 if has('python3')
     Plug 'python-mode/python-mode'
@@ -141,9 +141,6 @@ endif
 Plug 'tpope/vim-endwise'
 Plug 'tweekmonster/braceless.vim'
 let g:braceless_line_continuation = 0
-
-Plug 'psf/black'
-let g:black_linelength = 120
 " }}}
 
 call plug#end()   " required
