@@ -9,8 +9,15 @@ if vim.fn.has('nvim') == 1 then
     end
 
     require'lspconfig'.pyright.setup{}
+    require'lspconfig'.rust_analyzer.setup{
+        settings = {
+            ["rust-analyzer"] = {
+                checkOnSave = "clippy"
+            }
+        }
+    }
     require'nvim-treesitter.configs'.setup {
-      ensure_installed = { "python" }, -- Ensure Python parser is installed
+      ensure_installed = { "python", "rust" }, -- Ensure Python parser is installed
       highlight = {
         enable = true,                -- Enable Treesitter highlighting
       },

@@ -135,6 +135,7 @@ let g:airline#extensions#tabline#left_alt_sep = ''
 " Language support {{{
 if has('nvim')
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    Plug 'simrat39/rust-tools.nvim'
     Plug 'neovim/nvim-lspconfig'
 endif
 
