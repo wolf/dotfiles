@@ -1,4 +1,0 @@
-[[language]]
-name = "python"
-formatter = { command = "black", args = ["--quiet", "-"] }
-auto-format = true
