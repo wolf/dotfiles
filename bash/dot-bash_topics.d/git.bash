@@ -42,6 +42,23 @@ function pushdtop() { # usage: pushdtop [<relative-path>] : pushd combined with 
     fi
 }
 
+function since_commit() { # since_commit [<ref>] : list all the files modified by all the commits since the given <ref>, including currently unstaged changes
+    # example: since_commit
+    # example: since_commit 12345
+    # example: since_commit HEAD~3
+    local COMMIT="${1:-HEAD}" ; shift
+    git diff "${COMMIT}" --name-only --relative "$@"
+}
+
+function in_commit() { # in_commit [<ref>] : list all the files modified as part of the given commit
+    # example: in_commit
+    # example: in_commit 12345
+    # example: in_commit HEAD~3
+    local FROM_COMMIT="${1:-HEAD}" ; shift
+    local TO_COMMIT="${1:-${FROM_COMMIT}}" ; shift
+    git diff "${FROM_COMMIT}" "${TO_COMMIT}^" --name-only --relative "$@"
+}
+
 function dirty() { # dirty : list currently modified and/or unmerged files that exist in this repo
     git ls-files --modified --deduplicate "$@"
 }
