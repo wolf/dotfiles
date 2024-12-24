@@ -101,6 +101,7 @@ let g:highlightedyank_highlight_duration = 450
 set background=light
 set t_Co=256
 Plug 'NLKNguyen/papercolor-theme'
+Plug 'kjssad/quantum.vim'
 
 " Airline {{{
 Plug 'vim-airline/vim-airline'
@@ -157,7 +158,9 @@ function! GetColorSchemes()
 endfunction
 
 let s:schemes = GetColorSchemes()
-if index(s:schemes, 'PaperColor') >= 0
+if has('nvim') && index(s:schemes, 'quantum') >= 0
+    colorscheme quantum
+elseif index(s:schemes, 'PaperColor') >= 0
     colorscheme PaperColor
 else
     colorscheme peachpuff
