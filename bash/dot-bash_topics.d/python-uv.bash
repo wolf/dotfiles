@@ -4,4 +4,5 @@ alias python3.10="uv run --python=3.10 python3"
 alias python3.11="uv run --python=3.11 python3"
 alias python3.12="uv run --python=3.12 python3"
 alias python3.13="uv run --python=3.13 python3"
-alias python3=python3.12
+alias python3.14="uv run --python=3.14 python3"
+alias python3=python3.13
