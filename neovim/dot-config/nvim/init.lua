@@ -64,9 +64,11 @@ if vim.fn.has('nvim') == 1 then
 
         -- Normal mode
         vim.api.nvim_set_keymap('n', '<leader><leader>w', "<cmd>HopWordAC<CR>", { noremap = true, silent = true })
-        vim.api.nvim_set_keymap('n', '<leader><leader>l', "<cmd>HopLineAC<CR>", { noremap = true, silent = true })
+        vim.api.nvim_set_keymap('n', '<leader><leader>b', "<cmd>HopWordBC<CR>", { noremap = true, silent = true })
         vim.api.nvim_set_keymap('n', '<leader><leader>f', "<cmd>HopChar1AC<CR>", { noremap = true, silent = true })
         vim.api.nvim_set_keymap('n', '<leader><leader>s', "<cmd>HopChar2AC<CR>", { noremap = true, silent = true })
+        vim.api.nvim_set_keymap('n', '<leader><leader>F', "<cmd>HopChar1BC<CR>", { noremap = true, silent = true })
+        vim.api.nvim_set_keymap('n', '<leader><leader>S', "<cmd>HopChar2BC<CR>", { noremap = true, silent = true })
         vim.api.nvim_set_keymap('n', '<leader><leader>j', "<cmd>lua hop_line_down()<CR>", { noremap = true, silent = true })
         vim.api.nvim_set_keymap('n', '<leader><leader>k', "<cmd>lua hop_line_up()<CR>", { noremap = true, silent = true })
         vim.api.nvim_set_keymap('n', '<leader><leader>J', "<cmd>lua hop_vertical_down()<CR>", { noremap = true, silent = true })
@@ -76,9 +78,11 @@ if vim.fn.has('nvim') == 1 then
         
         -- Operator-pending mode
         vim.api.nvim_set_keymap('o', '<leader><leader>w', "<cmd>HopWordAC<CR>", { noremap = true, silent = true })
-        vim.api.nvim_set_keymap('o', '<leader><leader>l', "<cmd>HopLineAC<CR>", { noremap = true, silent = true })
+        vim.api.nvim_set_keymap('o', '<leader><leader>b', "<cmd>HopWordBC<CR>", { noremap = true, silent = true })
         vim.api.nvim_set_keymap('o', '<leader><leader>f', "<cmd>HopChar1AC<CR>", { noremap = true, silent = true })
         vim.api.nvim_set_keymap('o', '<leader><leader>s', "<cmd>HopChar2AC<CR>", { noremap = true, silent = true })
+        vim.api.nvim_set_keymap('o', '<leader><leader>F', "<cmd>HopChar1BC<CR>", { noremap = true, silent = true })
+        vim.api.nvim_set_keymap('o', '<leader><leader>S', "<cmd>HopChar2BC<CR>", { noremap = true, silent = true })
         vim.api.nvim_set_keymap('o', '<leader><leader>j', "<cmd>lua hop_line_down()<CR>", { noremap = true, silent = true })
         vim.api.nvim_set_keymap('o', '<leader><leader>k', "<cmd>lua hop_line_up()<CR>", { noremap = true, silent = true })
         vim.api.nvim_set_keymap('o', '<leader><leader>J', "<cmd>lua hop_vertical_down()<CR>", { noremap = true, silent = true })
@@ -88,9 +92,11 @@ if vim.fn.has('nvim') == 1 then
 
         -- Visual mode
         vim.api.nvim_set_keymap('x', '<leader><leader>w', "<cmd>HopWordAC<CR>", { noremap = true, silent = true })
-        vim.api.nvim_set_keymap('x', '<leader><leader>l', "<cmd>HopLineAC<CR>", { noremap = true, silent = true })
+        vim.api.nvim_set_keymap('x', '<leader><leader>b', "<cmd>HopWordBC<CR>", { noremap = true, silent = true })
         vim.api.nvim_set_keymap('x', '<leader><leader>f', "<cmd>HopChar1AC<CR>", { noremap = true, silent = true })
         vim.api.nvim_set_keymap('x', '<leader><leader>s', "<cmd>HopChar2AC<CR>", { noremap = true, silent = true })
+        vim.api.nvim_set_keymap('x', '<leader><leader>F', "<cmd>HopChar1BC<CR>", { noremap = true, silent = true })
+        vim.api.nvim_set_keymap('x', '<leader><leader>S', "<cmd>HopChar2BC<CR>", { noremap = true, silent = true })
         vim.api.nvim_set_keymap('x', '<leader><leader>j', "<cmd>lua hop_line_down()<CR>", { noremap = true, silent = true })
         vim.api.nvim_set_keymap('x', '<leader><leader>k', "<cmd>lua hop_line_up()<CR>", { noremap = true, silent = true })
         vim.api.nvim_set_keymap('x', '<leader><leader>J', "<cmd>lua hop_vertical_down()<CR>", { noremap = true, silent = true })
