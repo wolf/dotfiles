@@ -62,7 +62,6 @@ Plug 'michaeljsmith/vim-indent-object'
 
 Plug 'prettier/vim-prettier'
 Plug 'vim-scripts/ReplaceWithRegister'
-Plug 'vim-scripts/argtextobj.vim'
 
 " let g:ale_disable_lsp = 1
 Plug 'dense-analysis/ale'
