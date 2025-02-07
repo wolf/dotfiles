@@ -1,5 +1,16 @@
-add_newline = true
 command_timeout = 2000
+add_newline = true
+
+format = """
+$username\
+$directory\
+$git_branch\
+$git_status\
+$conda\
+$rust\
+\n\
+$character
+"""
 
 [character]
 success_symbol = "[\\$](bold)"
@@ -21,6 +32,7 @@ untracked = "%"
 up_to_date = "="
 
 [username]
+style_user = "bold blue"
 format = "[$user]($style)@"
 
 #
@@ -142,7 +154,7 @@ disabled = true
 disabled = true
 
 [rust]
-disabled = true
+disabled = false
 
 [scala]
 disabled = true
