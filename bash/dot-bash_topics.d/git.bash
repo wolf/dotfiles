@@ -68,6 +68,10 @@ function edit_dirty() { # edit_dirty : like dirty, but open in $EDITOR instead o
     dirty "$@" -z | xargs -o -0 ${EDITOR}
 }
 
+function addi() { # addi : git add -i, but input works on Windows (but want the name everywhere)
+    MSYS_NO_PATHCONV=1 git add -i
+}
+
 if [ "$(command -v fzf)" ] ; then
     function zadd() { # zadd [<regexp>] : multi-select fzf over modified files filtered by <regexp>.  Choose the ones you want, and they are staged
         declare -a RG_ARGUMENTS
