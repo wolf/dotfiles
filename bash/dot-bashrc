@@ -64,7 +64,7 @@ function hosts() {  # hosts : list Hosts configured in ~/.ssh/config
     fi
 }
 
-function did()  { history | grep -v 'did' | grep "$@"; }    # did <regexp> : list commands from history matching <regexp>
+function did()  { history | grep -vw 'did' | grep "$@"; }   # did <regexp> : list commands from history matching <regexp>
 function be()   { sudo su -l "$@"; }                        # be <user> : start a login shell as user, but using your own sudo password
 
 # vim: set ft=sh ts=8 sw=4 tw=0 et noai :
