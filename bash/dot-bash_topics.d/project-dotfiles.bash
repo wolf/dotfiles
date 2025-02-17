@@ -1,4 +1,4 @@
-export DOTFILES_DIR=~/dotfiles
+# requires cdpath.bash is sourced _before_ sourcing this file: we need $DOTFILES_DIR
 
 function cddf() { # cddf [<relative-path>] : cd into root of the working copy of dotfiles, or to a path relative to that
     cd "${DOTFILES_DIR}/${1}" || return

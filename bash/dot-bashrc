@@ -9,10 +9,7 @@ stty -ixon -ixoff
 
 umask go-wx
 
-export CDPATH=.
-
 function show_path() { echo "${PATH}" | tr ':' '\n'; }      # show_path : display $PATH, one path per line
-function show_cdpath() { echo "${CDPATH}" | tr ':' '\n'; }  # show_cdpath : display $CDPATH, one path per line
 
 # shellcheck disable=SC1091
 source "${HOME}/.bash_topics.d/required_functions.bash.inc"
