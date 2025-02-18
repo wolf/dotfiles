@@ -1,6 +1,7 @@
-# ignore everything
+# ignore (almost) everything, because other things will be created here
 *
 
-# ...except the startup directory (and of course we _do_ want to commit .gitignore)
-!startup/
+# ...don't ignore the very small set of things that must be shared
 !.gitignore
+!ipython_config.py
+!startup/
