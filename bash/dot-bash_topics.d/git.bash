@@ -16,6 +16,15 @@ function time_since_last_commit() {
     git log --no-walk --format="%ar" 2>/dev/null | sed 's/\([0-9]\) \(.\).*/\1\2/';
 }
 
+function upstream() {
+    local BRANCH=$(git rev-parse --abbrev-ref @{u} 2>/dev/null)
+    if [[ -z $BRANCH ]] ; then
+        echo "(no upstream)"
+    else
+        echo "${BRANCH#origin/}"
+    fi
+}
+
 function git_top_level() {
     local TOP_LEVEL
     if [[ "$(pwd)" =~ ^(.*)/.git([^[:alnum:]_]|$) ]] ; then
