@@ -191,8 +191,8 @@ endif
 
 " Settings {{{
 if has('nvim')
-    let g:python_host_prog = '~/.config/vim/nvim_venv/bin/python'
-    let g:python3_host_prog = '~/.config/vim/nvim_venv/bin/python'
+    let g:python_host_prog = '~/.config/nvim/nvim_venv/bin/python'
+    let g:python3_host_prog = '~/.config/nvim/nvim_venv/bin/python'
 endif
 
 set pyxversion=3
