@@ -1,3 +1,7 @@
+# Normally I use NeoVim.  That's set up for the general case.  But on Git Bash for Windows,
+# NeoVim has troubles, so lets undo what ../nvim.bash has set up.
+unalias vim
+
 export VISUAL='vim'
 export EDITOR='vim -p'
 export FCEDIT='vim'
