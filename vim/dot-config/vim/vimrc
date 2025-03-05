@@ -395,7 +395,7 @@ nnoremap <silent> <Leader>sw :call ToggleShowWhitespaceErrors()<CR>
 nnoremap <silent> <Leader>rn :set relativenumber!<CR>
 " Toggle list view
 nnoremap <silent> <Leader>l :set list!<CR>
-set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+,eol:$
+set listchars=space:·,tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+,eol:$
 
 " Act naturally when lines wrap
 nnoremap j gj
