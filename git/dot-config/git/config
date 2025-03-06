@@ -11,27 +11,16 @@
     t = ! GIT_PAGER=tig git log --no-color
     st = status -sb
     switch-recent = !git branch --sort=-committerdate --format='%(refname:short)' | fzf --preview='git log --date=relative --color main..{}' | xargs git switch
-    upstream = ! git rev-parse --abbrev-ref @{u} 2>/dev/null | sed 's=origin/==' || echo '(no upstream)'
+    upstream = ! git rev-parse --abbrev-ref @{u} 2>/dev/null | sed 's#origin/##' || echo '(no upstream)'
     n = ! git status -s | wc -l
     unstage = restore --staged
     aliases = ! git config --list | grep alias
 [apply]
     whitespace = fix
-[color]
-    ui = auto
-    branch = auto
-    diff = auto
-    status = auto
-    pager = true
 [color "branch"]
     current = green
     local = blue
     remote = red
-[color "diff-highlight"]
-    oldNormal = red bold
-    oldHighlight = red bold 52
-    newNormal = green bold
-    newHighlight = green bold 22
 [color "diff"]
     meta = yellow
     frag = magenta bold
@@ -40,17 +29,26 @@
     plain = white
     commit = yellow bold
     whitespace = red reverse
+[color "diff-highlight"]
+    oldNormal = red bold
+    oldHighlight = red bold 52
+    newNormal = green bold
+    newHighlight = green bold 22
 [color "status"]
     added = yellow
     changed = green
     untracked = cyan
+[color]
+    ui = auto
+    branch = auto
+    diff = auto
+    status = auto
+    pager = true
 [core]
     editor = vim
     pager = delta
     legacyheaders = false
     whitespace = trailing-space,space-before-tab,cr-at-eol
-[delta]
-    features = wolf-normal
 [delta "interactive"]
     keep-plus-minus-markers = false
 [delta "wolf-normal"]
@@ -59,6 +57,8 @@
     line-numbers = true
     navigate = true
     syntax-theme = Monokai Extended Light
+[delta]
+    features = wolf-normal
 [diff]
     algorithm = histogram
     interHunkContext = 3
@@ -72,8 +72,16 @@
     prompt = false
 [fetch]
     prune = true
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
 [help]
     autocorrect = 20
+[init]
+    defaultBranch = main
+    templatedir = ~/.config/git/template
 [interactive]
     diffFilter = delta --color-only --features=interactive
     singleKey = true
@@ -82,10 +90,10 @@
     conflictstyle = zdiff3
     renameLimit = 65000
     directoryRename = true
-[mergetool]
-    prompt = false
 [mergetool "fugitive"]
     cmd = vim -f -c "Gdiff" "$MERGED"
+[mergetool]
+    prompt = false
 [pull]
     rebase = merges
 [push]
@@ -102,11 +110,5 @@
 [user]
     name = Wolf
     email = Wolf@zv.cx
-[filter "lfs"]
-    clean = git-lfs clean -- %f
-    smudge = git-lfs smudge -- %f
-    process = git-lfs filter-process
-    required = true
-[init]
-    defaultBranch = main
-    templatedir = ~/.config/git/template
+[includeIf "gitdir:~/development/DMP/"]
+    path = ~/.config/git/config-dmp
