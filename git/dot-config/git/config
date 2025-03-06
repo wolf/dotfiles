@@ -17,6 +17,8 @@
     aliases = ! git config --list | grep alias
 [apply]
     whitespace = fix
+[branch]
+    sort = -committerdate
 [color "branch"]
     current = green
     local = blue
@@ -44,11 +46,16 @@
     diff = auto
     status = auto
     pager = true
+[commit]
+    verbose = true
 [core]
-    editor = vim
+    editor = nvim -p
     pager = delta
     legacyheaders = false
     whitespace = trailing-space,space-before-tab,cr-at-eol
+    excludesfile = ~/.config/git/ignore
+    # fsmonitor = true
+    # untrackedCache = true
 [delta "interactive"]
     keep-plus-minus-markers = false
 [delta "wolf-normal"]
@@ -62,8 +69,8 @@
 [diff]
     algorithm = histogram
     interHunkContext = 3
-    colorMoved = default
-    renames = copy
+    colorMoved = plain
+    renames = copies
     mnemonicprefix = true
     noprefix = true
     tool = vimdiff
@@ -72,13 +79,15 @@
     prompt = false
 [fetch]
     prune = true
+    pruneTags = true
+    all = true
 [filter "lfs"]
     clean = git-lfs clean -- %f
     smudge = git-lfs smudge -- %f
     process = git-lfs filter-process
     required = true
 [help]
-    autocorrect = 20
+    autocorrect = prompt
 [init]
     defaultBranch = main
     templatedir = ~/.config/git/template
@@ -99,14 +108,20 @@
 [push]
     default = upstream
     autoSetupRemote = true
+    followTags = true
 [rebase]
+    autoSquash = true
     autoStash = true
+    updateRefs = true
 [repack]
     usedeltabaseoffset = true
 [rerere]
     enabled = true
+    autoUpdate = true
 [stash]
     showPath = true
+[tag]
+    sort = version:refname
 [user]
     name = Wolf
     email = Wolf@zv.cx

@@ -1,2 +1,8 @@
+[alias]
+    active = branch --list 'bugfix/*' 'feature/*'
+    prs = branch --list 'pr/*'
+    release = ! git branch --list 'release/*' | sort -r -g | head -1
+    releases = ! git branch --list 'release/*' | sort -r -g
+    switch-recent = !git branch --sort=-committerdate --format='%(refname:short)' | fzf --preview='git log --date=relative --color develop..{}' | xargs git switch 2>/dev/null
 [user]
     email = wolf@dmp-maps.com
