@@ -3,6 +3,12 @@ vim.cmd('source ~/.config/vim/vimrc')
 if vim.fn.has('nvim') == 1 then
     vim.g.mapleader = " "
 
+    vim.api.nvim_create_autocmd("TextYankPost", {
+        callback = function()
+            vim.highlight.on_yank({higroup="HighlightedyankRegion", timeout=450})
+        end,
+    })
+
     local status, hop = pcall(require, 'hop')
     if status then
         hop.setup {}
