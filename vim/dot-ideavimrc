@@ -1,4 +1,7 @@
 source ~/.config/vim/vimrc
+unmap /
+unmap ?
+unmap g/
 
 let mapleader = "\<Space>"
 
