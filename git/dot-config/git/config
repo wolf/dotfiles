@@ -11,7 +11,7 @@
     t = ! GIT_PAGER=tig git log --no-color
     st = status -sb
     switch-recent = !git branch --sort=-committerdate --format='%(refname:short)' | fzf --preview='git log --date=relative --color main..{}' | xargs git switch
-    upstream = ! git rev-parse --abbrev-ref @{u} 2>/dev/null | sed 's#origin/##' || echo '(no upstream)'
+    upstream = ! git rev-parse --abbrev-ref @{u} 2>/dev/null | sed 's=origin/==' || echo '(no upstream)'
     n = ! git status -s | wc -l
     unstage = restore --staged
     aliases = ! git config --list | grep alias
