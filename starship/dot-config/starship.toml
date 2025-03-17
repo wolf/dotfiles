@@ -3,6 +3,7 @@ add_newline = true
 
 format = """
 ${custom.readline} \
+${custom.drive_label}\
 $username\
 $directory\
 $git_branch\
@@ -21,6 +22,7 @@ error_symbol = "[\\$](bold red)"
 [directory]
 truncation_length = 8
 truncate_to_repo = true
+use_os_path_sep = false
 
 [git_state]
 style = "bold blue"
@@ -41,3 +43,8 @@ format = "[$user]($style)@"
 command = "echo $READLINE_EDIT_MODE"
 format = "[$output](bold red)"
 when = true
+
+[custom.drive_label]
+format = "[($output )](bold fg:40)"
+command = "drive_label"
+when = "[[ $(platform) == 'mingw' && -n $(command -v drive_label >/dev/null 2>&1 && drive_label) ]]"
