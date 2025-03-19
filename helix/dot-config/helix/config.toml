@@ -1,0 +1,17 @@
+theme = "onelight"
+
+[editor]
+true-color = true
+bufferline = "multiple"
+rulers = [120]
+scrolloff = 3
+shell = ["bash", "-c"]
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "block"
+
+[keys.normal.backspace]
+a = ":set line-number absolute"
+r = ":set line-number relative"
