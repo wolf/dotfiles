@@ -39,6 +39,9 @@ up_to_date = "="
 style_user = "bold blue"
 format = "[$user]($style)@"
 
+[python]
+symbol = " "
+
 [custom.readline]
 command = "echo $READLINE_EDIT_MODE"
 format = "[$output](bold red)"
