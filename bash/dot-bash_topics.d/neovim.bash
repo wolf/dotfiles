@@ -1,6 +1,6 @@
-export VISUAL='nvim'
-export EDITOR='nvim -p'
-export FCEDIT='nvim'
+# export VISUAL='nvim'
+# export EDITOR='nvim -p'
+# export FCEDIT='nvim'
 
 alias vim='nvim -p'
 

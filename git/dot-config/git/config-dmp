@@ -1,5 +1,6 @@
 [alias]
     active = branch --list 'bugfix/*' 'feature/*'
+    experimental = branch --list 'experimental/*'
     prs = branch --list 'pr/*'
     release = ! git branch --list 'release/*' | sort -r -g | head -1
     releases = ! git branch --list 'release/*' | sort -r -g

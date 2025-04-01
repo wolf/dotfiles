@@ -49,7 +49,7 @@
 [commit]
     verbose = true
 [core]
-    editor = nvim -p
+    editor = hx
     pager = delta
     legacyheaders = false
     whitespace = trailing-space,space-before-tab,cr-at-eol
