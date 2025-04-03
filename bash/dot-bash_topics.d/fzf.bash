@@ -1,10 +1,8 @@
 command -v fzf >/dev/null || return
 
-# shellcheck disable=SC1090
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+eval $(fzf --bash)
 
 export FZF_DEFAULT_OPTS='--ansi --layout=reverse'
-export FZF_DEFAULT_COMMAND='fd --follow --hidden --type file --color=always'
 
 function ze() { # ze [<pattern>] : use fzf to select one or more files in or below . whose names match <pattern> and open them in $EDITOR
     # shellcheck disable=SC2086
