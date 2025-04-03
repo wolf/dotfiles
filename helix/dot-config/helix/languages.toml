@@ -1,0 +1,12 @@
+[language-server.rust-lsp]
+command = "rust-analyzer"
+
+[[language]]
+language-servers = [ { name = "rust-analyzer" } ]
+
+[language-server.python-lsp]
+command = "pyright"
+
+[[language]]
+name = "python"
+language-servers = [ { name = "pyright" } ]
