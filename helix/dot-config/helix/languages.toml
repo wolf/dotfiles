@@ -2,6 +2,7 @@
 command = "rust-analyzer"
 
 [[language]]
+name = "rust"
 language-servers = [ { name = "rust-analyzer" } ]
 
 [language-server.python-lsp]
