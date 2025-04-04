@@ -1,17 +1,34 @@
 theme = "onelight"
 
 [editor]
-true-color = true
 bufferline = "multiple"
+color-modes = true
+default-yank-register = "+"
+end-of-line-diagnostics = "hint"
 rulers = [120]
 scrolloff = 3
 shell = ["bash", "-c"]
+true-color = true
 
 [editor.cursor-shape]
 insert = "bar"
 normal = "block"
-select = "block"
+select = "underline"
+
+[editor.whitespace]
+render = "none"
+
+[editor.statusline]
+left = ["mode", "spinner", "file-name", "read-only-indicator", "file-modification-indicator", "version-control"]
+mode.normal = "NORMAL"
+mode.insert = "INSERT"
+mode.select = "SELECT"
+
+[editor.inline-diagnostics]
+cursor-line = "warning"
 
 [keys.normal.backspace]
 a = ":set line-number absolute"
 r = ":set line-number relative"
+l = ":set whitespace.render all"
+L = ":set whitespace.render none"
