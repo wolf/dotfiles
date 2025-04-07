@@ -11,3 +11,11 @@ command = "pyright"
 [[language]]
 name = "python"
 language-servers = [ { name = "pyright" } ]
+
+[language-server.markdown-lsp]
+command = "marksman"
+
+[[language]]
+name = "markdown"
+language-servers = [ { name = "marksman" } ]
+formatter = { command = "dprint", args = ["fmt", "--stdin", "md"] }
