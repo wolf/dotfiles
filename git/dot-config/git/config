@@ -67,6 +67,7 @@
 [delta]
     features = wolf-normal
 [diff]
+    tool = kdiff3
     algorithm = histogram
     interHunkContext = 3
     colorMoved = plain
@@ -76,6 +77,8 @@
     renamelimit = 1428
 [difftool]
     prompt = false
+    keepBackup = false
+    trustExitCode = false
 [fetch]
     prune = true
     pruneTags = true
@@ -94,11 +97,14 @@
     diffFilter = delta --color-only --features=interactive
     singleKey = true
 [merge]
+    tool = kdiff3
     conflictstyle = zdiff3
     renameLimit = 65000
     directoryRename = true
 [mergetool]
     prompt = false
+    keepBackup = false
+    keepTemporaries = false
 [pull]
     rebase = merges
 [push]
