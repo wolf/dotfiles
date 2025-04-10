@@ -19,7 +19,8 @@ select = "underline"
 render = "none"
 
 [editor.statusline]
-left = ["mode", "spinner", "file-name", "read-only-indicator", "file-modification-indicator", "version-control"]
+left = ["mode", "spinner", "version-control"]
+center = ["file-name", "read-only-indicator", "file-modification-indicator"]
 right = ["diagnostics", "selections", "register", "position", "position-percentage", "file-encoding"]
 mode.normal = "NORMAL"
 mode.insert = "INSERT"
