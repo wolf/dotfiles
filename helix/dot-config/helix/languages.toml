@@ -5,6 +5,9 @@ command = "rust-analyzer"
 name = "rust"
 language-servers = [ { name = "rust-analyzer" } ]
 
+[language-server.rust-analyzer.config]
+check.command = "clippy"
+
 [language-server.python-lsp]
 command = "pyright"
 
