@@ -8,3 +8,6 @@ if command -v brew >/dev/null ; then
         export PATH="${PATH}:${LLVM_BIN}"
     fi
 fi
+
+# For building Helix myself
+export HELIX_RUNTIME="~/.config/helix/runtime"
