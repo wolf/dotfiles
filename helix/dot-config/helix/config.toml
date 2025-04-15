@@ -8,6 +8,8 @@ end-of-line-diagnostics = "hint"
 rulers = [120]
 scrolloff = 3
 shell = ["bash", "-c"]
+trim-final-newlines = true
+trim-trailing-whitespace = true
 true-color = true
 
 [editor.cursor-shape]
