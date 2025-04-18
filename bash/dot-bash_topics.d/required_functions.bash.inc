@@ -44,4 +44,4 @@ function source_topics() { # source_topics : sources each of the files returned 
     source_all "${TOPICS[@]}"
 }
 
-function mkcd() { mkdir -p "$@" && cd "${1}" || return; }   # mkcd <path> : create all directories needed to build <path> and cd into it
+function mkcd() { [[ -n "$1" ]] && mkdir -p "$@" && cd "${1}" || return; }   # mkcd <path> : create all directories needed to build <path> and cd into it
