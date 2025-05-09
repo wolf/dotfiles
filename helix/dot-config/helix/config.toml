@@ -3,8 +3,10 @@ theme = "onelight"
 [editor]
 bufferline = "multiple"
 color-modes = true
+cursorline = true
 default-yank-register = "+"
 end-of-line-diagnostics = "hint"
+insert-final-newline = true
 rulers = [120]
 scrolloff = 1
 shell = ["bash", "-c"]
@@ -34,5 +36,5 @@ cursor-line = "warning"
 [keys.normal.backspace]
 a = ":set line-number absolute"
 r = ":set line-number relative"
-l = ":set whitespace.render all"
-L = ":set whitespace.render none"
+w = ":set whitespace.render none"
+W = ":set whitespace.render all"
