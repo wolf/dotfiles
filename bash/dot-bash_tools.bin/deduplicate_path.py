@@ -6,12 +6,16 @@ To be run once as the very last thing that happens in the Bash startup sequence.
 """
 
 import os
+import platform
+from pathlib import Path, PureWindowsPath
 
 original_paths = os.getenv(
     "PATH"
 )  # Technically this can return `None`.  I handle it, but it will never really happen.
 output_paths = ""
 
+_is_windows = platform.system() == "Windows"
+_path_separator = ";" if _is_windows else ":"
 _paths_already_present = set()
 
 
@@ -23,14 +27,24 @@ def is_new_path(path: str) -> bool:
     return True
 
 
+def posix_path(path: str) -> Path:
+    if _is_windows:
+        p = PureWindowsPath(path)
+        if not p.drive:
+            return Path(p)
+        drive = p.drive[0].lower()
+        everything_else = str(p)[len(drive) + 1:]
+        return Path(f"/{drive}/{everything_else}")
+    else:
+        return Path(path)
+
+
 if original_paths is not None:
-    # Split on `:`s gives us a list.  No element is quoted.  `is_new_path` tells us which to keep.
-    # No quoting for individual elements is needed because the entire concatenated value will be quoted at the end.
     deduplicated_paths = [
-        path for path in original_paths.split(":") if is_new_path(path)
+        posix_path(path) for path in original_paths.split(_path_separator) if is_new_path(path)
     ]
     output_paths = ":".join(
-        deduplicated_paths[1:]
+        path.as_posix() for path in deduplicated_paths[1:]
     )  # Trim the path added by `uv` just to run this script.
 else:
     output_paths = original_paths
