@@ -34,6 +34,7 @@ mode.select = "SELECT"
 cursor-line = "warning"
 
 [keys.normal.backspace]
+f = ":reflow 120"
 a = ":set line-number absolute"
 r = ":set line-number relative"
 w = ":set whitespace.render none"
