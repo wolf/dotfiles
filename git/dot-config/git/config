@@ -1,4 +1,5 @@
 [alias]
+    active = ! git branch --color=always --sort=refname | rg --color=always -v '^\\s*archive/'
     ci = commit
     br = branch
     d = diff --word-diff=color
@@ -77,11 +78,9 @@
     renamelimit = 1428
 [difftool]
     prompt = false
-    keepBackup = false
-    trustExitCode = false
-[difftool "Kaleidoscope"]
-    cmd = ksdiff --partial-changeset --relative-path "$MERGED" -- "$LOCAL" "$REMOTE"
-    trustExitCode = true
+[difftool "kdiff3"]
+    cmd = kdiff3 "$LOCAL" "$REMOTE"
+	trustExitCode = false
 [fetch]
     prune = true
     pruneTags = true
@@ -103,13 +102,13 @@
     conflictstyle = zdiff3
     renameLimit = 65000
     directoryRename = true
-[mergetool "Kaleidoscope"]
-    cmd = ksdiff --merge --output "$MERGED" --base "$BASE" "$LOCAL" "$REMOTE"
-    trustExitCode = true
 [mergetool]
     prompt = false
     keepBackup = false
     keepTemporaries = false
+[mergetool "kdiff3"]
+    cmd = kdiff3 "$BASE" "$LOCAL" "$REMOTE" -o "$MERGED"
+    trustExitCode = true
 [pull]
     rebase = merges
 [push]
@@ -132,5 +131,13 @@
 [user]
     name = Wolf
     email = Wolf@zv.cx
+
 [includeIf "gitdir:~/development/DMP/"]
     path = ~/.config/git/config-dmp
+
+[includeIf "os:macos"]
+    path = ~/.config/git/config-macos
+[includeIf "os:linux"]
+    path = ~/.config/git/config-linux
+[includeIf "os:windows"]
+    path = ~/.config/git/config-windows
