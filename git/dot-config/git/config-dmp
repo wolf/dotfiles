@@ -1,5 +1,5 @@
 [alias]
-    active = ! git branch --sort=refname | rg -v '^\\s*archive/'
+    active = ! git branch --color=always --sort=refname | rg --color=always -v '^\\s*archive/'
     experimental = branch --list 'experimental/*'
     prs = branch --list 'pr/*'
     release = ! git branch --list 'release/*' | sort -r -g | head -1
