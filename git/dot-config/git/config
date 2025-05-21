@@ -79,6 +79,9 @@
     prompt = false
     keepBackup = false
     trustExitCode = false
+[difftool "Kaleidoscope"]
+    cmd = ksdiff --partial-changeset --relative-path "$MERGED" -- "$LOCAL" "$REMOTE"
+    trustExitCode = true
 [fetch]
     prune = true
     pruneTags = true
@@ -100,6 +103,9 @@
     conflictstyle = zdiff3
     renameLimit = 65000
     directoryRename = true
+[mergetool "Kaleidoscope"]
+    cmd = ksdiff --merge --output "$MERGED" --base "$BASE" "$LOCAL" "$REMOTE"
+    trustExitCode = true
 [mergetool]
     prompt = false
     keepBackup = false
