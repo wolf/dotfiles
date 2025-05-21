@@ -13,7 +13,15 @@ command = "pyright"
 
 [[language]]
 name = "python"
-language-servers = [ { name = "pyright" } ]
+scope = "source.python"
+injection-regex = "python"
+file-types = ["py", "pyi", "py3", "pyw", "ptl", "rpy", "pyx", "pxd"]
+indent = { tab-width = 4, unit = "    " }
+language-servers = ["pyright", "ruff"]
+
+[language.formatter]
+command = "ruff"
+args = ["format", "--line-length", "120", "--stdin-filename", "file", "-"]
 
 [language-server.markdown-lsp]
 command = "marksman"
