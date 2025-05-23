@@ -8,9 +8,10 @@ $username\
 $directory\
 $git_branch\
 $git_status\
-$conda\
+${custom.pixi_env}\
 $python\
 $rust\
+${custom.shell_level}\
 \n\
 $character
 """
@@ -41,6 +42,21 @@ format = "[$user]($style)@"
 
 [python]
 symbol = " "
+
+[custom.pixi_env]
+# because the conda module doesn't seem to work with pixi
+command = "echo $CONDA_DEFAULT_ENV"
+when = '[[ -n $PIXI_ENVIRONMENT_NAME ]]'
+format = "via [🅿️$output]($style) "
+style = "bold green"
+description = "Show pixi environment name"
+
+[custom.shell_level]
+command = "echo $SHLVL"
+when = '[[ $SHLVL -gt 2 ]]'
+format = "📦[$output]($style) "    # Package/container feel
+style = "bold yellow"
+description = "Show shell nesting level when > 2"
 
 [custom.readline]
 command = "echo $READLINE_EDIT_MODE"
