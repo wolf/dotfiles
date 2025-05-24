@@ -42,6 +42,7 @@ format = "[$user]($style)@"
 
 [python]
 symbol = " "
+format = '[${symbol}(${version} )(\($virtualenv\) )]($style)'
 
 [custom.pixi_env]
 # because the conda module doesn't seem to work with pixi
