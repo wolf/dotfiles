@@ -13,11 +13,12 @@ import typer
 from typing_extensions import Annotated
 
 from get_platform import get_platform
+from posix_path import posix_path
 
 
 def print_paths(paths: set[Path] | list[Path], separator: str = "\n", file = sys.stdout) -> None:
     # This is factored out because it is useful when debugging
-    print(separator.join(str(path) for path in paths), file=file)
+    print(separator.join(str(posix_path(path)) for path in paths), file=file, end="")
 
 
 def main(print0: Annotated[bool, typer.Option(help="Separate paths with NULLs instead of line-breaks.")] = False):
