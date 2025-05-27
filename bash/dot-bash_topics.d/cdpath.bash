@@ -3,6 +3,7 @@ export WOLF_REPOS_DIR="~/develop/wolf"
 export DMP_REPOS_DIR="~/develop/dmp"
 export DROPBOX_DIR="${HOME}/Dropbox"
 export PROJECTS_DIR="${DROPBOX_DIR}/projects"
+export DOTFILES_DIR="${WOLF_REPOS_DIR}/dotfiles"
 
 export CDPATH=.:"${WOLF_REPOS_DIR}":"${DMP_REPOS_DIR}":"${PROJECTS_DIR}":"${DROPBOX_DIR}"
 
