@@ -132,7 +132,7 @@
     name = Wolf
     email = Wolf@zv.cx
 
-[includeIf "gitdir:~/development/DMP/"]
+[includeIf "gitdir:~/develop/dmp/"]
     path = ~/.config/git/config-dmp
 
 [includeIf "os:macos"]
