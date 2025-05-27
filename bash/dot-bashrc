@@ -64,7 +64,11 @@ function hosts() {  # hosts : list Hosts configured in ~/.ssh/config
 function did()  { history | grep -vw 'did' | grep "$@"; }   # did <regexp> : list commands from history matching <regexp>
 function be()   { sudo su -l "$@"; }                        # be <user> : start a login shell as user, but using your own sudo password
 
-eval "$(deduplicate_path.py)"
+if [ $(get_platform.py) == mingw ] ; then
+    eval "$(deduplicate_path.py --remove 'C:\Users\Wolf\AppData\Local\Microsoft\WindowsApps')"
+else
+    eval "$(deduplicate_path.py)"
+fi
 export BASHRC_COMPLETE=1
 
 # vim: set ft=sh ts=8 sw=4 tw=0 et noai :

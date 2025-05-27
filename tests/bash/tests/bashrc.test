@@ -24,7 +24,7 @@ function test_get_topics() {
     touch "${HOME}/.bash_topics.d/${PLATFORM}/not-a-topic.test4.bash"
 
     declare -a TOPICS
-    readarray -d '' TOPICS < <( get_topics --print0 )
+    readarray -d '' TOPICS < <( get_topics.py --print0 )
 
     declare -A TOPICS_MAP
     declare -A PLATFORMS_MAP

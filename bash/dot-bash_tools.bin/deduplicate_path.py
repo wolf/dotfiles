@@ -1,4 +1,11 @@
-#!/usr/bin/env -S uv run --script
+#!/usr/bin/env -S uv run --quiet --script
+# /// script
+# requires-python = ">=3.13"
+# dependencies = [
+#     "typer",
+#     "typing_extensions",
+# ]
+# ///
 """
 $PATH may contain (useless) duplicates.  Running `eval "$(deduplicate_path.py)"` eliminates them.
 
@@ -8,6 +15,11 @@ To be run once as the very last thing that happens in the Bash (and this is a Ba
 import os
 import platform
 from pathlib import Path, PureWindowsPath
+from typing import List, Optional
+
+import typer
+from typing_extensions import Annotated
+
 
 original_paths = os.getenv("PATH")  # Technically this can return `None`.  I handle it, but it will never really happen.
 output_paths = ""
@@ -59,15 +71,27 @@ def posix_path(path: str) -> Path:
         return Path(path)
 
 
-if original_paths is not None:
-    deduplicated_paths = [posix_path(path) for path in original_paths.split(_path_separator) if is_new_path(path)]
+def main(
+    remove: Annotated[Optional[List[Path]], typer.Option(help="A directory to remove from `$PATH`")] = None,
+):
+    paths_to_remove = set()
+    if remove is not None:
+        paths_to_remove = {posix_path(str(path)) for path in remove}
 
-    # Because the result will always be handled inside Bash, I produce the well-known, `:` separated, forward slash
-    # version of `$PATH`.
-    output_paths = ":".join(
-        path.as_posix() for path in deduplicated_paths[1:]
-    )  # Using the slice `[1:]` trims the path `uv` added just to run this script.
-else:
-    output_paths = original_paths
+    if original_paths is not None:
+        deduplicated_paths = [posix_path(path) for path in original_paths.split(_path_separator) if is_new_path(path)]
 
-print(f'export PATH="{output_paths}"')
+        # Because the result will always be handled inside Bash, I produce the well-known, `:` separated, forward slash
+        # version of `$PATH`.
+        output_paths = ":".join(
+            path.as_posix() for path in deduplicated_paths[1:] if path not in paths_to_remove
+        )  # Using the slice `[1:]` trims the path `uv` added just to run this script.
+    else:
+        # TODO: original_paths has the wrong format on Windows.  Yes, this can never happen; but fix it anyway.
+        output_paths = original_paths
+
+    print(f'export PATH="{output_paths}"')
+
+
+if __name__ == "__main__":
+    typer.run(main)

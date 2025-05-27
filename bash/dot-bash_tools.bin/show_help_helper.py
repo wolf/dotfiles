@@ -1,5 +1,7 @@
-#!/usr/bin/env python3
-
+#!/usr/bin/env -S uv run --quiet --script
+# /// script
+# requires-python = ">=3.13"
+# ///
 from collections import defaultdict
 from dataclasses import dataclass
 import re
