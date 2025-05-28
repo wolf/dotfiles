@@ -7,7 +7,7 @@
 # ]
 # ///
 import sys
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 import typer
 from typing_extensions import Annotated
@@ -16,7 +16,7 @@ from get_platform import get_platform
 from posix_path import posix_path
 
 
-def print_paths(paths: set[Path] | list[Path], separator: str = "\n", file = sys.stdout) -> None:
+def print_paths(paths: set[PurePosixPath] | list[PurePosixPath], separator: str = "\n", file = sys.stdout) -> None:
     # This is factored out because it is useful when debugging
     print(separator.join(str(posix_path(path)) for path in paths), file=file, end="")
 

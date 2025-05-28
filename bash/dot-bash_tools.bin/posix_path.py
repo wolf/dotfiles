@@ -7,10 +7,10 @@ _is_windows = platform.system() == "Windows"
 
 
 def fix_path_separators(path: PathLike) -> PurePosixPath:
-    return PurePosixPath(str(path).replace('\\', '/').replace('//', '/'))
+    return PurePosixPath(str(path).replace('\\+', '/').replace('/+', '/'))
 
 
-def posix_path(path: str) -> PurePosixPath:
+def posix_path(path: PathLike) -> PurePosixPath:
     """
     Convert a platform-dependent string into a `pathlib.Path`
 
