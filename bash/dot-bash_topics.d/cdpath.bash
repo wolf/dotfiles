@@ -1,6 +1,6 @@
 # Environment variables to be used in `$CDPATH` and anywhere else that needs them.
-export WOLF_REPOS_DIR="~/develop/wolf"
-export DMP_REPOS_DIR="~/develop/dmp"
+export WOLF_REPOS_DIR="${HOME}/develop/wolf"
+export DMP_REPOS_DIR="${HOME}/develop/dmp"
 export DROPBOX_DIR="${HOME}/Dropbox"
 export PROJECTS_DIR="${DROPBOX_DIR}/projects"
 export DOTFILES_DIR="${WOLF_REPOS_DIR}/dotfiles"
