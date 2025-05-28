@@ -15,5 +15,5 @@ function df_branch() { # df_branch : report what branch the dotfiles repo has cu
 
 CURRENT_BRANCH="$(df_branch)"
 if [[ "${CURRENT_BRANCH}" != local-only ]] ; then
-    echo "WARNING: dotfiles is not on the local-only branch"
+    echo "WARNING: dotfiles is not on the local-only branch" >&2
 fi
