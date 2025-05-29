@@ -13,7 +13,7 @@ function setUp() {
     unset CDPATH
 
     local PLATFORM
-    PLATFORM="$(platform)"
+    PLATFORM="$(get_platform.py)"
 
     # shellcheck disable=SC1091
     source "${HOME}/.bash_topics.d/fd.bash"
@@ -91,7 +91,7 @@ function test_f_follows_symbolic_links() {
     local RANDOM_STRING
     local FOUND
 
-    [ "$(platform)" = "msys" ] && startSkipping
+    [ "$(get_platform.py)" = "msys" ] && startSkipping
 
     # make a link in /tmp that leads to test/data
     RANDOM_STRING="$(python3 -c "import uuid; print(str(uuid.uuid4()),end='')")"

@@ -41,7 +41,7 @@ function test_ge_follows_symbolic_links() {
     local OUTPUT
     local RANDOM_STRING
 
-    [ "$(platform)" = "mingw" ] && startSkipping
+    [ "$(get_platform.py)" = "mingw" ] && startSkipping
 
     # make a link in /tmp that leads to test/data
     RANDOM_STRING="$(python3 -c "import uuid; print(str(uuid.uuid4()),end='')")"

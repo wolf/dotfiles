@@ -67,4 +67,4 @@ when = true
 [custom.drive_label]
 format = "[($output )](bold fg:40)"
 command = "drive_label"
-when = "[[ $(platform) == 'mingw' && -n $(command -v drive_label >/dev/null 2>&1 && drive_label) && $(git rev-parse --is-inside-work-tree >/dev/null 2>&1; echo $?) -eq 0 ]]"
+when = "[[ $(get_platform.py) == 'mingw' && -n $(command -v drive_label >/dev/null 2>&1 && drive_label) && $(git rev-parse --is-inside-work-tree >/dev/null 2>&1; echo $?) -eq 0 ]]"
