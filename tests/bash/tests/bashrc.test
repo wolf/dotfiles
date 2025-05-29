@@ -47,9 +47,9 @@ function test_get_topics() {
     # shellcheck disable=SC2016
     assertTrue "didn't find a local-only topic!" '[ "${TOPICS_MAP["${HOME}/.bash_topics.d/not-a-topic.test2.local-only.bash"]}" ]'
 
-    # does it find get_platform.py specific topics?
+    # does it find platform-specific topics?
     # shellcheck disable=SC2016
-    assertTrue "didn't find a get_platform.py-specific topic!" '[ "${TOPICS_MAP["${HOME}/.bash_topics.d/${PLATFORM}/not-a-topic.test4.bash"]}" ]'
+    assertTrue "didn't find a platform-specific topic!" '[ "${TOPICS_MAP["${HOME}/.bash_topics.d/${PLATFORM}/not-a-topic.test4.bash"]}" ]'
 
     # does it ignore .do-not-load topics?
     # shellcheck disable=SC2016
