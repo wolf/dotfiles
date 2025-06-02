@@ -1,5 +1,5 @@
 [alias]
-    active = ! git branch --color=always --sort=refname | rg --color=always -v '^\\s*archive/'
+    active = ! git branch --color=always --sort=refname | rg --color=always -v --regexp '\\warchive/'
     ci = commit
     br = branch
     d = diff --word-diff=color
