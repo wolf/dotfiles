@@ -28,5 +28,6 @@ command = "marksman"
 
 [[language]]
 name = "markdown"
+soft-wrap = { enable = true, wrap-at-text-width = true }
 language-servers = [ { name = "marksman" } ]
 formatter = { command = "dprint", args = ["fmt", "--stdin", "md"] }
