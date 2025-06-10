@@ -16,6 +16,10 @@
     n = ! git status -s | wc -l
     unstage = restore --staged
     aliases = ! git config --list | grep alias
+
+    ruff-fix-staged = ! git diff --name-only --staged | grep '\\.py$' | xargs ruff check --fix
+    ruff-noqa-staged = ! git diff --name-only --staged | grep '\\.py$' | xargs ruff check --add-noqa
+    re-add-fixes = ! git diff --name-only --staged | grep '\\.py$' | xargs git add
 [apply]
     whitespace = fix
 [branch]
