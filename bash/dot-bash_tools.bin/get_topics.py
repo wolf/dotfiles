@@ -16,12 +16,18 @@ from get_platform import get_platform
 from posix_path import posix_path
 
 
-def print_paths(paths: set[PurePosixPath] | list[PurePosixPath], separator: str = "\n", file = sys.stdout) -> None:
+def print_paths(
+    paths: set[PurePosixPath] | list[PurePosixPath],
+    separator: str = "\n",
+    file=sys.stdout,
+) -> None:
     # This is factored out because it is useful when debugging
     print(separator.join(str(posix_path(path)) for path in paths), file=file, end="")
 
 
-def main(print0: Annotated[bool, typer.Option(help="Separate paths with NULLs instead of line-breaks.")] = False):
+def main(
+    print0: Annotated[bool, typer.Option(help="Separate paths with NULLs instead of line-breaks.")] = False,
+):
     home_dir = Path.home()
     topics_dir: Path = home_dir / ".bash_topics.d"
     platform_specific_topics_dir: Path = topics_dir / get_platform()
@@ -50,7 +56,9 @@ def main(print0: Annotated[bool, typer.Option(help="Separate paths with NULLs in
     if initial_topics_file.exists():
         with open(initial_topics_file, "r") as f:
             # You are not required to add ".bash" onto the end, but I handle it if you do.
-            initial_topics = [Path(topic if topic.endswith(".bash") else topic + ".bash") for topic in f.read().splitlines()]
+            initial_topics = [
+                Path(topic if topic.endswith(".bash") else topic + ".bash") for topic in f.read().splitlines()
+            ]
             all_initial_topics = set(initial_topics)
 
     # You can supply a file that lists topics that must be sourced last, again, one per line in the order you want it to happen.
@@ -61,7 +69,9 @@ def main(print0: Annotated[bool, typer.Option(help="Separate paths with NULLs in
     if final_topics_file.exists():
         with open(final_topics_file, "r") as f:
             # Again, you are not required to add ".bash" onto the end, but I handle it if you do.
-            final_topics = [Path(topic if topic.endswith(".bash") else topic + ".bash") for topic in f.read().splitlines()]
+            final_topics = [
+                Path(topic if topic.endswith(".bash") else topic + ".bash") for topic in f.read().splitlines()
+            ]
             all_final_topics = set(final_topics)
 
     # Now we look in the topics directory for actual topic files.  Order is not important here, so we only make a set.
@@ -91,7 +101,9 @@ def main(print0: Annotated[bool, typer.Option(help="Separate paths with NULLs in
     # Any platform-specific topics that _don't_ shadow a general topic, i.e., that name exists _only_ in the platform-
     # specific directory, they must be sourced and they won't have been hit by the loop over `unordered_topics`, and we
     # have to source them _before_ we do the `final_topics`.  That means now.
-    all_platform_specific_only_topics = all_platform_specific_topics - (all_topics | all_initial_topics | all_final_topics)
+    all_platform_specific_only_topics = all_platform_specific_topics - (
+        all_topics | all_initial_topics | all_final_topics
+    )
     for topic in sorted(all_platform_specific_only_topics):
         result.append(platform_specific_topics_dir / topic)
 
@@ -103,7 +115,7 @@ def main(print0: Annotated[bool, typer.Option(help="Separate paths with NULLs in
             # `all_platform_specific_topics` was created with `glob`, so we know for sure that `topic` exists.
             result.append(platform_specific_topics_dir / topic)
 
-    print_paths(result, separator = "\0" if print0 else "\n")
+    print_paths(result, separator="\0" if print0 else "\n")
 
 
 if __name__ == "__main__":

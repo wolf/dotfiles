@@ -48,7 +48,9 @@ def main(
         paths_to_remove = {posix_path(path) for path in remove}
 
     if original_paths is not None:
-        deduplicated_paths = [posix_path(Path(path)) for path in original_paths.split(_path_separator) if is_new_path(path)]
+        deduplicated_paths = [
+            posix_path(Path(path)) for path in original_paths.split(_path_separator) if is_new_path(path)
+        ]
 
         # Because the result will always be handled inside Bash, I produce the well-known, `:` separated, forward slash
         # version of `$PATH`.

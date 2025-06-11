@@ -6,14 +6,14 @@ from pathlib import PurePosixPath, PureWindowsPath
 
 # Calculated once, when this module is imported
 _is_windows = platform.system() == "Windows"
-_consecutive_windows_slashes_pat = re.compile(r'\\+')
-_consecutive_posix_slashes_pat = re.compile(r'/+')
+_consecutive_windows_slashes_pat = re.compile(r"\\+")
+_consecutive_posix_slashes_pat = re.compile(r"/+")
 
 
 def fix_path_separators(path: PathLike) -> PurePosixPath:
     broken_path = str(path)
-    windows_slashes_fixed = re.sub(_consecutive_windows_slashes_pat, '/', broken_path)
-    consecutive_posix_slashes_fixed = re.sub(_consecutive_posix_slashes_pat, '/', windows_slashes_fixed)
+    windows_slashes_fixed = re.sub(_consecutive_windows_slashes_pat, "/", broken_path)
+    consecutive_posix_slashes_fixed = re.sub(_consecutive_posix_slashes_pat, "/", windows_slashes_fixed)
     return PurePosixPath(consecutive_posix_slashes_fixed)
 
 

@@ -52,17 +52,11 @@ def read_proposed_commands(proposed_commands_file: str) -> dict[str, dict[str, s
     return proposed_commands_grouped_by_path
 
 
-def get_defined_commands(
-    declares_file: str, exported_commands: set[str], help: dict[str, dict[str, str]]
-):
-    DECLARATION_WITH_PATH_RE = re.compile(
-        r"(?P<command>\w+) (?P<line_number>\d+) (?P<path>.*)"
-    )
+def get_defined_commands(declares_file: str, exported_commands: set[str], help: dict[str, dict[str, str]]):
+    DECLARATION_WITH_PATH_RE = re.compile(r"(?P<command>\w+) (?P<line_number>\d+) (?P<path>.*)")
 
     defined_commands: dict[str, BashFunction] = {}
-    defined_commands_grouped_by_path: dict[str, dict[str, BashFunction]] = defaultdict(
-        dict
-    )
+    defined_commands_grouped_by_path: dict[str, dict[str, BashFunction]] = defaultdict(dict)
     with open(declares_file, "r") as f:
         for line in f:
             m = DECLARATION_WITH_PATH_RE.match(line)
@@ -94,9 +88,7 @@ if __name__ == "__main__":
     exported_commands = read_exported_commands(exported_commands_file)
     proposed_commands = read_proposed_commands(proposed_commands_file)
 
-    commands, commands_grouped_by_path = get_defined_commands(
-        declares_file, exported_commands, proposed_commands
-    )
+    commands, commands_grouped_by_path = get_defined_commands(declares_file, exported_commands, proposed_commands)
 
     if single_command_to_lookup:
         if single_command_to_lookup in commands:
@@ -113,9 +105,5 @@ if __name__ == "__main__":
             if path in commands_grouped_by_path:
                 print(f"{section_separator}{path}")
                 section_separator = "\n"
-                for bash_function in sorted(
-                    commands_grouped_by_path[path].values(), key=lambda x: x.name
-                ):
-                    print(
-                        f"{bash_function.name:<{padding_needed}}  {bash_function.help}"
-                    )
+                for bash_function in sorted(commands_grouped_by_path[path].values(), key=lambda x: x.name):
+                    print(f"{bash_function.name:<{padding_needed}}  {bash_function.help}")
