@@ -1,5 +1,4 @@
-if [ -d "${HOME}/.cargo/bin" ] && [[ ":$PATH:" != *":${HOME}/.cargo/bin:"* ]] ; then
-    # If .cargo/bin is an existing directory, not yet on $PATH, then add it
+if [ -d "${HOME}/.cargo/bin" ] ; then
     export PATH="${PATH}:${HOME}/.cargo/bin"
 fi
 

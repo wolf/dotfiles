@@ -81,6 +81,8 @@ function git-addi() { # git-addi : git add -i, but input works on Windows (but w
     MSYS_NO_PATHCONV=1 git add -i "$@"
 }
 
+function find_branch() { git branch --list "*$@*"; }
+
 if [ "$(command -v fzf)" ] ; then
     function zadd() { # zadd [<regexp>] : multi-select fzf over modified files filtered by <regexp>.  Choose the ones you want, and they are staged
         declare -a RG_ARGUMENTS

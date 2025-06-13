@@ -1,14 +1,14 @@
-command -v fd >/dev/null || return
+command -v fd >/dev/null 2>&1 || return
 
-function f() { # f <glob> : list all the files in or below . whose names match <glob>.  You can give options to fd with all the f-commands
+f() { # f <glob> : list all the files in or below . whose names match <glob>.  You can give options to fd with all the f-commands
     fd --follow --hidden --glob "$@" 2>/dev/null
 }
 
-function fcat() { # fcat <glob> : find all the files in or below . whose names match <glob> and cat them
+fcat() { # fcat <glob> : find all the files in or below . whose names match <glob> and cat them
     fd --follow --hidden --glob --type f "$@" --exec-batch bat
 }
 
-function fcd() { # fcd <glob> : find the first directory in or below . whose name matches <glob> and cd into it
+fcd() { # fcd <glob> : find the first directory in or below . whose name matches <glob> and cd into it
     local FIRST_MATCHING_DIRECTORY
     FIRST_MATCHING_DIRECTORY="$(fd --follow --hidden --glob --type d --max-results 1 "$@" 2>/dev/null)"
     if [ -d "${FIRST_MATCHING_DIRECTORY}" ]; then
@@ -16,7 +16,7 @@ function fcd() { # fcd <glob> : find the first directory in or below . whose nam
     fi
 }
 
-function fcd_of() { # fcd_of <glob> : find the first file-system object in or below . whose name matches <glob>, and cd into its parent
+fcd_of() { # fcd_of <glob> : find the first file-system object in or below . whose name matches <glob>, and cd into its parent
     local FIRST_MATCH
     local PARENT_OF_FIRST_MATCH
 
@@ -28,24 +28,24 @@ function fcd_of() { # fcd_of <glob> : find the first file-system object in or be
     fi
 }
 
-function fe() { # fe <glob> : find all the files in or below . whose names match <glob> and open them in $EDITOR
+fe() { # fe <glob> : find all the files in or below . whose names match <glob> and open them in $EDITOR
     # shellcheck disable=SC2086
     fd --follow --hidden --glob --type f "$@" --exec-batch ${EDITOR}
 }
 
-function fll() { # fll <glob> : find all the files in or below . whose names match <glob>, and list them as would ls -l
+fll() { # fll <glob> : find all the files in or below . whose names match <glob>, and list them as would ls -l
     fd --follow --hidden --glob "$@" --exec-batch eza -alF
 }
 
-function fsource() { # fsource <glob> : find all the files in or below . whose names match <glob> and source them
+fsource() { # fsource <glob> : find all the files in or below . whose names match <glob> and source them
     local FILES
     declare -a FILES
     readarray -d '' FILES < <(fd --follow --hidden --glob --type f --color=never --print0 "$@")
     source_all "${FILES[@]}"
 }
 
-if [ "$(command -v as-tree)" ] ; then
-    function ftree() { # ftree <glob> : find all the files in or below . whose names match <glob> and display them as a tree
+if command -v as-tree >/dev/null 2>&1 ; then
+    ftree() { # ftree <glob> : find all the files in or below . whose names match <glob> and display them as a tree
         fd --follow --hidden --glob "$@" | as-tree
     }
 fi
