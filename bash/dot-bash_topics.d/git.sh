@@ -1,22 +1,15 @@
 # shellcheck disable=SC2046
 
-export GIT_PS1_SHOWDIRTYSTATE=1
-export GIT_PS1_SHOWSTASHSTATE=1
-export GIT_PS1_SHOWUNTRACKEDFILES=1
-export GIT_PS1_SHOWUPSTREAM="auto"
-export GIT_PS1_SHOWCOLORHINTS=1
-export GIT_PS1_DESCRIBE_STYLE="branch"
-
-function tip() { # tip [<branch-name>] : print the (short) commit-id for <branch-name>, or HEAD if none given
+tip() { # tip [<branch-name>] : print the (short) commit-id for <branch-name>, or HEAD if none given
     local BRANCH="${1:-HEAD}"
     git rev-parse --short "${BRANCH}" 2>/dev/null;
 }
 
-function time_since_last_commit() {
+time_since_last_commit() {
     git log --no-walk --format="%ar" 2>/dev/null | sed 's/\([0-9]\) \(.\).*/\1\2/';
 }
 
-function upstream() {
+upstream() {
     local BRANCH=$(git rev-parse --abbrev-ref @{u} 2>/dev/null)
     if [[ -z $BRANCH ]] ; then
         echo "(no upstream)"
@@ -25,17 +18,7 @@ function upstream() {
     fi
 }
 
-function git_top_level() {
-    local TOP_LEVEL
-    if [[ "$(pwd)" =~ ^(.*)/.git([^[:alnum:]_]|$) ]] ; then
-        TOP_LEVEL="${BASH_REMATCH[1]}"
-    else
-        TOP_LEVEL="$(git rev-parse --show-toplevel)"
-    fi
-    echo "${TOP_LEVEL}"
-}
-
-function cdtop() { # cdtop [<relative-path>] : cd to the top-level of the current git working-copy, or to a path relative to that
+cdtop() { # cdtop [<relative-path>] : cd to the top-level of the current git working-copy, or to a path relative to that
     local TOP_LEVEL
     TOP_LEVEL="$(git_top_level)"
     if [ -n "${TOP_LEVEL}" ] ; then
@@ -43,7 +26,7 @@ function cdtop() { # cdtop [<relative-path>] : cd to the top-level of the curren
     fi
 }
 
-function pushdtop() { # usage: pushdtop [<relative-path>] : pushd combined with cdtop
+pushdtop() { # usage: pushdtop [<relative-path>] : pushd combined with cdtop
     local TOP_LEVEL
     TOP_LEVEL="$(git_top_level)"
     if [ -n "${TOP_LEVEL}" ] ; then
@@ -51,7 +34,7 @@ function pushdtop() { # usage: pushdtop [<relative-path>] : pushd combined with 
     fi
 }
 
-function since_commit() { # since_commit [<ref>] : list all the files modified by all the commits since the given <ref>, including currently unstaged changes
+since_commit() { # since_commit [<ref>] : list all the files modified by all the commits since the given <ref>, including currently unstaged changes
     # example: since_commit
     # example: since_commit 12345
     # example: since_commit HEAD~3
@@ -59,7 +42,7 @@ function since_commit() { # since_commit [<ref>] : list all the files modified b
     git diff "${COMMIT}" --name-only --relative "$@"
 }
 
-function in_commit() { # in_commit [<ref>] : list all the files modified as part of the given commit
+in_commit() { # in_commit [<ref>] : list all the files modified as part of the given commit
     # example: in_commit
     # example: in_commit 12345
     # example: in_commit HEAD~3
@@ -68,23 +51,21 @@ function in_commit() { # in_commit [<ref>] : list all the files modified as part
     git diff "${FROM_COMMIT}" "${TO_COMMIT}^" --name-only --relative "$@"
 }
 
-function dirty() { # dirty : list currently modified and/or unmerged files that exist in this repo
+dirty() { # dirty : list currently modified and/or unmerged files that exist in this repo
     git ls-files --modified --deduplicate "$@"
 }
 
-function edit_dirty() { # edit_dirty : like dirty, but open in $EDITOR instead of list
+edit_dirty() { # edit_dirty : like dirty, but open in $EDITOR instead of list
     # shellcheck disable=SC2086
     dirty "$@" -z | xargs -o -0 ${EDITOR}
 }
 
-function git-addi() { # git-addi : git add -i, but input works on Windows (but want the name everywhere)
+git-addi() { # git-addi : git add -i, but input works on Windows (but want the name everywhere)
     MSYS_NO_PATHCONV=1 git add -i "$@"
 }
 
-function find_branch() { git branch --list "*$@*"; }
-
-if [ "$(command -v fzf)" ] ; then
-    function zadd() { # zadd [<regexp>] : multi-select fzf over modified files filtered by <regexp>.  Choose the ones you want, and they are staged
+if command -v fzf ; then
+    zadd() { # zadd [<regexp>] : multi-select fzf over modified files filtered by <regexp>.  Choose the ones you want, and they are staged
         declare -a RG_ARGUMENTS
         if (( ! $# )) ; then
             RG_ARGUMENTS=(".")
@@ -97,7 +78,7 @@ if [ "$(command -v fzf)" ] ; then
             | xargs -0 git add
     }
 
-    function zshow() { # zshow [git-log-options...] : brings up fzf over a log of selected commits, then shows the chosen one
+    zshow() { # zshow [git-log-options...] : brings up fzf over a log of selected commits, then shows the chosen one
         # example: zshow
         # example: zshow --author=Wolf --since="{2 days ago}"
         local COMMITS_TO_SHOW
