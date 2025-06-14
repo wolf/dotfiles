@@ -1,22 +1,5 @@
 # shellcheck disable=SC2046
-
-tip() { # tip [<branch-name>] : print the (short) commit-id for <branch-name>, or HEAD if none given
-    local BRANCH="${1:-HEAD}"
-    git rev-parse --short "${BRANCH}" 2>/dev/null;
-}
-
-time_since_last_commit() {
-    git log --no-walk --format="%ar" 2>/dev/null | sed 's/\([0-9]\) \(.\).*/\1\2/';
-}
-
-upstream() {
-    local BRANCH=$(git rev-parse --abbrev-ref @{u} 2>/dev/null)
-    if [[ -z $BRANCH ]] ; then
-        echo "(no upstream)"
-    else
-        echo "${BRANCH#origin/}"
-    fi
-}
+# git-top-level.{bash,zsh} must execute first, at least ... I'm pretty sure.
 
 cdtop() { # cdtop [<relative-path>] : cd to the top-level of the current git working-copy, or to a path relative to that
     local TOP_LEVEL
@@ -34,6 +17,33 @@ pushdtop() { # usage: pushdtop [<relative-path>] : pushd combined with cdtop
     fi
 }
 
+dirty() { # dirty : list currently modified and/or unmerged files that exist in this repo
+    git ls-files --modified --deduplicate "$@"
+}
+
+edit_dirty() { # edit_dirty : like dirty, but open in $EDITOR instead of list
+    # shellcheck disable=SC2086
+    dirty "$@" -z | xargs -o -0 ${EDITOR}
+}
+
+upstream() {
+    local BRANCH=$(git rev-parse --abbrev-ref @{u} 2>/dev/null)
+    if [[ -z $BRANCH ]] ; then
+        echo "(no upstream)"
+    else
+        echo "${BRANCH#origin/}"
+    fi
+}
+
+tip() { # tip [<branch-name>] : print the (short) commit-id for <branch-name>, or HEAD if none given
+    local BRANCH="${1:-HEAD}"
+    git rev-parse --short "${BRANCH}" 2>/dev/null;
+}
+
+time_since_last_commit() {
+    git log --no-walk --format="%ar" 2>/dev/null | sed 's/\([0-9]\) \(.\).*/\1\2/';
+}
+
 since_commit() { # since_commit [<ref>] : list all the files modified by all the commits since the given <ref>, including currently unstaged changes
     # example: since_commit
     # example: since_commit 12345
@@ -49,15 +59,6 @@ in_commit() { # in_commit [<ref>] : list all the files modified as part of the g
     local FROM_COMMIT="${1:-HEAD}" ; shift
     local TO_COMMIT="${1:-${FROM_COMMIT}}" ; shift
     git diff "${FROM_COMMIT}" "${TO_COMMIT}^" --name-only --relative "$@"
-}
-
-dirty() { # dirty : list currently modified and/or unmerged files that exist in this repo
-    git ls-files --modified --deduplicate "$@"
-}
-
-edit_dirty() { # edit_dirty : like dirty, but open in $EDITOR instead of list
-    # shellcheck disable=SC2086
-    dirty "$@" -z | xargs -o -0 ${EDITOR}
 }
 
 git-addi() { # git-addi : git add -i, but input works on Windows (but want the name everywhere)
