@@ -162,11 +162,22 @@ def resolve_topic_paths(
 
     There can be zero or more resulting `Path`s for each topic name.  The resulting list is typically
     greater than the number of supplied names.
+
+    This is the function that ensures actual paths to files are ordered, e.g., like so:
+
+        git.sh                # General shell-agnostic topics
+        git.bash              # Shell-specific topics
+        darwin/               # Platform-specific overrides
+        ├── git.sh
+        └── git.bash
+
+    All the files for a given topic are together.  If `topic_names` is ordered, then the corresponding
+    paths appear (clumped) in that order.
     """
     topic_stems = set(topic_names)
     actual_topic_roots = actual_dirs(topic_roots)
 
-    # The list of directories to search must not contain duplicates; because that coule make us return
+    # The list of directories to search must not contain duplicates; because that could make us return
     # the same topic path more than once.
     assert len(set(actual_topic_roots)) == len(actual_topic_roots), (
         "Error: some directories appear more than once in the input to `resolve_topic_paths`."
@@ -225,8 +236,24 @@ def resolve_topic_paths_from_file(
     """
     filtered_topics = read_topic_stems(topics_list_file)
     if limit_topics_to is not None:
+        # We can't just use set math because order matters: `filtered_topics` is a list.
         filtered_topics = [t for t in filtered_topics if t in limit_topics_to]
     return resolve_topic_paths(filtered_topics, topic_roots, extensions)
+
+
+def ordered_unique_extensions(sequence: Sequence[str]) -> list[str]:
+    # Here's our chance to weed out not just duplicates, but **anything** we can't use.
+    seen: set[str] = set()
+    result: list[str] = []
+
+    # This would be **way** too complicated as a comprehension.
+    for s in sequence:
+        if not s or not isinstance(s, str) or s == ".":
+            continue
+        if (s := s.lstrip(".")) not in seen:
+            result.append(s)
+            seen.add(s)
+    return result
 
 
 def get_topics(
@@ -280,6 +307,13 @@ def get_topics(
             ├── git.sh
             └── git.bash
 
+    Constraints
+    -----------
+    The search for topics will always include the platform specific topics directory,
+    if there is one for this platform.  The search for topics will always include files
+    with the ".sh" extension.  If you really wanted, you could get **only** the ".sh"
+    topics, but I don't know why you'd want that.
+
     Examples
     --------
     >>> topics = get_topics('~/.config/shell/topics', ['bash'])
@@ -288,22 +322,35 @@ def get_topics(
     >>> topics[0].name
     'initial.sh'
     """
-    # I make a lot of assertions here.  Maybe these actually belong in `main`, and this function should expect well
-    # formed input.
+    #
+    # Validate and/or fix all parameters
+    #
 
-    # If the caller provided a non-empty string instead of a list of strings, convert it into a list of strings.
-    if isinstance(extensions, str) and extensions:
-        extensions = [extensions]
-    # If extensions didn't start as a list, it should be one now.
-    assert isinstance(extensions, list), "Error: acceptable extensions must be an ordered list."
-    # Please don't start an extension with a ".".  Could assert, but this is something I can fix.
-    extensions = [e.lstrip(".") for e in extensions]
-    assert extensions and all(e for e in extensions), "Error: at least one non-empty filename extension (no '.') must be given."
-    assert len(set(extensions)) == len(extensions), "Error: some extensions were given more than once!"
-    extensions = ["sh"] + [e for e in extensions if e and e != "sh"]
-
+    # You have to give me a good directory to start in.  I can't fix it if you don't.
     general_topics_root = Path(topics_root)
     assert general_topics_root.is_dir(), "Error: a valid directory must be supplied (where to search for topics)."
+
+    # There's a couple of things you **might** do wrong in communicating the extensions you want.  Some things I can
+    # fix (so I do), and some things I can't (so I assert).
+
+    # Can fix: if the caller provided a non-empty string instead of a list of strings, convert it into a list of strings.
+    if extensions and isinstance(extensions, str) and extensions != ".":
+        extensions = [extensions]
+    # So now, `extensions` must be a (plausible) list, or else a bad string.  A bad string, or even a bad list will
+    # be caught by the following `assert`.
+
+    # Can't fix: caller must supply at least one non-empty string ("." doesn't coun't because that will **become** an
+    # empty string when I strip leading dots).
+    assert extensions and isinstance(extensions, list) and any(e and isinstance(e, str) and e != "." for e in extensions), \
+        "Error: at least one non-empty filename extension (a string, not starting with '.') must be given."
+
+    # Can fix: weed out anything that's not a non-empty string; drop any "." prefixes; make sure "sh" is included, and
+    # appears first in the list.  We already know that extensions contains at least one real string.
+    extensions = ordered_unique_extensions(["sh"] + list(extensions))
+
+    #
+    # Make a list of all the directories we will search; and build a `set` of all the topic (stems) we find there.
+    #
 
     all_topic_roots = [general_topics_root]
     if (platform_topics_root := general_topics_root / get_platform()).exists():
@@ -316,12 +363,23 @@ def get_topics(
         # If no actual topics exist, that's not an error.  It just means there's nothing to return.
         return []
 
+    #
+    # If this is to be a non-interactive shell session, we may not need all the available topics.
+    #
+
     non_interactive_topics_file = general_topics_root / "non-interactive-topics"
     if non_interactive_topics_file.exists() and non_interactive:
         limit_topics_to = set(read_topic_stems(non_interactive_topics_file))
         all_topics &= limit_topics_to
     else:
         limit_topics_to = None
+
+    #
+    # Now collect, separately both the initial topics and final topics
+    #
+    # For both initial and final, grab a set of topic (stems) in addition to the ordered topic file.  We use those
+    # to do set math to calculate which topics to include in "everything that's left"
+    #
 
     initial_topics, ordered_initial_topic_paths = resolve_topic_paths_from_file(
         general_topics_root / "initial-topics",  # It's okay for this file to not exist, or to exist and be empty.
@@ -337,12 +395,24 @@ def get_topics(
         limit_topics_to,
     )
 
+    #
+    # Collect everything that's left.  We know what's left by starting with the set of all available topics, and
+    # subtracting everything that's already spoken for by initial and final.
+    #
+
+    # `all_topics` is already limited by `limit_topics_to`, so no need for further constraints.
+    # Technically don't need `sorted` here.  I didn't promise to order topics not mentioned in initial or final;
+    # but why not alphabetize them.  Of course they still obey the rules with a given topic: ".sh" before shell-
+    # specific, general before platform-specific.
     _, ordered_other_topic_paths = resolve_topic_paths(
-        # `all_topics` is already limited to `limit_topics_to`, so no need for further constraints.
         sorted(all_topics - (initial_topics | final_topics)),
         all_topic_roots,
         extensions,
     )
+
+    #
+    # Now we have three non-overlapping lists of actual topic files in exactly the order we want!
+    #
 
     return ordered_initial_topic_paths + ordered_other_topic_paths + ordered_final_topic_paths
 
