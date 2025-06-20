@@ -17,7 +17,7 @@ def fix_path_separators(path: PathLike) -> PurePosixPath:
     return PurePosixPath(consecutive_posix_slashes_fixed)
 
 
-def posix_path(path: PathLike) -> PurePosixPath:
+def posix_path(path: PathLike | str) -> PurePosixPath:
     """
     Convert a platform-dependent string into a `pathlib.PurePosixPath`, formatted correctly
 
@@ -43,7 +43,7 @@ def posix_path(path: PathLike) -> PurePosixPath:
     fixes the drive part, dropping the `:` that is part of that.  Then `fix_path_separators` fixes everything else and
     returns a `PurePosixPath`.
     """
-    if _is_windows or type(path) is PureWindowsPath:
+    if _is_windows or isinstance(path,PureWindowsPath):
         p = PureWindowsPath(path)
         if not p.drive:
             return fix_path_separators(p)

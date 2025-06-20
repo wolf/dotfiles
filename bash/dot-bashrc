@@ -9,11 +9,13 @@ stty -ixon -ixoff
 
 umask go-wx
 
+# TODO: path.sh
 function show_path() { echo "${PATH}" | tr ':' '\n'; }      # show_path : display $PATH, one path per line
 
 # shellcheck disable=SC1091
 source "${HOME}/.bash_topics.d/required_functions.sh.inc"
 
+# TODO: make a new topic: completion.bash
 if command -v brew >/dev/null && test -f "$(brew --prefix)/etc/bash_completion" ; then
     # shellcheck disable=SC1091
     source "$(brew --prefix)"/etc/bash_completion
@@ -22,6 +24,7 @@ elif [ -f /etc/bash_completion ] ; then
     source /etc/bash_completion
 fi
 
+# TODO: dir-colors.sh or maybe dir-colors.bash if zsh does this differently
 if [ -f ~/.dir_colors ] ; then
     # shellcheck disable=SC2046
     eval $(dircolors -b ~/.dir_colors)
@@ -29,6 +32,7 @@ fi
 
 source_topics >/dev/null
 
+# TODO: prompt.sh or maybe prompt.bash
 if [ ! "$(command -v starship)" ] ; then
     if command -v __git_ps1 >/dev/null ; then
         export PS1='\n\u@\h:\[\e[35m\]\w\[\e[0m\]$(virtualenv_info) $(__git_ps1 "\[\e[32m\][$(time_since_last_commit) %s $(tip)]\[\e[0m\]")'$'\n\$ '
@@ -36,9 +40,11 @@ if [ ! "$(command -v starship)" ] ; then
         export PS1='\n\u@\h:\[\e[35m\]\w\[\e[0m\]$(virtualenv_info)'$'\n\$ '
     fi
 
+    # TODO: maybe this belongs **outside** the test for starship?
     export SUDO_PS1='\n\u@\h:\[\e[35m\]\w\[\e[0m\]\n\$ '
 fi
 
+# TODO: history.bash, maybe others.  See what Zsh needs
 export HISTCONTROL=ignoreboth:erasedups
 export HISTFILE=~/.bash_history
 export HISTSIZE=10000
@@ -48,22 +54,28 @@ shopt -s histappend cdspell autocd histreedit
 export PROMPT_COMMAND="update_readline_edit_mode_environment_variable; history -a; history -c; history -r; $PROMPT_COMMAND"
 trap 'history -a' EXIT
 
+# TODO: this is Bash-specific, probably needs a topic
 bind '"\t":menu-complete'
 bind '"\e[A":history-search-backward'
 bind '"\e[B":history-search-forward'
 
-alias h20='history 20'                                              # h20 : show the last 20 entries from history
+alias h20='history 20'  # h20 : show the last 20 entries from history
+# TODO: only alias if `tree` is available.
 alias tree="tree -alC -I '.git|*venv|__pycache__|.pytest_cache|.mypy_cache|.pixi|target|node_modules'"
 
+# TODO: ssh.sh
 function hosts() {  # hosts : list Hosts configured in ~/.ssh/config
     if [ -f "${HOME}/.ssh/config" ] ; then
         grep -e '^Host' "${HOME}/.ssh/config"
     fi
 }
 
+# TODO: history.sh
 function did()  { history | grep -vw 'did' | grep "$@"; }   # did <regexp> : list commands from history matching <regexp>
+# TODO: should be in a topic, I just don't know which one
 function be()   { sudo su -l "$@"; }                        # be <user> : start a login shell as user, but using your own sudo password
 
+# TODO: deduplicate should just be a final topic; no funny business
 if [ $(get_platform.py) == mingw ] ; then
     eval "$(deduplicate_path.py --remove 'C:\Users\Wolf\AppData\Local\Microsoft\WindowsApps')"
 else
