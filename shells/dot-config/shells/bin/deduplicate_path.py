@@ -1,11 +1,4 @@
 #!/usr/bin/env -S uv run --quiet --script
-# /// script
-# requires-python = ">=3.13"
-# dependencies = [
-#     "typer",
-#     "typing_extensions",
-# ]
-# ///
 """
 $PATH may contain (useless) duplicates.  Running `eval "$(deduplicate_path.py)"` eliminates them.
 

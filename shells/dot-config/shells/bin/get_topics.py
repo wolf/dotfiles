@@ -248,6 +248,8 @@ def ordered_unique_extensions(sequence: Sequence[str]) -> list[str]:
 
     # This would be **way** too complicated as a comprehension.
     for s in sequence:
+        # If I turn the following condition into `not (...)`, it would contain a double-negative and be
+        # harder to understand.
         if not s or not isinstance(s, str) or s == ".":
             continue
         if (s := s.lstrip(".")) not in seen:
