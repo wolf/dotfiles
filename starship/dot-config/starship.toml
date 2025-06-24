@@ -2,7 +2,6 @@ command_timeout = 5000
 add_newline = true
 
 format = """
-${custom.readline} \
 ${custom.drive_label}\
 $username\
 $directory\

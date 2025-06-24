@@ -1,0 +1,30 @@
+# Return if not interactive
+[[ $- != *i* ]] && return
+
+# Source system zshrc if it exists (equivalent to /etc/bashrc)
+if [[ -f /etc/zshrc ]]; then
+    source /etc/zshrc
+fi
+
+# Disable flow control (Ctrl-S/Ctrl-Q) - same as bash stty -ixon -ixoff
+# Zsh handles this differently, but this achieves the same result
+stty -ixon -ixoff 2>/dev/null
+
+# Set umask (same as bash)
+umask go-wx
+
+# Edit the command-line in vi mode
+bindkey -v
+
+# Source the required functions and topics system
+# shellcheck disable=SC1091
+source "${HOME}/.config/shells/topics/required_functions.sh.inc"
+
+source_topics() { # source_topics : sources each of the files returned by get_topics.py, in order
+    local -a TOPICS
+    # Zsh way to read null-delimited input into array
+    TOPICS=("${(@0)$(get_topics.py "${HOME}/.config/shells/topics" zsh --print0)}")
+    source_all "${TOPICS[@]}"
+}
+
+source_topics >/dev/null

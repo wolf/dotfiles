@@ -1,0 +1,22 @@
+[[ "$-" != *i* ]] && return
+
+if [ -f /etc/bashrc ] ; then
+    # shellcheck disable=SC1091
+    source /etc/bashrc
+fi
+
+stty -ixon -ixoff
+
+umask go-wx
+
+# shellcheck disable=SC1091
+source "${HOME}/.config/shells/topics/required_functions.sh.inc"
+
+source_topics() { # source_topics : sources each of the files returned by get_topics.py, in order
+    local TOPICS
+    declare -a TOPICS
+    readarray -d '' TOPICS < <( get_topics.py "${HOME}/.config/shells/topics" bash --print0 )
+    source_all "${TOPICS[@]}"
+}
+
+source_topics >/dev/null
