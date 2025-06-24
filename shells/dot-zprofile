@@ -1,4 +1,4 @@
-export PATH="${HOME}/.config/shells/bin:${HOME}/.cargo/bin:${HOME}/.local/bin:${PATH}"
+export PATH="${HOME}/.config/shells/bin:${HOME}/.cargo/bin:${HOME}/.local/bin:${HOME}/.pixi/bin:${PATH}"
 
 # Note: .zprofile is sourced for login shells
 # .zshrc will be sourced for both login and interactive shells
