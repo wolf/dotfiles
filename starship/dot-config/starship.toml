@@ -3,6 +3,7 @@ add_newline = true
 
 format = """
 ${custom.shell}\
+${custom.readline}\
 ${custom.drive_label}\
 $username\
 $directory\
@@ -46,7 +47,7 @@ format = '[${symbol}(${version} )(\($virtualenv\) )]($style)'
 
 [custom.shell]
 command = "echo $STARSHIP_SHELL"
-format = "[$output](bold red) "
+format = "[$output](bold red)($STARSHIP_SHELL=~bash )"
 when = true
 
 [custom.pixi_env]
@@ -66,8 +67,8 @@ description = "Show shell nesting level when > 2"
 
 [custom.readline]
 command = "echo $READLINE_EDIT_MODE"
-format = "[$output](bold red)"
-when = true
+format = "+[$output](bold red) "
+when = "[[ ${STARSHIP_SHELL} =~ bash ]]"
 
 [custom.drive_label]
 format = "[($output )](bold fg:40)"
