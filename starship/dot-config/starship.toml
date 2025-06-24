@@ -4,7 +4,7 @@ add_newline = true
 format = """
 ${custom.shell_is_bash}\
 ${custom.any_other_shell}\
-${custom.readline}\
+${custom.bash_readline}\
 ${custom.drive_label}\
 $username\
 $directory\
@@ -71,7 +71,7 @@ format = "📦[$output]($style) "    # Package/container feel
 style = "bold yellow"
 description = "Show shell nesting level when > 2"
 
-[custom.readline]
+[custom.bash_readline]
 command = "echo $READLINE_EDIT_MODE"
 format = "+[$output](bold red) "
 when = "[[ ${STARSHIP_SHELL} =~ bash ]]"
