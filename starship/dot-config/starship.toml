@@ -2,6 +2,7 @@ command_timeout = 5000
 add_newline = true
 
 format = """
+${custom.shell}\
 ${custom.drive_label}\
 $username\
 $directory\
@@ -42,6 +43,11 @@ format = "[$user]($style)@"
 [python]
 symbol = " "
 format = '[${symbol}(${version} )(\($virtualenv\) )]($style)'
+
+[custom.shell]
+command = "echo $STARSHIP_SHELL"
+format = "[$output](bold red) "
+when = true
 
 [custom.pixi_env]
 # because the conda module doesn't seem to work with pixi
