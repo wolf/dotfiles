@@ -1,7 +1,7 @@
 command -v fd >/dev/null 2>&1 || return
 
 fcat() { # fcat <glob> : find all the files in or below . whose names match <glob> and cat them
-    fd --follow --no-ignore --hidden --glob --type f "$@" --exec-batch cat
+    fd --follow --no-ignore --hidden --glob --type f "$@" --exec-batch bat
 }
 
 fe() { # fe <glob> : find all the files in or below . whose names match <glob> and open them in $EDITOR
