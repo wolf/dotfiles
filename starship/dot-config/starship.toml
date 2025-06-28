@@ -5,8 +5,9 @@ format = """
 ${custom.shell_is_bash}\
 ${custom.any_other_shell}\
 ${custom.bash_readline}\
-${custom.drive_label}\
 $username\
+$hostname\
+${custom.drive_label}\
 $directory\
 $git_branch\
 $git_status\
@@ -18,34 +19,6 @@ ${custom.shell_level}\
 $character
 """
 
-[character]
-success_symbol = "[\\$](bold)"
-error_symbol = "[\\$](bold red)"
-
-[directory]
-truncation_length = 8
-truncate_to_repo = true
-use_os_path_sep = false
-
-[git_state]
-style = "bold blue"
-
-[git_status]
-ahead = ">"
-behind = "<"
-diverged = "<>"
-modified = "*"
-untracked = "%"
-up_to_date = "="
-
-[username]
-style_user = "bold blue"
-format = "[$user]($style)@"
-
-[python]
-symbol = " "
-format = '[${symbol}(${version} )(\($virtualenv\) )]($style)'
-
 [custom.shell_is_bash]
 command = "echo bash"
 format = "[$output](bold red)"
@@ -56,6 +29,44 @@ command = "echo $STARSHIP_SHELL"
 format = "[$output](bold red) "
 when = "[[ ${STARSHIP_SHELL} != bash ]]"
 
+[custom.bash_readline]
+command = "echo $READLINE_EDIT_MODE"
+format = "+[$output](bold red) "
+when = "[[ ${STARSHIP_SHELL} =~ bash ]]"
+
+[username]
+style_user = "blue"
+style_root = "red"
+show_always = true
+format = "[$user]($style)"
+detect_env_vars = ['SSH_CONNECTION']  # or however you want to detect remote vs local
+
+[hostname]
+ssh_only = true
+format = "@[$hostname]($style) "
+style = "blue"
+aliases = { "kubuntu" = "kubuntu_laptop" }
+
+[custom.drive_label]
+format = "[($output )](bold fg:40)"
+command = "drive_label"
+when = "[[ $(get_platform.py) == 'mingw' && -n $(command -v drive_label >/dev/null 2>&1 && drive_label) && $(git rev-parse --is-inside-work-tree >/dev/null 2>&1; echo $?) -eq 0 ]]"
+
+[directory]
+truncation_length = 8
+truncate_to_repo = true
+
+[git_status]
+ahead = ">"
+behind = "<"
+diverged = "<>"
+modified = "*"
+untracked = "%"
+up_to_date = "="
+
+[git_state]
+style = "bold blue"
+
 [custom.pixi_env]
 # because the conda module doesn't seem to work with pixi
 command = "echo $CONDA_DEFAULT_ENV"
@@ -64,6 +75,10 @@ format = "via [🅿️$output]($style) "
 style = "bold green"
 description = "Show pixi environment name"
 
+[python]
+symbol = " "
+format = '[${symbol}(${version} )(\($virtualenv\) )]($style)'
+
 [custom.shell_level]
 command = "echo $SHLVL"
 when = '[[ $SHLVL -gt 2 ]]'
@@ -71,12 +86,6 @@ format = "📦[$output]($style) "    # Package/container feel
 style = "bold yellow"
 description = "Show shell nesting level when > 2"
 
-[custom.bash_readline]
-command = "echo $READLINE_EDIT_MODE"
-format = "+[$output](bold red) "
-when = "[[ ${STARSHIP_SHELL} =~ bash ]]"
-
-[custom.drive_label]
-format = "[($output )](bold fg:40)"
-command = "drive_label"
-when = "[[ $(get_platform.py) == 'mingw' && -n $(command -v drive_label >/dev/null 2>&1 && drive_label) && $(git rev-parse --is-inside-work-tree >/dev/null 2>&1; echo $?) -eq 0 ]]"
+[character]
+success_symbol = "[\\$](bold)"
+error_symbol = "[\\$](bold red)"
