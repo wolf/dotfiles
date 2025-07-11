@@ -19,9 +19,19 @@ setopt CORRECT                  # Spell correction for commands (like cdspell)
 # Pattern-based ignoring (closest equivalent to HISTIGNORE)
 HISTORY_IGNORE="(ls|ll|pwd|bg|fg|history|h20|..|exit|did)"
 
-# Zsh-specific keybindings (equivalent to Bash bind commands)
-bindkey '^I' menu-complete                    # Tab for menu completion
-bindkey '^[[A' history-search-backward        # Up arrow for history search
-bindkey '^[[B' history-search-forward         # Down arrow for history search
+# Load the functions I will use with the up and down arrows.  Yes, this is more work than Bash.
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+
+# Create the matching zle widgets.  That's what let's me use them with bindkey.
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+
+# Bind to arrow keys
+bindkey '^[[A' up-line-or-beginning-search    # Up arrow
+bindkey '^[[B' down-line-or-beginning-search  # Down arrow
+
+# But lets keep tab-completion as well.
+bindkey '^I' menu-complete
 
 alias h20='history -20'  # h20 : show the last 20 entries from history
