@@ -260,7 +260,7 @@ def ordered_unique_extensions(sequence: Sequence[str]) -> list[str]:
 def get_topics(
     topics_root: PathLike | str,
     extensions: str | Sequence[str],
-    non_interactive: bool = False,
+    interactive: bool = True,
 ) -> list[Path]:
     """
     Discover and order shell topic files for sourcing at startup.
@@ -277,8 +277,8 @@ def get_topics(
     extensions : str | Sequence[str]
         Shell-specific filename extensions to include (without leading dots),
         e.g., ['bash'] or ['zsh'].
-    non_interactive : bool, default False
-        If True, only return topics suitable for non-interactive shells
+    interactive : bool, default True
+        If False, only return topics suitable for non-interactive shells
         as specified in the 'non-interactive-topics' file.
 
     Returns
@@ -369,7 +369,7 @@ def get_topics(
     #
 
     non_interactive_topics_file = general_topics_root / "non-interactive-topics"
-    if non_interactive_topics_file.exists() and non_interactive:
+    if non_interactive_topics_file.exists() and not interactive:
         limit_topics_to = set(read_topic_stems(non_interactive_topics_file))
         all_topics &= limit_topics_to
     else:
@@ -422,9 +422,9 @@ def main(
     topics_dir: Annotated[Path, typer.Argument(help="The top-level topics directory")],
     shell: Annotated[str, typer.Argument(help="Return topics appropriate for this shell, e.g., 'zsh'")],
     print0: Annotated[bool, typer.Option(help="Separate paths with NULLs instead of line-breaks")] = False,
-    non_interactive: Annotated[
-        bool, typer.Option(help="Only return topics needed for a non-interactive shell session.")
-    ] = False,
+    interactive: Annotated[
+        bool, typer.Option(help="When False, only return topics needed for a non-interactive shell session.")
+    ] = True,
 ):
     if not topics_dir.is_dir():
         typer.echo(f"Error: Directory {topics_dir} does not exist", err=True)
@@ -433,7 +433,7 @@ def main(
     if shell not in {"bash", "zsh", "sh"}:
         typer.echo(f"Warning: Unusual shell '{shell}' - supported: bash, zsh", err=True)
 
-    topics_paths = get_topics(topics_dir, [shell], non_interactive)
+    topics_paths = get_topics(topics_dir, [shell], interactive)
     print_paths(topics_paths, separator="\0" if print0 else "\n")
 
 
