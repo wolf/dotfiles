@@ -17,6 +17,21 @@ pushdtop() { # usage: pushdtop [<relative-path>] : pushd combined with cdtop
     fi
 }
 
+gp() {
+    for branch in main master develop; do
+        if git show-ref --verify --quiet "refs/heads/$branch"; then
+            git switch "$branch"
+            return 0
+        fi
+    done
+    echo "No primary branch found (main, master, develop)" >&2
+    return 1
+}
+
+gb() {
+    git switch -
+}
+
 dirty() { # dirty : list currently modified and/or unmerged files that exist in this repo
     git ls-files --modified --deduplicate "$@"
 }
