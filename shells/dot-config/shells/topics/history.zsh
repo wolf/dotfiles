@@ -20,16 +20,16 @@ setopt CORRECT                  # Spell correction for commands (like cdspell)
 HISTORY_IGNORE="(ls|ll|pwd|bg|fg|history|h20|..|exit|did)"
 
 # Load the functions I will use with the up and down arrows.  Yes, this is more work than Bash.
-autoload -U up-line-or-beginning-search
-autoload -U down-line-or-beginning-search
+# autoload -U up-line-or-beginning-search
+# autoload -U down-line-or-beginning-search
 
 # Create the matching zle widgets.  That's what let's me use them with bindkey.
-zle -N up-line-or-beginning-search
-zle -N down-line-or-beginning-search
+# zle -N up-line-or-beginning-search
+# zle -N down-line-or-beginning-search
 
 # Bind to arrow keys
-bindkey '^[[A' up-line-or-beginning-search    # Up arrow
-bindkey '^[[B' down-line-or-beginning-search  # Down arrow
+# bindkey '^[[A' up-line-or-beginning-search    # Up arrow
+# bindkey '^[[B' down-line-or-beginning-search  # Down arrow
 
 # But lets keep tab-completion as well.
 bindkey '^I' menu-complete
