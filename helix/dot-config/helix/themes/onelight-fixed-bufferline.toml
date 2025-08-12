@@ -1,0 +1,5 @@
+inherits = "onelight"
+
+# Make active tab match the editing area background
+"ui.bufferline.active" = { fg = "black", bg = "white", modifiers = ["bold"] }
+"ui.bufferline.inactive" = { fg = "grey", bg = "grey-200" }
