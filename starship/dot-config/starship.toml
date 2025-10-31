@@ -5,8 +5,9 @@ format = """
 ${custom.shell_is_bash}\
 ${custom.any_other_shell}\
 ${custom.bash_readline}\
-$username\
-$hostname\
+${custom.space}\
+$username$hostname\
+${custom.space}\
 ${custom.drive_label}\
 $directory\
 $git_branch\
@@ -19,6 +20,11 @@ ${custom.shell_level}\
 $character
 """
 
+[custom.space]
+when = "true"
+format = "[ ]()"
+disabled = false
+
 [custom.shell_is_bash]
 command = "echo bash"
 format = "[$output](bold red)"
@@ -26,12 +32,12 @@ when = "[[ ${STARSHIP_SHELL} =~ bash ]]"
 
 [custom.any_other_shell]
 command = "echo $STARSHIP_SHELL"
-format = "[$output](bold red) "
+format = "[$output](bold red)"
 when = "[[ ${STARSHIP_SHELL} != bash ]]"
 
 [custom.bash_readline]
 command = "echo $READLINE_EDIT_MODE"
-format = "+[$output](bold red) "
+format = "+[$output](bold red)"
 when = "[[ ${STARSHIP_SHELL} =~ bash ]]"
 
 [username]
@@ -43,7 +49,7 @@ detect_env_vars = ['SSH_CONNECTION']  # or however you want to detect remote vs 
 
 [hostname]
 ssh_only = true
-format = "@[$hostname]($style) "
+format = "@[$hostname]($style)"
 style = "blue"
 aliases = { "kubuntu" = "kubuntu_laptop" }
 
