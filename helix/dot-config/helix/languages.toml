@@ -8,8 +8,13 @@ language-servers = [ { name = "rust-analyzer" } ]
 [language-server.rust-analyzer.config]
 check.command = "clippy"
 
-[language-server.python-lsp]
-command = "pyright"
+[language-server.ruff-server]
+command = "ruff"
+args = ["server"]
+
+[language-server.pyrefly]
+command = "pyrefly"
+args = ["lsp"]
 
 [[language]]
 name = "python"
@@ -17,7 +22,7 @@ scope = "source.python"
 injection-regex = "python"
 file-types = ["py", "pyi", "py3", "pyw", "ptl", "rpy", "pyx", "pxd"]
 indent = { tab-width = 4, unit = "    " }
-language-servers = ["pyright", "ruff"]
+language-servers = ["ruff-server", "pyrefly"]
 
 [language.formatter]
 command = "ruff"
