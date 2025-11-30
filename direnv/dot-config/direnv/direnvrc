@@ -1,0 +1,48 @@
+# layout_uv - direnv layout for uv Python environments
+# This function sets up a Python environment using uv similar to layout python
+
+layout_uv() {
+    local uv_python_version="${1:-python3.12}"
+
+    # Check if uv is installed
+    if ! command -v uv &> /dev/null; then
+        log_error "uv is not installed. Please install it first: https://docs.astral.sh/uv/"
+        return 1
+    fi
+
+    # Create .venv if it doesn't exist
+    if [[ ! -d .venv ]]; then
+        log_status "Creating virtual environment with uv using $uv_python_version"
+        uv venv --python "$uv_python_version"
+    fi
+
+    # Sync dependencies if project files exist
+    if [[ -f pyproject.toml ]] || [[ -f requirements.txt ]]; then
+        # Watch files to trigger re-sync on changes
+        watch_file pyproject.toml 2>/dev/null || true
+        watch_file uv.lock 2>/dev/null || true
+        watch_file requirements.txt 2>/dev/null || true
+
+        log_status "Syncing dependencies..."
+        if [[ -f pyproject.toml ]]; then
+            # Try frozen sync first (fast), fall back to full sync if needed
+            uv sync --frozen 2>/dev/null || uv sync
+        elif [[ -f requirements.txt ]]; then
+            uv pip install -r requirements.txt
+        fi
+    fi
+
+    # Activate the virtual environment
+    export VIRTUAL_ENV="$PWD/.venv"
+    if [[ -d $VIRTUAL_ENV/bin ]]; then
+        PATH_add "$VIRTUAL_ENV/bin"
+    fi
+    if [[ -d $VIRTUAL_ENV/Scripts ]]; then
+        PATH_add "$VIRTUAL_ENV/Scripts"
+    fi
+
+    # Set Python-related environment variables
+    export UV_PROJECT_ENVIRONMENT="$VIRTUAL_ENV"
+
+    log_status "uv environment is activated: $VIRTUAL_ENV"
+}
