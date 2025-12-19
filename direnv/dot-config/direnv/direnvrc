@@ -10,6 +10,9 @@ layout_uv() {
         return 1
     fi
 
+    # You only would have said `layout uv` in the `.envrc` file at the project root, so this is okay.
+    export PROJECT_ROOT="$PWD"
+
     # Create .venv if it doesn't exist
     if [[ ! -d .venv ]]; then
         log_status "Creating virtual environment with uv using $uv_python_version"
@@ -43,6 +46,9 @@ layout_uv() {
 
     # Set Python-related environment variables
     export UV_PROJECT_ENVIRONMENT="$VIRTUAL_ENV"
+    if [[ -d "$PROJECT_ROOT/src" ]]; then
+        path_add PYTHONPATH "$PROJECT_ROOT/src"
+    fi
 
     log_status "uv environment is activated: $VIRTUAL_ENV"
 }
