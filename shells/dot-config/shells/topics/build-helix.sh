@@ -3,7 +3,8 @@ export HELIX_BUILD_DIR="${WOLF_REPOS_DIR}/helix"
 export HELIX_DEFAULT_RUNTIME="${HELIX_BUILD_DIR}/runtime"
 
 build_helix() {
-  rm -f "$(which hx)"
+  # Might not be there, might not be `$(which hx)`, might be `hx.exe` (need to check that works)
+  rm -f "~/.cargo/bin/hx"
 
   if command -v direnv >/dev/null 2>&1; then
     direnv block "${HELIX_BUILD_DIR}/.envrc"
