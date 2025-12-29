@@ -1,6 +1,17 @@
 # shellcheck disable=SC2046
 # git-top-level.{bash,zsh} must execute first, at least ... I'm pretty sure.
 
+export PATH="${HOME}/.config/git/bin:${PATH}"
+
+make-worktree() {
+    if [[ "$@" == --help ]]; then
+        make-worktree.py --help
+    else
+        local NEW_DIR
+        NEW_DIR=$(make-worktree.py "$@") && cd "$NEW_DIR"
+    fi
+}
+
 cdtop() { # cdtop [<relative-path>] : cd to the top-level of the current git working-copy, or to a path relative to that
     local TOP_LEVEL
     TOP_LEVEL="$(git_top_level)"
