@@ -1,6 +1,6 @@
 #!/usr/bin/env -S uv run --no-project --script --quiet
 # /// script
-# requires-python = ">=3.14"
+# requires-python = ">=3.13"
 # dependencies = [
 #     "typer",
 #     "typing_extensions",
@@ -267,7 +267,8 @@ def setup_worktree(repo: Path) -> None:
     envrc_sample = (repo / ".envrc.sample").resolve()
     envrc = (repo / ".envrc").resolve()
     if envrc_sample.exists() and not envrc.exists():
-        envrc.symlink_to(envrc_sample)
+        # Do just a bit of work to make as simple a symlink as possible.
+        envrc.symlink_to(envrc_sample.relative_to(envrc.parent, walk_up=True))
     if envrc.exists():
         # Everything is new in this worktree, whether we symlinked or not
         direnv_allow(envrc)
