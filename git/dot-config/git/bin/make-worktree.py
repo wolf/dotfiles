@@ -86,14 +86,18 @@ def fetch_all(repo: Path) -> None:
     ], check=True, stdout=subprocess.DEVNULL)
 
 
-def find_branches(repo: Path, pattern: str) -> list[str]:
+def find_branches(repo: Path, pattern: str, remote_name: str = "origin") -> list[str]:
     """
     Find all branches (local and remote) matching a pattern.
 
+    For simple names (no wildcards), searches for both local branch and
+    remote_name/branch. For patterns with wildcards, passes through to git.
+    Returns all matches - caller decides priority.
+
     Args:
         repo: Path to the Git repository.
-        pattern: Branch name pattern to search for. If you specifically want
-                a remote branch, use "origin/foo" instead of just "foo".
+        pattern: Branch name or pattern to search for.
+        remote_name: Name of the remote to search (default: "origin").
 
     Returns:
         List of matching branch names with ref prefixes removed
@@ -103,24 +107,39 @@ def find_branches(repo: Path, pattern: str) -> list[str]:
     assert is_absolute_repo_path(repo)
     assert pattern
 
-    subprocess_result = subprocess.run([
-        "git",
-        "-C", str(repo),
-        "branch",
-        "--format=%(refname)",
-        "--all", "--list",
-        pattern,
-    ], capture_output=True, text=True, check=True)
+    # Check if pattern contains git wildcards
+    has_wildcards = bool(set('*?[') & set(pattern))
 
-    all_matches: list[str] = []
-    for match in subprocess_result.stdout.splitlines():
-        if not (match := match.strip()):
-            continue
-        match = match.removeprefix("refs/heads/")
-        match = match.removeprefix("refs/remotes/")
-        all_matches.append(match)
+    if has_wildcards:
+        # Pattern search - use as-is
+        patterns_to_search = [pattern]
+    else:
+        # Exact name - search local and remote
+        patterns_to_search = [
+            pattern,                    # Local: feature
+            f"{remote_name}/{pattern}", # Remote: origin/feature
+        ]
 
-    return all_matches
+    all_matches = []
+    for search_pattern in patterns_to_search:
+        subprocess_result = subprocess.run([
+            "git",
+            "-C", str(repo),
+            "branch",
+            "--format=%(refname)",
+            "--all", "--list",
+            search_pattern,
+        ], capture_output=True, text=True, check=True)
+
+        all_matches.extend([
+            match.removeprefix("refs/heads/").removeprefix("refs/remotes/")
+            for line in subprocess_result.stdout.splitlines()
+            if (match := line.strip())
+        ])
+
+    # Remove duplicates while preserving order
+    seen = set()
+    return [m for m in all_matches if not (m in seen or seen.add(m))]
 
 
 def current_branch(repo: Path) -> str:
@@ -173,8 +192,10 @@ def worktree_add(
     assert is_absolute_repo_path(repo)
     assert new_worktree_branch
 
+    fetch_all(repo)
+
     remote_prefix = f"{remote_name}/"
-    existing_branches = find_branches(repo, new_worktree_branch)
+    existing_branches = find_branches(repo, new_worktree_branch, remote_name)
     if existing_branches:
         # The branch we want exists. Don't create a new one. Don't specify a starting point.
         local_branches = {b for b in existing_branches if not b.startswith(remote_prefix)}
@@ -238,7 +259,7 @@ def submodule_update(repo: Path) -> None:
         "git",
         "-C", str(repo),
         "submodule", "update",
-        "--recursive",
+        "--init", "--recursive",
     ], check=True, stdout=subprocess.DEVNULL)
 
 
@@ -258,20 +279,31 @@ def direnv_allow(envrc: Path) -> None:
     ], check=True, stdout=subprocess.DEVNULL)
 
 
+def setup_envrc(repo: Path) -> None:
+    """Discover, possibly create, and allow `.envrc`."""
+    assert is_absolute_repo_path(repo)
+
+    envrc_sample = repo / ".envrc.sample"
+    envrc = repo / ".envrc"
+    if envrc_sample.exists() and not envrc.exists():
+        envrc.symlink_to(envrc_sample.name)
+    if envrc.exists():
+        # Everything is new in this worktree, whether we symlinked or not
+        direnv_allow(envrc)
+
+
+
 def setup_worktree(repo: Path) -> None:
     """Finish anything needed in a new worktree (which isn't much)."""
     assert is_absolute_repo_path(repo)
 
     submodule_update(repo)
+    setup_envrc(repo)
 
-    envrc_sample = (repo / ".envrc.sample").resolve()
-    envrc = (repo / ".envrc").resolve()
-    if envrc_sample.exists() and not envrc.exists():
-        # Do just a bit of work to make as simple a symlink as possible.
-        envrc.symlink_to(envrc_sample.relative_to(envrc.parent, walk_up=True))
-    if envrc.exists():
-        # Everything is new in this worktree, whether we symlinked or not
-        direnv_allow(envrc)
+    # What about everything else? Virtual environments, `pre-commit`, `$PATH`, etc? There are so many different
+    # possibilities, I could go to a lot of trouble to guess what you need and try to give it to you. But I won't.
+    # If you need (more) setup: make `direnv` do it.
+
 
 
 def main(

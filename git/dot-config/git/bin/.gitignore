@@ -1,0 +1,5 @@
+# Ignore all venv directories
+*venv/
+
+# But DO track this .envrc (normally gitignored for secrets)
+!.envrc

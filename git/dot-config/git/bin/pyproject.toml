@@ -1,0 +1,24 @@
+[project]
+name = "git-worktree-tools"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "typer",
+    "typing_extensions",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+]
+
+[tool.coverage.run]
+source = ["."]
+parallel = true
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+]
