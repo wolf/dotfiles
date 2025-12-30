@@ -5,6 +5,8 @@ import subprocess
 from pathlib import Path
 
 import pytest
+import typer
+import typer.testing
 
 from conftest import run_script_with_coverage
 
@@ -15,6 +17,11 @@ spec = importlib.util.spec_from_file_location("make_clone", SCRIPT_PATH)
 make_clone = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(make_clone)
 derive_directory_from_url = make_clone.derive_directory_from_url
+main = make_clone.main
+app = make_clone.app
+
+# Create CLI runner for direct function testing
+runner = typer.testing.CliRunner()
 
 
 class TestDeriveDirectoryFromUrl:
@@ -259,3 +266,108 @@ class TestMakeCloneIntegration:
         assert result.returncode == 0
         assert "Clone a Git repository" in result.stdout
         assert "IMPORTANT: Repository URL must come first" in result.stdout
+
+
+# Direct function tests for improved coverage
+
+
+def test_main_function_basic_clone(git_repo, tmp_path):
+    """Test main function with basic clone."""
+    clone_dir = tmp_path / "test-clone"
+
+    result = runner.invoke(app, [f"file://{git_repo}", str(clone_dir)])
+
+    assert result.exit_code == 0
+    assert clone_dir.exists()
+    assert (clone_dir / ".git").exists()
+    assert str(clone_dir.resolve()) in result.stdout
+
+
+def test_main_function_derived_directory(git_repo, tmp_path, monkeypatch):
+    """Test main function deriving directory from URL."""
+    # Clone in a subdirectory to avoid conflict with source repo
+    clone_parent = tmp_path / "clones"
+    clone_parent.mkdir()
+    monkeypatch.chdir(clone_parent)
+
+    result = runner.invoke(app, [f"file://{git_repo}"])
+
+    # Should derive "test-repo" from path
+    expected_dir = clone_parent / "test-repo"
+    assert result.exit_code == 0
+    assert expected_dir.exists()
+    assert str(expected_dir.resolve()) in result.stdout
+
+
+def test_main_function_with_git_options(git_repo_with_remote, tmp_path):
+    """Test main function with git clone options."""
+    git_repo, remote_repo = git_repo_with_remote
+
+    # Create a branch to clone
+    subprocess.run(["git", "checkout", "-b", "feature"], cwd=git_repo, check=True, capture_output=True)
+    subprocess.run(["git", "commit", "--allow-empty", "-m", "Feature"], cwd=git_repo, check=True, capture_output=True)
+    subprocess.run(["git", "push", "-u", "origin", "feature"], cwd=git_repo, check=True, capture_output=True)
+
+    clone_dir = tmp_path / "feature-clone"
+
+    # Clone with --branch option
+    result = runner.invoke(app, [
+        f"file://{remote_repo}",
+        str(clone_dir),
+        "--branch", "feature"
+    ])
+
+    assert result.exit_code == 0
+    assert clone_dir.exists()
+
+    # Verify we're on the feature branch
+    branch_result = subprocess.run(
+        ["git", "branch", "--show-current"],
+        cwd=clone_dir,
+        capture_output=True,
+        text=True,
+        check=True
+    )
+    assert branch_result.stdout.strip() == "feature"
+
+
+def test_main_function_clone_failure(tmp_path):
+    """Test main function error handling on clone failure."""
+    result = runner.invoke(app, [
+        "https://invalid-domain-xyz-123.com/repo.git",
+        str(tmp_path / "test")
+    ])
+
+    assert result.exit_code == 1
+    assert "Error: git clone failed" in result.stderr
+
+
+def test_main_function_with_depth(git_repo_with_remote, tmp_path):
+    """Test main function with --depth option."""
+    git_repo, remote_repo = git_repo_with_remote
+
+    # Create multiple commits
+    for i in range(5):
+        subprocess.run(["git", "commit", "--allow-empty", "-m", f"Commit {i}"], cwd=git_repo, check=True, capture_output=True)
+    subprocess.run(["git", "push"], cwd=git_repo, check=True, capture_output=True)
+
+    clone_dir = tmp_path / "shallow"
+
+    result = runner.invoke(app, [
+        f"file://{remote_repo}",
+        str(clone_dir),
+        "--depth", "1"
+    ])
+
+    assert result.exit_code == 0
+    assert clone_dir.exists()
+
+    # Verify shallow clone
+    log_result = subprocess.run(
+        ["git", "rev-list", "--count", "HEAD"],
+        cwd=clone_dir,
+        capture_output=True,
+        text=True,
+        check=True
+    )
+    assert log_result.stdout.strip() == "1"
