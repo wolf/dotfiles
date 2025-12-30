@@ -3,12 +3,23 @@
 
 export PATH="${HOME}/.config/git/bin:${PATH}"
 
+alias sync-main=sync-main.py
+
 make-worktree() {
     if [[ "$@" == --help ]]; then
         make-worktree.py --help
     else
         local NEW_DIR
         NEW_DIR=$(make-worktree.py "$@") && cd "$NEW_DIR"
+    fi
+}
+
+make-clone() {
+    if [[ "$@" == --help ]]; then
+        make-clone.py --help
+    else
+        local NEW_DIR
+        NEW_DIR=$(make-clone.py "$@") && cd "$NEW_DIR"
     fi
 }
 
