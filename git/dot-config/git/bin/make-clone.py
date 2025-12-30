@@ -4,6 +4,7 @@
 # dependencies = [
 #     "typer",
 #     "typing_extensions",
+#     "git-workflow-utils @ git+https://github.com/wolf/git-workflow-utils.git",
 # ]
 # ///
 """
@@ -33,8 +34,6 @@ Examples:
 
     # Clone with custom directory and git options (directory must be second)
     make-clone.py git@github.com:user/repo.git my-dir --depth 1 --branch main
-
-Requires: git_shared.py in the same directory
 """
 import subprocess
 from pathlib import Path
@@ -44,7 +43,7 @@ from urllib.parse import urlparse
 import typer
 from typing_extensions import Annotated
 
-from git_shared import initialize_repo, resolve_path
+from git_workflow_utils import initialize_repo, resolve_path
 
 app = typer.Typer()
 

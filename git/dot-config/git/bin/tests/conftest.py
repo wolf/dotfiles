@@ -6,7 +6,7 @@ from typing import Any
 
 import pytest
 
-# Add parent directory to path so scripts can import git_shared
+# Add parent directory to path so tests can import script modules
 _SCRIPT_DIR = Path(__file__).parent.parent
 if str(_SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPT_DIR))

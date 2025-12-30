@@ -146,7 +146,7 @@ make-clone git@github.com:user/repo.git
 
 ## Shared Functionality
 
-All utilities share common functionality through `git_shared.py`:
+All utilities share common functionality through the `git-workflow-utils` package:
 
 - **Repository resolution**: Finds git repositories from relative or absolute paths
 - **Branch discovery**: Intelligently finds local and remote branches
@@ -154,9 +154,11 @@ All utilities share common functionality through `git_shared.py`:
 - **Direnv setup**: Creates .envrc symlink and runs `direnv allow` if available
 - **Path resolution**: Handles tilde expansion and absolute path conversion
 
+The package is available on GitHub: [wolf/git-workflow-utils](https://github.com/wolf/git-workflow-utils)
+
 ## Testing
 
-The project includes comprehensive test coverage (96.02% overall):
+The project includes comprehensive test coverage (95.57% overall):
 
 ```bash
 # Run tests
@@ -171,7 +173,6 @@ pytest tests/test_make_clone.py -v
 
 **Coverage by file:**
 - `make-clone.py`: 100.00%
-- `git_shared.py`: 97.06%
 - `make-worktree.py`: 95.24%
 - `sync-main.py`: 93.83%
 
@@ -187,10 +188,12 @@ Python dependencies are managed per-script using uv's inline metadata:
 
 - `typer`: CLI framework with type hints and automatic help generation
 - `typing_extensions`: Backports of typing features
+- `git-workflow-utils`: Shared git utilities ([GitHub](https://github.com/wolf/git-workflow-utils))
 
 Development dependencies:
 - `pytest`: Test framework
 - `pytest-cov`: Coverage plugin
+- `git-workflow-utils`: Also included in dev dependencies for testing
 
 ## Project Structure
 
@@ -199,7 +202,6 @@ git/dot-config/git/bin/
 ├── make-worktree.py      # Worktree creation utility
 ├── make-clone.py         # Clone with initialization
 ├── sync-main.py          # Branch synchronization
-├── git_shared.py         # Shared functionality
 ├── tests/
 │   ├── conftest.py       # Shared test fixtures
 │   ├── test_make_worktree.py
@@ -243,11 +245,17 @@ This removes:
 **Note:** The `.` at the end limits the operation to the current directory only, preventing cleanup of other parts of your dotfiles repo.
 
 **Add new utility:**
-1. Create script with uv inline metadata
-2. Add to git_shared.py if sharing functionality
+1. Create script with uv inline metadata and git-workflow-utils dependency
+2. Import shared functionality from git-workflow-utils package
 3. Write comprehensive tests in tests/
 4. Add shell wrapper in shells/dot-config/shells/topics/git.sh
 5. Update this README
+
+**Add new shared functionality:**
+1. Add functions to [git-workflow-utils](https://github.com/wolf/git-workflow-utils) package
+2. Write tests in the package's test suite
+3. Use in scripts by importing from git_workflow_utils
+4. Create a new release or update the git hash in script dependencies
 
 ## Requirements
 

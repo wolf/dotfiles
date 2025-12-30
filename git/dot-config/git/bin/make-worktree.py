@@ -4,6 +4,7 @@
 # dependencies = [
 #     "typer",
 #     "typing_extensions",
+#     "git-workflow-utils @ git+https://github.com/wolf/git-workflow-utils.git",
 # ]
 # ///
 """
@@ -24,8 +25,6 @@ Example:
 
     # Create new branch starting from a specific ref
     make-worktree.py new-feature --from main
-
-Requires: git_shared.py in the same directory
 """
 import os
 import subprocess
@@ -35,7 +34,7 @@ from typing import Optional
 import typer
 from typing_extensions import Annotated
 
-from git_shared import (
+from git_workflow_utils import (
     current_branch,
     direnv_allow,
     fetch_all,

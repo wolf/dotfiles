@@ -4,6 +4,7 @@
 # dependencies = [
 #     "typer",
 #     "typing_extensions",
+#     "git-workflow-utils @ git+https://github.com/wolf/git-workflow-utils.git",
 # ]
 # ///
 """
@@ -36,8 +37,6 @@ Example:
 
     # Preview what would happen
     sync-main.py --dry-run
-
-Requires: git_shared.py in the same directory
 """
 import subprocess
 import sys
@@ -46,7 +45,7 @@ from pathlib import Path
 import typer
 from typing_extensions import Annotated
 
-from git_shared import current_branch, fetch_all, has_uncommitted_changes, run_git
+from git_workflow_utils import current_branch, fetch_all, has_uncommitted_changes, run_git
 
 
 def main(
