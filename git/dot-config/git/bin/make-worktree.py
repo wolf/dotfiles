@@ -6,6 +6,25 @@
 #     "typing_extensions",
 # ]
 # ///
+"""
+Create Git worktrees with intelligent branch resolution and automated setup.
+
+This script simplifies the workflow of creating Git worktrees by:
+- Automatically finding branches (local or remote) by name
+- Creating worktrees in sensible default locations
+- Initializing submodules in the new worktree
+- Setting up direnv (.envrc → direnv allow, or .envrc.sample → .envrc symlink → direnv allow)
+
+Example:
+    # Create worktree for existing branch (finds origin/feature if no local branch)
+    make-worktree.py feature
+
+    # Create worktree with specific path
+    make-worktree.py feature-branch /path/to/worktree
+
+    # Create new branch starting from a specific ref
+    make-worktree.py new-feature --from main
+"""
 import os
 import subprocess
 from pathlib import Path
