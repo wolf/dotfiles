@@ -1,5 +1,11 @@
 # Ignore all venv directories
 *venv/
 
+# Ignore test/build artifacts
+.coverage
+.coverage.*
+*.egg-info/
+uv.lock
+
 # But DO track this .envrc (normally gitignored for secrets)
 !.envrc
