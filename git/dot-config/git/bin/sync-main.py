@@ -1,0 +1,183 @@
+#!/usr/bin/env -S uv run --no-project --script --quiet
+# /// script
+# requires-python = ">=3.13"
+# dependencies = [
+#     "typer",
+#     "typing_extensions",
+# ]
+# ///
+"""
+Sync updates from a shared branch into your working branch via cherry-pick.
+
+Typical use case: repos with a shared branch (e.g., 'main') and a local-only
+branch (e.g., 'local-only' with secrets that should never be pushed).
+
+This script automates the workflow of:
+- Fetching all remotes (prune deleted refs, update tags)
+- Switching to the shared branch and pulling updates
+- Switching back to your working branch
+- Cherry-picking new commits using reflog (main@{1}..main)
+
+Key features:
+- Uses reflog syntax to find commit range automatically
+- Optional --stash to handle uncommitted changes
+- Comprehensive fetch before pull (all remotes, tags, prune)
+- --dry-run to preview actions
+
+Example:
+    # Pull main and cherry-pick to current branch (local-only)
+    sync-main.py
+
+    # Pull a different branch
+    sync-main.py --branch develop
+
+    # Stash uncommitted changes during sync
+    sync-main.py --stash
+
+    # Preview what would happen
+    sync-main.py --dry-run
+"""
+import subprocess
+import sys
+from pathlib import Path
+
+import typer
+from typing_extensions import Annotated
+
+
+def run_git(*args: str, check: bool = True, capture: bool = False) -> subprocess.CompletedProcess:
+    """Run a git command and return the result."""
+    cmd = ["git", *args]
+    if capture:
+        return subprocess.run(cmd, capture_output=True, text=True, check=check)
+    return subprocess.run(cmd, check=check)
+
+
+def current_branch() -> str:
+    """Get the currently checked out branch name."""
+    result = run_git("branch", "--show-current", capture=True)
+    return result.stdout.strip()
+
+
+def has_uncommitted_changes() -> bool:
+    """Check if there are uncommitted changes in the working tree."""
+    result = run_git("status", "--porcelain", capture=True)
+    return bool(result.stdout.strip())
+
+
+def fetch_all() -> None:
+    """Fetch all remotes, prune deleted refs, and update tags."""
+    run_git("fetch", "--prune", "--all", "--tags", "--recurse-submodules")
+
+
+def main(
+    branch: Annotated[str, typer.Option("--branch", "-b", help="Branch to pull from (e.g., 'main')")] = "main",
+    target: Annotated[str, typer.Option("--target", "-t", help="Branch to cherry-pick into. Defaults to current branch.")] = "",
+    stash: Annotated[bool, typer.Option("--stash", "-s", help="Stash uncommitted changes before syncing and restore after")] = False,
+    dry_run: Annotated[bool, typer.Option("--dry-run", "-n", help="Show what would be done without doing it")] = False,
+) -> None:
+    """
+    Pull updates from a shared branch and cherry-pick them into your working branch.
+
+    Saves your current branch, switches to the specified branch (default: main),
+    pulls updates, switches back, and cherry-picks the new commits using reflog.
+    """
+    # Stash if requested and there are uncommitted changes
+    stashed = False
+    if stash and has_uncommitted_changes():
+        typer.echo("Stashing uncommitted changes...")
+        if not dry_run:
+            run_git("stash", "push", "-m", "sync-main autostash")
+            stashed = True
+        else:
+            typer.echo("[DRY RUN] Would run: git stash push -m 'sync-main autostash'")
+
+    # Get current branch
+    original_branch = current_branch()
+    target_branch = target or original_branch
+
+    # If we're already on the branch to pull, just fetch and pull
+    if original_branch == branch:
+        typer.echo(f"Already on {branch}, fetching and pulling...")
+        if not dry_run:
+            fetch_all()
+            run_git("pull")
+        else:
+            typer.echo(f"[DRY RUN] Would run: git fetch --prune --all --tags --recurse-submodules")
+            typer.echo(f"[DRY RUN] Would run: git pull")
+
+        # Restore stash if we stashed
+        if stashed:
+            typer.echo("Restoring stashed changes...")
+            if not dry_run:
+                run_git("stash", "pop")
+            else:
+                typer.echo("[DRY RUN] Would run: git stash pop")
+        return
+
+    typer.echo(f"Current branch: {original_branch}")
+    typer.echo(f"Fetching all remotes...")
+    if not dry_run:
+        fetch_all()
+    else:
+        typer.echo(f"[DRY RUN] Would run: git fetch --prune --all --tags --recurse-submodules")
+
+    typer.echo(f"Switching to {branch} to pull updates...")
+
+    # Switch to the branch and pull
+    if not dry_run:
+        run_git("switch", branch)
+        run_git("pull")
+    else:
+        typer.echo(f"[DRY RUN] Would run: git switch {branch}")
+        typer.echo(f"[DRY RUN] Would run: git pull")
+
+    # Check if there are new commits
+    if not dry_run:
+        result = run_git("rev-list", "--count", f"{branch}@{{1}}..{branch}", capture=True)
+        commit_count = int(result.stdout.strip())
+    else:
+        commit_count = 0  # Can't determine in dry-run
+        typer.echo(f"[DRY RUN] Would check commit count")
+
+    # Switch back to original branch
+    typer.echo(f"Switching back to {target_branch}...")
+    if not dry_run:
+        run_git("switch", target_branch)
+    else:
+        typer.echo(f"[DRY RUN] Would run: git switch {target_branch}")
+
+    # Cherry-pick if there are new commits
+    if dry_run:
+        typer.echo(f"[DRY RUN] Would cherry-pick: {branch}@{{1}}..{branch}")
+    elif commit_count > 0:
+        typer.echo(f"Cherry-picking {commit_count} new commit(s) from {branch}...")
+        commit_range = f"{branch}@{{1}}..{branch}"
+
+        try:
+            run_git("cherry-pick", commit_range)
+            typer.echo(f"✓ Successfully cherry-picked {commit_count} commit(s)")
+        except subprocess.CalledProcessError:
+            typer.echo("Error: Cherry-pick failed. You may need to resolve conflicts.", err=True)
+            typer.echo("Run 'git cherry-pick --abort' to cancel or resolve conflicts and continue.")
+            if stashed:
+                typer.echo("Warning: Stashed changes not restored due to error. Run 'git stash pop' manually.", err=True)
+            raise typer.Exit(1)
+    else:
+        typer.echo(f"No new commits on {branch}")
+
+    # Restore stash if we stashed
+    if stashed:
+        typer.echo("Restoring stashed changes...")
+        if not dry_run:
+            try:
+                run_git("stash", "pop")
+                typer.echo("✓ Stashed changes restored")
+            except subprocess.CalledProcessError:
+                typer.echo("Warning: Failed to restore stashed changes. Run 'git stash pop' manually.", err=True)
+        else:
+            typer.echo("[DRY RUN] Would run: git stash pop")
+
+
+if __name__ == "__main__":
+    typer.run(main)
