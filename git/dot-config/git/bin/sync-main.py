@@ -16,10 +16,10 @@ This script automates the workflow of:
 - Fetching all remotes (prune deleted refs, update tags)
 - Switching to the shared branch and pulling updates
 - Switching back to your working branch
-- Cherry-picking new commits using reflog (main@{1}..main)
+- Cherry-picking new commits (if any were pulled)
 
 Key features:
-- Uses reflog syntax to find commit range automatically
+- Captures SHAs before/after pull to detect new commits
 - Optional --stash to handle uncommitted changes
 - Comprehensive fetch before pull (all remotes, tags, prune)
 - --dry-run to preview actions
@@ -80,17 +80,17 @@ def main(
     Pull updates from a shared branch and cherry-pick them into your working branch.
 
     Saves your current branch, switches to the specified branch (default: main),
-    pulls updates, switches back, and cherry-picks the new commits using reflog.
+    pulls updates, switches back, and cherry-picks any new commits that were pulled.
     """
     # Stash if requested and there are uncommitted changes
     stashed = False
     if stash and has_uncommitted_changes():
         typer.echo("Stashing uncommitted changes...")
         if not dry_run:
-            run_git("stash", "push", "-m", "sync-main autostash")
+            run_git("stash", "push", "--include-untracked", "--message", "sync-main autostash")
             stashed = True
         else:
-            typer.echo("[DRY RUN] Would run: git stash push -m 'sync-main autostash'")
+            typer.echo("[DRY RUN] Would run: git stash push --include-untracked --message 'sync-main autostash'")
 
     # Get current branch
     original_branch = current_branch()
@@ -124,21 +124,31 @@ def main(
 
     typer.echo(f"Switching to {branch} to pull updates...")
 
-    # Switch to the branch and pull
+    # Switch to the branch and capture SHA before pull
     if not dry_run:
         run_git("switch", branch)
+        result = run_git("rev-parse", branch, capture=True)
+        before_sha = result.stdout.strip()
         run_git("pull")
+        result = run_git("rev-parse", branch, capture=True)
+        after_sha = result.stdout.strip()
     else:
         typer.echo(f"[DRY RUN] Would run: git switch {branch}")
+        typer.echo(f"[DRY RUN] Would run: git rev-parse {branch}")
         typer.echo(f"[DRY RUN] Would run: git pull")
+        typer.echo(f"[DRY RUN] Would run: git rev-parse {branch}")
+        before_sha = after_sha = ""  # Dummy values for dry-run
 
     # Check if there are new commits
-    if not dry_run:
-        result = run_git("rev-list", "--count", f"{branch}@{{1}}..{branch}", capture=True)
+    if not dry_run and before_sha != after_sha:
+        result = run_git("rev-list", "--count", f"{before_sha}..{after_sha}", capture=True)
         commit_count = int(result.stdout.strip())
     else:
-        commit_count = 0  # Can't determine in dry-run
-        typer.echo(f"[DRY RUN] Would check commit count")
+        commit_count = 0
+        if dry_run:
+            typer.echo(f"[DRY RUN] Would check commit count")
+        else:
+            typer.echo(f"No new commits pulled from {branch}")
 
     # Switch back to original branch
     typer.echo(f"Switching back to {target_branch}...")
@@ -149,10 +159,10 @@ def main(
 
     # Cherry-pick if there are new commits
     if dry_run:
-        typer.echo(f"[DRY RUN] Would cherry-pick: {branch}@{{1}}..{branch}")
+        typer.echo(f"[DRY RUN] Would cherry-pick commits from {branch}")
     elif commit_count > 0:
         typer.echo(f"Cherry-picking {commit_count} new commit(s) from {branch}...")
-        commit_range = f"{branch}@{{1}}..{branch}"
+        commit_range = f"{before_sha}..{after_sha}"
 
         try:
             run_git("cherry-pick", commit_range)
@@ -163,8 +173,6 @@ def main(
             if stashed:
                 typer.echo("Warning: Stashed changes not restored due to error. Run 'git stash pop' manually.", err=True)
             raise typer.Exit(1)
-    else:
-        typer.echo(f"No new commits on {branch}")
 
     # Restore stash if we stashed
     if stashed:

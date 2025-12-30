@@ -1,8 +1,11 @@
-import pytest
-from pathlib import Path
-import subprocess
 import importlib.util
 import os
+import subprocess
+from pathlib import Path
+
+import pytest
+
+from conftest import run_script_with_coverage
 
 # Import make-worktree.py using importlib (can't use regular import due to hyphen)
 SCRIPT_PATH = Path(__file__).parent.parent / "make-worktree.py"
@@ -13,30 +16,6 @@ spec.loader.exec_module(make_worktree)
 # Extract functions for easier access
 resolve_path = make_worktree.resolve_path
 is_absolute_repo_path = make_worktree.is_absolute_repo_path
-
-
-def run_script_with_coverage(args, **kwargs):
-    """
-    Run the script via coverage to track subprocess execution.
-
-    Args:
-        args: List of arguments to pass to the script (don't include script path)
-        **kwargs: Additional arguments to pass to subprocess.run()
-
-    Returns:
-        subprocess.CompletedProcess result
-    """
-    import sys
-
-    # Run script through coverage using the same Python interpreter
-    cmd = [
-        sys.executable, "-m", "coverage", "run",
-        "--parallel-mode",  # Create separate .coverage.* files
-        "--source=.",       # Track coverage for current directory
-        str(SCRIPT_PATH),
-        *args
-    ]
-    return subprocess.run(cmd, **kwargs)
 
 
 def test_resolve_path_current_dir():
@@ -97,6 +76,7 @@ def test_is_absolute_repo_path_valid(tmp_path):
 def test_cli_help():
     """Test that --help works and shows usage information."""
     result = run_script_with_coverage(
+        SCRIPT_PATH,
         ["--help"],
         capture_output=True,
         text=True
@@ -109,6 +89,7 @@ def test_cli_help():
 def test_cli_missing_required_argument():
     """Test that script fails appropriately when required branch argument is missing."""
     result = run_script_with_coverage(
+        SCRIPT_PATH,
         [],
         capture_output=True,
         text=True
@@ -117,30 +98,12 @@ def test_cli_missing_required_argument():
     assert "Missing argument" in result.stderr or "required" in result.stderr.lower()
 
 
-@pytest.fixture
-def git_repo(tmp_path):
-    """Create a temporary git repository for testing."""
-    repo = tmp_path / "test-repo"
-    repo.mkdir()
-
-    # Initialize git repo
-    subprocess.run(["git", "init"], cwd=repo, check=True, capture_output=True)
-    subprocess.run(["git", "config", "user.email", "test@example.com"], cwd=repo, check=True, capture_output=True)
-    subprocess.run(["git", "config", "user.name", "Test User"], cwd=repo, check=True, capture_output=True)
-
-    # Create initial commit
-    (repo / "README.md").write_text("# Test Repo\n")
-    subprocess.run(["git", "add", "README.md"], cwd=repo, check=True, capture_output=True)
-    subprocess.run(["git", "commit", "-m", "Initial commit"], cwd=repo, check=True, capture_output=True)
-
-    return repo
-
-
 def test_cli_create_worktree_new_branch(git_repo, tmp_path):
     """Test creating a worktree with a new branch."""
     worktree_path = tmp_path / "feature-branch"
 
     result = run_script_with_coverage(
+        SCRIPT_PATH,
         ["-C", str(git_repo), "feature-branch", str(worktree_path)],
         capture_output=True,
         text=True
@@ -168,6 +131,7 @@ def test_cli_create_worktree_new_branch(git_repo, tmp_path):
 def test_cli_create_worktree_sibling_directory(git_repo):
     """Test that worktree defaults to sibling directory when only branch name is given."""
     result = run_script_with_coverage(
+        SCRIPT_PATH,
         ["-C", str(git_repo), "sibling-test"],
         capture_output=True,
         text=True
@@ -218,6 +182,7 @@ def test_cli_create_worktree_from_remote_branch(git_repo, tmp_path):
     # Now create a worktree from the remote-only branch (script should find origin/remote-only)
     worktree_path = tmp_path / "remote-worktree"
     result = run_script_with_coverage(
+        SCRIPT_PATH,
         ["-C", str(git_repo), "remote-only", str(worktree_path)],
         capture_output=True,
         text=True
@@ -262,19 +227,17 @@ exit 0
     # Create worktree with fake direnv in PATH
     worktree_path = tmp_path / "envrc-test"
 
-    import sys
     env = os.environ.copy()
     env["PATH"] = str(fake_bin) + ":" + env.get("PATH", "")
 
     # Run script with modified PATH
-    cmd = [
-        sys.executable, "-m", "coverage", "run",
-        "--parallel-mode",
-        "--source=.",
-        str(SCRIPT_PATH),
-        "-C", str(git_repo), "envrc-branch", str(worktree_path)
-    ]
-    result = subprocess.run(cmd, capture_output=True, text=True, env=env)
+    result = run_script_with_coverage(
+        SCRIPT_PATH,
+        ["-C", str(git_repo), "envrc-branch", str(worktree_path)],
+        capture_output=True,
+        text=True,
+        env=env
+    )
 
     assert result.returncode == 0, f"Script failed: {result.stderr}"
     assert worktree_path.exists()

@@ -4,6 +4,7 @@
 # Ignore test/build artifacts
 .coverage
 .coverage.*
+htmlcov/
 *.egg-info/
 uv.lock
 
