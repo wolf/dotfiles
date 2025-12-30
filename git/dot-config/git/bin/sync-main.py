@@ -36,6 +36,8 @@ Example:
 
     # Preview what would happen
     sync-main.py --dry-run
+
+Requires: git_shared.py in the same directory
 """
 import subprocess
 import sys
@@ -44,30 +46,7 @@ from pathlib import Path
 import typer
 from typing_extensions import Annotated
 
-
-def run_git(*args: str, check: bool = True, capture: bool = False) -> subprocess.CompletedProcess:
-    """Run a git command and return the result."""
-    cmd = ["git", *args]
-    if capture:
-        return subprocess.run(cmd, capture_output=True, text=True, check=check)
-    return subprocess.run(cmd, check=check)
-
-
-def current_branch() -> str:
-    """Get the currently checked out branch name."""
-    result = run_git("branch", "--show-current", capture=True)
-    return result.stdout.strip()
-
-
-def has_uncommitted_changes() -> bool:
-    """Check if there are uncommitted changes in the working tree."""
-    result = run_git("status", "--porcelain", capture=True)
-    return bool(result.stdout.strip())
-
-
-def fetch_all() -> None:
-    """Fetch all remotes, prune deleted refs, and update tags."""
-    run_git("fetch", "--prune", "--all", "--tags", "--recurse-submodules")
+from git_shared import current_branch, fetch_all, has_uncommitted_changes, run_git
 
 
 def main(

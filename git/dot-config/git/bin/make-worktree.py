@@ -24,6 +24,8 @@ Example:
 
     # Create new branch starting from a specific ref
     make-worktree.py new-feature --from main
+
+Requires: git_shared.py in the same directory
 """
 import os
 import subprocess
@@ -33,154 +35,19 @@ from typing import Optional
 import typer
 from typing_extensions import Annotated
 
-
-def resolve_path(path: str|Path|None = None) -> Path:
-    """
-    Convert a path to an absolute, resolved Path object.
-
-    Args:
-        path: Path to resolve. If None or empty, uses current working directory.
-              Handles tilde expansion for home directory.
-
-    Returns:
-        Absolute, resolved Path object.
-    """
-    if not path:
-        # Catches both `None` and the empty string
-        path = Path.cwd()
-    elif "~" in str(path):
-        path = os.path.expanduser(path)
-    return Path(path).resolve()
-
-
-def is_absolute_repo_path(repo: Path) -> bool:
-    """
-    Return True if `repo` is an absolute path to an actual Git working copy.
-
-    We **don't** check that `repo / ".git"` is a directory (which is only true in the main
-    working copy, not in any of its worktrees).
-
-    This is meant to be used in `assert`s.
-    """
-    return (
-        repo.is_absolute()
-        and repo.is_dir()
-        and (repo / ".git").exists()
-    )
-
-
-def resolve_repo(repo: str|Path|None = None) -> Path:
-    """
-    Resolve a path to a Git repository and validate it exists.
-
-    Args:
-        repo: Path to repository. Uses current directory if not provided.
-
-    Returns:
-        Absolute path to the repository.
-
-    Raises:
-        AssertionError: If the path doesn't point to a valid Git repository.
-    """
-    repo = resolve_path(repo)
-    assert is_absolute_repo_path(repo)
-    return repo
-
-
-def fetch_all(repo: Path) -> None:
-    """
-    Bring all **remote** branches up-to-date.
-
-    Pulling would be harder. I'd have to worry about merging/rebasing and/or anything in
-    the way.
-    """
-    assert is_absolute_repo_path(repo)
-
-    # Bring all tags and remote branches up-to-date
-    subprocess.run([
-        "git",
-        "-C", str(repo),
-        "fetch",
-        "--prune", "--all", "--tags", "--recurse-submodules",
-    ], check=True, stdout=subprocess.DEVNULL)
-
-
-def find_branches(repo: Path, pattern: str, remote_name: str = "origin") -> list[str]:
-    """
-    Find all branches (local and remote) matching a pattern.
-
-    For simple names (no wildcards), searches for both local branch and
-    remote_name/branch. For patterns with wildcards, passes through to git.
-    Returns all matches - caller decides priority.
-
-    Args:
-        repo: Path to the Git repository.
-        pattern: Branch name or pattern to search for.
-        remote_name: Name of the remote to search (default: "origin").
-
-    Returns:
-        List of matching branch names with ref prefixes removed
-        (e.g., "main" instead of "refs/heads/main" or "origin/main"
-        instead of "refs/remotes/origin/main").
-    """
-    assert is_absolute_repo_path(repo)
-    assert pattern
-
-    # Check if pattern contains git wildcards
-    has_wildcards = bool(set('*?[') & set(pattern))
-
-    if has_wildcards:
-        # Pattern search - use as-is
-        patterns_to_search = [pattern]
-    else:
-        # Exact name - search local and remote
-        patterns_to_search = [
-            pattern,                    # Local: feature
-            f"{remote_name}/{pattern}", # Remote: origin/feature
-        ]
-
-    all_matches = []
-    for search_pattern in patterns_to_search:
-        subprocess_result = subprocess.run([
-            "git",
-            "-C", str(repo),
-            "branch",
-            "--format=%(refname)",
-            "--all", "--list",
-            search_pattern,
-        ], capture_output=True, text=True, check=True)
-
-        all_matches.extend([
-            match.removeprefix("refs/heads/").removeprefix("refs/remotes/")
-            for line in subprocess_result.stdout.splitlines()
-            if (match := line.strip())
-        ])
-
-    # Remove duplicates while preserving order
-    seen = set()
-    return [m for m in all_matches if not (m in seen or seen.add(m))]
-
-
-def current_branch(repo: Path) -> str:
-    """
-    Get the currently checked out branch name.
-
-    Args:
-        repo: Path to the Git repository.
-
-    Returns:
-        Name of the current branch.
-    """
-    assert is_absolute_repo_path(repo)
-
-    subprocess_result = subprocess.run([
-        "git",
-        "-C", str(repo),
-        "branch",
-        "--show-current",
-    ], capture_output=True, text=True, check=True)
-
-    return subprocess_result.stdout.strip()
+from git_shared import (
+    current_branch,
+    direnv_allow,
+    fetch_all,
+    find_branches,
+    initialize_repo,
+    is_absolute_repo_path,
+    resolve_path,
+    resolve_repo,
+    run_git,
+    setup_envrc,
+    submodule_update,
+)
 
 
 def worktree_add(
@@ -211,10 +78,10 @@ def worktree_add(
     assert is_absolute_repo_path(repo)
     assert new_worktree_branch
 
-    fetch_all(repo)
+    fetch_all(repo=repo, quiet=True)
 
     remote_prefix = f"{remote_name}/"
-    existing_branches = find_branches(repo, new_worktree_branch, remote_name)
+    existing_branches = find_branches(new_worktree_branch, repo=repo, remote_name=remote_name)
     if existing_branches:
         # The branch we want exists. Don't create a new one. Don't specify a starting point.
         local_branches = {b for b in existing_branches if not b.startswith(remote_prefix)}
@@ -234,7 +101,7 @@ def worktree_add(
         assert not new_worktree_branch.startswith(remote_prefix)
 
         if not starting_ref:
-            starting_ref = current_branch(repo)
+            starting_ref = current_branch(repo=repo)
 
         extra_arguments = ["-b", new_worktree_branch, starting_ref]
 
@@ -265,66 +132,6 @@ def worktree_add(
     return new_worktree
 
 
-def submodule_update(repo: Path) -> None:
-    """
-    Update submodules in the repository recursively.
-
-    Args:
-        repo: Path to the Git repository.
-    """
-    assert is_absolute_repo_path(repo)
-
-    subprocess.run([
-        "git",
-        "-C", str(repo),
-        "submodule", "update",
-        "--init", "--recursive",
-    ], check=True, stdout=subprocess.DEVNULL)
-
-
-def direnv_allow(envrc: Path) -> None:
-    """
-    Allow direnv to load the specified .envrc file.
-
-    Args:
-        envrc: Path to the .envrc file.
-    """
-    assert envrc.is_file()
-
-    subprocess.run([
-        "direnv",
-        "allow",
-        str(envrc),
-    ], check=True, stdout=subprocess.DEVNULL)
-
-
-def setup_envrc(repo: Path) -> None:
-    """Discover, possibly create, and allow `.envrc`."""
-    assert is_absolute_repo_path(repo)
-
-    envrc_sample = repo / ".envrc.sample"
-    envrc = repo / ".envrc"
-    if envrc_sample.exists() and not envrc.exists():
-        envrc.symlink_to(envrc_sample.name)
-    if envrc.exists():
-        # Everything is new in this worktree, whether we symlinked or not
-        direnv_allow(envrc)
-
-
-
-def setup_worktree(repo: Path) -> None:
-    """Finish anything needed in a new worktree (which isn't much)."""
-    assert is_absolute_repo_path(repo)
-
-    submodule_update(repo)
-    setup_envrc(repo)
-
-    # What about everything else? Virtual environments, `pre-commit`, `$PATH`, etc? There are so many different
-    # possibilities, I could go to a lot of trouble to guess what you need and try to give it to you. But I won't.
-    # If you need (more) setup: make `direnv` do it.
-
-
-
 def main(
     branch: Annotated[str, typer.Argument(help="The name of the branch you are checking out or creating. Will also serve as the new repo name if you don't supply one.")],
     worktree: Annotated[Optional[Path], typer.Argument(help="Path to the new repo. A single name implies a sibling to the starting repo. Otherwise, if relative, starts at the starting repo.")] = None,
@@ -343,7 +150,7 @@ def main(
     """
     starting_repo = resolve_repo(repo)
     new_repo = worktree_add(starting_repo, branch, worktree, starting_ref, remote)
-    setup_worktree(new_repo)
+    initialize_repo(new_repo)
     print(str(new_repo))
 
 

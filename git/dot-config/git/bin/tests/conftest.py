@@ -6,6 +6,11 @@ from typing import Any
 
 import pytest
 
+# Add parent directory to path so scripts can import git_shared
+_SCRIPT_DIR = Path(__file__).parent.parent
+if str(_SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(_SCRIPT_DIR))
+
 
 def run_script_with_coverage(script_path: Path, args: list[str], **kwargs: Any) -> subprocess.CompletedProcess:
     """
