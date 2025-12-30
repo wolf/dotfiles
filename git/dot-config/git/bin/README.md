@@ -223,6 +223,25 @@ git/dot-config/git/bin/
 open htmlcov/index.html
 ```
 
+**Clean up development artifacts:**
+```bash
+# Preview what will be removed (dry run)
+git clean -fdxn .
+
+# Remove all build, test, and coverage artifacts
+git clean -fdx .
+```
+
+This removes:
+- `.venv/` - Virtual environment
+- `.coverage_data/` - Coverage data files
+- `htmlcov/` - HTML coverage reports
+- `.pytest_cache/` - Pytest cache
+- `__pycache__/` - Python bytecode cache
+- `uv.lock` - UV lock file
+
+**Note:** The `.` at the end limits the operation to the current directory only, preventing cleanup of other parts of your dotfiles repo.
+
 **Add new utility:**
 1. Create script with uv inline metadata
 2. Add to git_shared.py if sharing functionality

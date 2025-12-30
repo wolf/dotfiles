@@ -6,6 +6,8 @@
 htmlcov/
 *.egg-info/
 uv.lock
+.pytest_cache/
+__pycache__/
 
 # But DO track this .envrc (normally gitignored for secrets)
 !.envrc
