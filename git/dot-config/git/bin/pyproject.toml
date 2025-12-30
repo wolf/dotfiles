@@ -16,6 +16,7 @@ dev = [
 [tool.coverage.run]
 source = ["."]
 parallel = true
+data_file = ".coverage_data/.coverage"
 omit = [
     "tests/*",
     "*/tests/*",

@@ -13,7 +13,7 @@ NC='\033[0m' # No Color
 echo -e "${BLUE}Running tests with coverage...${NC}"
 
 # Clean up old coverage data
-rm -f .coverage .coverage.*
+rm -rf .coverage_data/
 rm -rf htmlcov/
 
 # Run pytest with coverage

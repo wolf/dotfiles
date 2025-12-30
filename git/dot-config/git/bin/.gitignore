@@ -2,8 +2,7 @@
 *venv/
 
 # Ignore test/build artifacts
-.coverage
-.coverage.*
+.coverage_data/
 htmlcov/
 *.egg-info/
 uv.lock
