@@ -29,7 +29,7 @@ layout_uv() {
         log_status "Syncing dependencies..."
         if [[ -f pyproject.toml ]]; then
             # Try frozen sync first (fast), fall back to full sync if needed
-            uv sync --frozen --extra dev 2>/dev/null || uv sync --extra dev
+            uv sync --frozen --group dev 2>/dev/null || uv sync --group dev
         elif [[ -f requirements.txt ]]; then
             uv pip install -r requirements.txt
         fi
