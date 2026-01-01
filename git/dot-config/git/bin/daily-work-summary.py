@@ -39,6 +39,7 @@ from typing_extensions import Annotated
 
 from git_workflow_utils import (
     fetch_all,
+    filter_repos_by_ignore_file,
     find_git_repos,
     get_commits,
     user_email_in_this_working_copy,
@@ -82,10 +83,11 @@ def main(
         typer.echo(f"Error: Directory not found: {repos_dir}", err=True)
         raise typer.Exit(1)
 
-    # Find all repos
+    # Find all repos (excluding worktrees, with .journalignore filtering)
     typer.echo(f"Scanning {repos_dir} for git repositories...")
-    repos = sorted(find_git_repos(repos_dir))
-    typer.echo(f"Found {len(repos)} repositories\n")
+    all_repos = find_git_repos(repos_dir, include_worktrees=False)
+    repos = sorted(filter_repos_by_ignore_file(all_repos, repos_dir, ".journalignore"))
+    typer.echo(f"Found {len(repos)} repositories (after filtering)\n")
 
     # Collect commits from all repos
     all_commits = {}
