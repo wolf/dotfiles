@@ -44,7 +44,7 @@ from git_workflow_utils import (
     resolve_path,
     resolve_repo,
     run_git,
-    setup_envrc,
+    sanitize_directory_name,
     submodule_update,
 )
 
