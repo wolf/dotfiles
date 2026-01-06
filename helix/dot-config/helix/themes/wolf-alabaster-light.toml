@@ -37,19 +37,19 @@ diagnostic = { underline = { style = "curl" } }
 "ui.linenr" = { fg = "punctuation" }
 "ui.linenr.selected" = { fg = "active", modifiers = ["bold"] }
 
-"ui.statusline" = { fg = "fg", bg = "bg" }
-"ui.statusline.inactive" = { fg = "punctuation", bg = "bg" }
+"ui.statusline" = { fg = "fg", bg = "panel" }
+"ui.statusline.inactive" = { fg = "punctuation", bg = "panel" }
 
 # Bufferline - make active buffer clearly visible (like onelight-fixed-bufferline)
 "ui.bufferline.active" = { fg = "fg", bg = "bg", modifiers = ["bold"] }
 "ui.bufferline.background" = { bg = "bg" }
-"ui.bufferline" = { fg = "punctuation", bg = "#EEEEEE" }
+"ui.bufferline" = { fg = "punctuation", bg = "panel" }
 
-"ui.menu" = { fg = "fg", bg = "bg" }
+"ui.menu" = { fg = "fg", bg = "panel" }
 "ui.menu.selected" = { fg = "bg", bg = "active" }
 
-"ui.popup" = { fg = "fg", bg = "bg" }
-"ui.popup.info" = { fg = "fg", bg = "bg" }
+"ui.popup" = { fg = "fg", bg = "panel" }
+"ui.popup.info" = { fg = "fg", bg = "panel" }
 "ui.window" = { fg = "punctuation" }
 "ui.help" = { fg = "fg", bg = "bg" }
 
@@ -137,3 +137,4 @@ selection = "#BFDBFE"    # Light blue
 active = "#007ACC"       # Bright blue - cursor, active elements
 highlight = "#FFBC5D"    # Orange - search, warnings
 error-red = "#AA3731"    # Red - errors
+panel = "panel"        # Darker grey - UI panels, menus, popups
