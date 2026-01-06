@@ -1,4 +1,4 @@
-theme = "onelight-fixed-bufferline"
+theme = "wolf-alabaster-light"
 
 [editor]
 bufferline = "multiple"

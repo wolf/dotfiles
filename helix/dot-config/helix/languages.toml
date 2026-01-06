@@ -5,6 +5,11 @@ command = "rust-analyzer"
 name = "rust"
 language-servers = [ { name = "rust-analyzer" } ]
 
+roots = [
+  "Cargo.toml",
+  "Cargo.lock",
+]
+
 [language-server.rust-analyzer.config]
 check.command = "clippy"
 
@@ -16,13 +21,18 @@ args = ["server"]
 command = "pyrefly"
 args = ["lsp"]
 
+[language-server.ty]
+command = "ty"
+args = ["server"]
+
 [[language]]
 name = "python"
 scope = "source.python"
 injection-regex = "python"
 file-types = ["py", "pyi", "py3", "pyw", "ptl", "rpy", "pyx", "pxd"]
 indent = { tab-width = 4, unit = "    " }
-language-servers = ["ruff-server", "pyrefly"]
+# language-servers = ["basedpyright", "ty", "ruff-server", "pyrefly"]
+language-servers = ["ty"]
 
 [language.formatter]
 command = "ruff"
