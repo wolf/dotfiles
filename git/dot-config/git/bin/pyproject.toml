@@ -7,7 +7,7 @@ dependencies = [
     "typing_extensions",
 ]
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
     "pytest",
     "pytest-cov",
