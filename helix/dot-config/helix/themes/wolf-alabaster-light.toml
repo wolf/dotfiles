@@ -1,5 +1,9 @@
 # wolf-alabaster-light.toml
-
+#
+# Author: Wolf <wolf@zv.cx>
+# Project: https://github.com/wolf/dotfiles
+# Download: https://raw.githubusercontent.com/wolf/dotfiles/main/helix/dot-config/helix/themes/wolf-alabaster-light.toml
+#
 # This is a light-background theme especically for the Helix editor.
 #
 # The most important part here is the syntax stuff, but the theme includes UI stuff specifically for Helix, as well.
@@ -14,6 +18,8 @@
 #   * The [priorities and ideas](https://tonsky.me/blog/syntax-highlighting/) behind the Alabaster Theme (which exists for many editors) by Nikita Prokopov
 #   * His [actual repo implementing the theme](https://github.com/tonsky/sublime-scheme-alabaster)
 #   * A [theme template](https://github.com/joegm/helix-theme-template) on GitHub provided by joegm
+
+# I don't consider this to be done! I absolutely want feedback. I absolutely will continue to tinker.
 
 # GENERAL - Diagnostics (LSP errors/warnings)
 warning = { fg = "highlight" }
@@ -32,7 +38,7 @@ diagnostic = { underline = { style = "curl" } }
 "ui.cursor.match" = { bg = "highlight" }
 
 "ui.selection" = { bg = "selection" }
-"ui.selection.primary" = { bg = "selection" }
+"ui.selection.primary" = { bg = "selection-primary" }
 
 "ui.linenr" = { fg = "punctuation" }
 "ui.linenr.selected" = { fg = "active", modifiers = ["bold"] }
@@ -133,8 +139,9 @@ definition = "#325CC0"   # Blue - function/class definitions
 
 # Supporting colors
 punctuation = "#777777"  # Grey - dimmed operators/brackets
-selection = "#BFDBFE"    # Light blue
+selection = "#BFDBFE"    # Light blue - secondary selections
+selection-primary = "#93C5FD"  # Darker blue - primary selection
 active = "#007ACC"       # Bright blue - cursor, active elements
 highlight = "#FFBC5D"    # Orange - search, warnings
 error-red = "#AA3731"    # Red - errors
-panel = "panel"        # Darker grey - UI panels, menus, popups
+panel = "#EEEEEE"      # Darker grey - UI panels, menus, popups
