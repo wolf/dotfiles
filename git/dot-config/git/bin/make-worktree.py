@@ -105,7 +105,7 @@ def worktree_add(
         extra_arguments = ["-b", new_worktree_branch, starting_ref]
 
     if not new_worktree:
-        new_worktree = Path(new_worktree_branch)
+        new_worktree = Path(sanitize_directory_name(new_worktree_branch))
     new_worktree = Path(new_worktree)
 
     # Resolve worktree path with intelligent defaults:
