@@ -9,7 +9,9 @@
       "Bash(git log:*)",
       "Bash(git diff:*)",
       "Bash(git show:*)",
-      "Bash(git blame:*)"
+      "Bash(git blame:*)",
+      "Bash(pytest:*)",
+      "Bash(bash:*)"
     ],
     "additionalDirectories": ["~/develop/"]
   },
