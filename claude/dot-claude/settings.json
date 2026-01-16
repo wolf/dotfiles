@@ -12,6 +12,7 @@
       "Bash(git blame:*)",
       "Bash(git rev-parse:*)",
       "Bash(git ls-files:*)",
+      "Bash(git switch:*)",
       "Bash(pytest:*)",
       "Bash(bash:*)"
     ],
