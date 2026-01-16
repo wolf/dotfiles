@@ -11,3 +11,5 @@ node_modules/
 .idea/
 tags
 LOCAL-*
+
+**/.claude/settings.local.json
