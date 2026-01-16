@@ -99,6 +99,10 @@ summary, blank line, then paragraphs as needed.
 
 Like docstrings: succinct, Markdown, only where needed. Comments explain the "why"; code is the "how". Use comments when the technique, code, or result is surprising or non-Pythonic. Obvious code is better than non-obvious code with good comments.
 
+# Bash Commands
+
+When running commands that target a specific directory (like git commands), `cd` to that directory first rather than using flags like `git -C <path>`. This keeps commands simple and matches the allowed command patterns in settings.
+
 # Commit Messages
 
 Use imperative mood: "Add feature" not "Added feature". Explain the "why" in the commit body for non-trivial changes.

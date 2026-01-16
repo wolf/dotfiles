@@ -10,6 +10,8 @@
       "Bash(git diff:*)",
       "Bash(git show:*)",
       "Bash(git blame:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(git ls-files:*)",
       "Bash(pytest:*)",
       "Bash(bash:*)"
     ],
