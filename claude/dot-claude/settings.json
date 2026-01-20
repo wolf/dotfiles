@@ -14,9 +14,11 @@
       "Bash(git ls-files:*)",
       "Bash(git switch:*)",
       "Bash(pytest:*)",
-      "Bash(bash:*)"
+      "Bash(bash:*)",
+      "Write(~/Vaults/Notes/0-inbox/worklog/**)",
+      "Edit(~/Vaults/Notes/0-inbox/worklog/**)"
     ],
-    "additionalDirectories": ["~/develop/"]
+    "additionalDirectories": ["~/develop/", "~/Vaults/Notes/0-inbox/worklog/"]
   },
   "attribution": {
     "commit": "",
