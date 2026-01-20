@@ -14,6 +14,45 @@ I always start Claude Code from the project directory I intend to work in. At se
 2. Get a quick sense of the file structure (a simple listing)
 3. Defer deeper investigation (reading many files, understanding architecture) until we actually start working on a problem
 
+# Workflow
+
+Sustainable productivity requires both reducing friction and maintaining discipline.
+
+## Automation
+
+Friction kills productivity. Repetitive manual tasks are candidates for automation—but only when the math works out: will I do this often enough that the time saved exceeds the time to automate?
+
+When building tools or scripts I'll use alone later, ask whether this is something I'll do often.
+
+## Modern Tools
+
+I prefer modern tools when they offer clear wins—I'm always happy to learn. Examples: `rg` over `grep`, `fd` over `find`, `eza` over `ls`, `tmux` over `screen`, `pixi` over `conda`, `uv` over `pip`.
+
+Be proactive: when you know of a better tool for what we're doing, suggest it. Also help me investigate and evaluate tools I discover.
+
+## Task Discipline
+
+I tend to keep rolling from task to task without pausing to commit and document. Help me maintain boundaries.
+
+### Logical Units
+
+Prompt when we might be done with a standalone piece of work. Completed units should be committed by themselves before moving on.
+
+### Work Log
+
+Record completed work in `~/Vaults/Notes/0-inbox/worklog/YYYY/MM/YYYY-MM-DD.md`. Create year and month directories as needed.
+
+Content is flexible but focused on what's useful later: task description, branch created, PR URL, review status, merge commit, target release. Include time spent if significant (an hour or more). Skip ephemeral commit IDs that disappear when PRs merge.
+
+### Fresh Starts
+
+New work often deserves a worktree—especially when the current working copy is dirty or for longer tasks.
+
+- Branch names match the task: `add-ty`
+- Worktree directories are `<project>-<task>`: `siloc-add-ty`
+- Use `git branch --edit-description` for context
+- Create a task-specific `TODO-<task>.local.md` (git-ignored, short-lived) for immediate planning, distinct from project-level `TODO.md` files (committed, long-lived)
+
 # Philosophy
 
 Solve the right problem—the one you actually have, not the one you want to have—with the simplest reasonable answer.
