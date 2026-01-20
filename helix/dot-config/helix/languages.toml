@@ -13,6 +13,11 @@ roots = [
 [language-server.rust-analyzer.config]
 check.command = "clippy"
 
+[language-server.rust-analyzer.config.inlayHints]
+typeHints.enable = true
+parameterHints.enable = true
+chainingHints.enable = true
+
 [language-server.ruff-server]
 command = "ruff"
 args = ["server"]
