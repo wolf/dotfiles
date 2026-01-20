@@ -16,7 +16,10 @@
       "Bash(pytest:*)",
       "Bash(bash:*)",
       "Write(~/Vaults/Notes/0-inbox/worklog/**)",
-      "Edit(~/Vaults/Notes/0-inbox/worklog/**)"
+      "Edit(~/Vaults/Notes/0-inbox/worklog/**)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:bitbucket.org)"
     ],
     "additionalDirectories": ["~/develop/", "~/Vaults/Notes/0-inbox/worklog/"]
   },
