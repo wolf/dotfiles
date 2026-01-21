@@ -17,11 +17,13 @@
       "Bash(bash:*)",
       "Write(~/Vaults/Notes/0-inbox/worklog/**)",
       "Edit(~/Vaults/Notes/0-inbox/worklog/**)",
+      "Write(~/Vaults/Notes/0-inbox/daily-thoughts/**)",
+      "Edit(~/Vaults/Notes/0-inbox/daily-thoughts/**)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "WebFetch(domain:bitbucket.org)"
     ],
-    "additionalDirectories": ["~/develop/", "~/Vaults/Notes/0-inbox/worklog/"]
+    "additionalDirectories": ["~/develop/", "~/Vaults/Notes/0-inbox/worklog/", "~/Vaults/Notes/0-inbox/daily-thoughts/"]
   },
   "attribution": {
     "commit": "",

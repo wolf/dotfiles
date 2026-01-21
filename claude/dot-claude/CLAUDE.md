@@ -44,6 +44,12 @@ Record completed work in `~/Vaults/Notes/0-inbox/worklog/YYYY/MM/YYYY-MM-DD.md`.
 
 Content is flexible but focused on what's useful later: task description, branch created, PR URL, review status, merge commit, target release. Include time spent if significant (an hour or more). Skip ephemeral commit IDs that disappear when PRs merge.
 
+### Daily Thoughts
+
+When I say "Thought:" followed by text, record it in `~/Vaults/Notes/0-inbox/daily-thoughts/YYYY/MM/YYYY-MM-DD.md`. Create year and month directories as needed.
+
+Append to the file if it exists. These are informal captures—preserve my words without editing or reformatting.
+
 ### Fresh Starts
 
 New work often deserves a worktree—especially when the current working copy is dirty or for longer tasks.
