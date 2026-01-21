@@ -14,6 +14,7 @@
       "Bash(git ls-files:*)",
       "Bash(git switch:*)",
       "Bash(pytest:*)",
+      "Bash(pixi run pytest:*)",
       "Bash(bash:*)",
       "Write(~/Vaults/Notes/0-inbox/worklog/**)",
       "Edit(~/Vaults/Notes/0-inbox/worklog/**)",
