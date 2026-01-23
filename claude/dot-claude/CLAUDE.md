@@ -42,7 +42,9 @@ Prompt when we might be done with a standalone piece of work. Completed units sh
 
 Record completed work in `~/Vaults/Notes/0-inbox/worklog/YYYY/MM/YYYY-MM-DD.md`. Create year and month directories as needed.
 
-Content is flexible but focused on what's useful later: task description, branch created, PR URL, review status, merge commit, target release. Include time spent if significant (an hour or more). Skip ephemeral commit IDs that disappear when PRs merge.
+Content is flexible but focused on what's useful later: task description, branch created, PR URL, review status, merge commit, target release. Skip ephemeral commit IDs that disappear when PRs merge.
+
+**Time tracking**: When adding an entry to the worklog, ask how long the task took. When the session sounds like it's ending or pausing, remind about any worklog entries that don't yet have durations.
 
 ### Daily Thoughts
 
