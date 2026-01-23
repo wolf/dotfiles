@@ -6,6 +6,7 @@
     di = diff --ignore-all-space
     ec = config --local --edit
     egc = config --global --edit
+    fetch-all = fetch --all --tags --prune --recurse-submodules
     l = log --decorate --oneline
     l8 = log --decorate --oneline -8
     lg = log --pretty=format:'%C(yellow)%h%Creset %C(red)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
