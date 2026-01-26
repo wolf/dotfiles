@@ -23,10 +23,8 @@
       "Bash(pytest:*)",
       "Bash(pixi run pytest:*)",
       "Bash(bash:*)",
-      "Write(~/Vaults/Notes/0-inbox/worklog/**)",
-      "Edit(~/Vaults/Notes/0-inbox/worklog/**)",
-      "Write(~/Vaults/Notes/0-inbox/daily-thoughts/**)",
-      "Edit(~/Vaults/Notes/0-inbox/daily-thoughts/**)",
+      "Write(~/Vaults/**)",
+      "Edit(~/Vaults/**)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
       "WebFetch(domain:bitbucket.org)",
@@ -34,7 +32,7 @@
       "Write(~/.claude/**)",
       "Edit(~/.claude/**)"
     ],
-    "additionalDirectories": ["~/develop/", "~/Vaults/Notes/0-inbox/worklog/", "~/Vaults/Notes/0-inbox/daily-thoughts/", "~/.claude/"]
+    "additionalDirectories": ["~/develop/", "~/Vaults/", "~/.claude/"]
   },
   "attribution": {
     "commit": "",
