@@ -46,6 +46,12 @@ Content is flexible but focused on what's useful later: task description, branch
 
 **Time tracking**: When adding an entry to the worklog, ask how long the task took. When the session sounds like it's ending or pausing, remind about any worklog entries that don't yet have durations.
 
+**Ticket tracking**: When work is related to a ticket (Jira, GitHub issue, etc.), note the ticket number and summary on its own line, just above the duration. Ask about ticket association when it's not obvious from context.
+
+**Attribution**: When work is done for a specific entity (employer, client, project), note it on the same line as the duration. The user may explicitly state who the work is for—this overrides any automatic detection based on directory. Project-specific CLAUDE.md files may define rules for automatic attribution (e.g., "work under this directory is for X").
+
+**Things integration**: When wrapping up completed work (updating worklog, closing tickets, etc.), check today's open tasks in Things for matches. This might mean marking a task complete or updating checklist items within it. When the match isn't obvious, discuss what to do.
+
 ### Daily Thoughts
 
 When I say "Thought:" followed by text, record it in `~/Vaults/Notes/0-inbox/daily-thoughts/YYYY/MM/YYYY-MM-DD.md`. Create year and month directories as needed.

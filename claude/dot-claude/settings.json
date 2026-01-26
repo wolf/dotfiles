@@ -13,6 +13,13 @@
       "Bash(git rev-parse:*)",
       "Bash(git ls-files:*)",
       "Bash(git switch:*)",
+      "Bash(gh issue:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(gh repo view:*)",
+      "Bash(gh release:*)",
       "Bash(pytest:*)",
       "Bash(pixi run pytest:*)",
       "Bash(bash:*)",
@@ -22,9 +29,12 @@
       "Edit(~/Vaults/Notes/0-inbox/daily-thoughts/**)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:raw.githubusercontent.com)",
-      "WebFetch(domain:bitbucket.org)"
+      "WebFetch(domain:bitbucket.org)",
+      "mcp__things__*",
+      "Write(~/.claude/**)",
+      "Edit(~/.claude/**)"
     ],
-    "additionalDirectories": ["~/develop/", "~/Vaults/Notes/0-inbox/worklog/", "~/Vaults/Notes/0-inbox/daily-thoughts/"]
+    "additionalDirectories": ["~/develop/", "~/Vaults/Notes/0-inbox/worklog/", "~/Vaults/Notes/0-inbox/daily-thoughts/", "~/.claude/"]
   },
   "attribution": {
     "commit": "",
