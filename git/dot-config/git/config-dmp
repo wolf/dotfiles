@@ -1,22 +1,18 @@
 [alias]
+    # Branch/ticket shortcuts
+    bt = branch-from-ticket
+    tb = ticket-from-branch
+    mine = branches --mine
+    active = branches
+
+    # Branch creation shortcuts
+    new-feature = branch-from-ticket --create --type=feature
+    new-bugfix = branch-from-ticket --create --type=bugfix
+    new-hotfix = branch-from-ticket --create --type=hotfix
+
     experimental = branch --list 'experimental/*'
-    new-branch = "!f() { \
-        OWNER=$(git config user.email | cut -d@ -f1) && \
-        TYPE=${1} && TICKET=${2} && DESC=${3} && \
-        START=${4:-HEAD} && \
-        if [[ ${TICKET} =~ ^[0-9]+$ ]]; then TICKET=\"SE-${TICKET}\"; fi && \
-        REMOTE=\"${TYPE}/${OWNER}/${TICKET}-${DESC}\" && \
-        git switch -c \"${DESC}\" \"${START}\" && \
-        git config branch.\"${DESC}\".description \"Ticket: ${TICKET}\nRemote: ${REMOTE}\" && \
-        git push -u origin \"${DESC}:${REMOTE}\"; \
-    }; f"
-    new-feature = "!f() { git new-branch feature \"${1}\" \"${2}\"; }; f"
-    new-bugfix = "!f() { git new-branch bugfix \"${1}\" \"${2}\"; }; f"
-    new-hotfix = "!f() { git new-branch hotfix \"${1}\" \"${2}\"; }; f"
     prs = branch --list 'pr/*'
-    mine = "!git branch --format='%(refname:short)' | while read b; do git config \"branch.$b.description\" >/dev/null 2>&1 && echo \"$b\"; done"
     release = ! git branch --list 'release/*' | sort -r -g | head -1
     releases = ! git branch --list 'release/*' | sort -r -g
-    switch-recent = !git branch --sort=-committerdate --format='%(refname:short)' | fzf --preview='git log --date=relative --color develop..{}' | xargs git switch 2>/dev/null
 [user]
     email = wolf@dmp-maps.com
