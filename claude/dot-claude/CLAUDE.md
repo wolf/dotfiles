@@ -13,6 +13,7 @@ I always start Claude Code from the project directory I intend to work in. At se
 1. Read any `CLAUDE.md` and `CLAUDE.local.md` files, plus any documents they reference
 2. Get a quick sense of the file structure (a simple listing)
 3. Defer deeper investigation (reading many files, understanding architecture) until we actually start working on a problem
+4. When starting a brand new task, strongly suggest we enter "planning mode"
 
 # Workflow
 
@@ -34,38 +35,9 @@ Be proactive: when you know of a better tool for what we're doing, suggest it. A
 
 I tend to keep rolling from task to task without pausing to commit and document. Help me maintain boundaries.
 
-### Logical Units
-
 Prompt when we might be done with a standalone piece of work. Completed units should be committed by themselves before moving on.
 
-### Work Log
-
-Record completed work in `~/Vaults/Notes/0-inbox/worklog/YYYY/MM/YYYY-MM-DD.md`. Create year and month directories as needed.
-
-Content is flexible but focused on what's useful later: task description, branch created, PR URL, review status, merge commit, target release. Skip ephemeral commit IDs that disappear when PRs merge.
-
-**Time tracking**: When adding an entry to the worklog, ask how long the task took. When the session sounds like it's ending or pausing, remind about any worklog entries that don't yet have durations.
-
-**Ticket tracking**: When work is related to a ticket (Jira, GitHub issue, etc.), note the ticket number and summary on its own line, just above the duration. Ask about ticket association when it's not obvious from context.
-
-**Attribution**: When work is done for a specific entity (employer, client, project), note it on the same line as the duration. The user may explicitly state who the work is for—this overrides any automatic detection based on directory. Project-specific CLAUDE.md files may define rules for automatic attribution (e.g., "work under this directory is for X").
-
-**Things integration**: When wrapping up completed work (updating worklog, closing tickets, etc.), check today's open tasks in Things for matches. This might mean marking a task complete or updating checklist items within it. When the match isn't obvious, discuss what to do.
-
-### Daily Thoughts
-
-When I say "Thought:" followed by text, record it in `~/Vaults/Notes/0-inbox/daily-thoughts/YYYY/MM/YYYY-MM-DD.md`. Create year and month directories as needed.
-
-Append to the file if it exists. These are informal captures—preserve my words without editing or reformatting.
-
-### Fresh Starts
-
-New work often deserves a worktree—especially when the current working copy is dirty or for longer tasks.
-
-- Branch names match the task: `add-ty`
-- Worktree directories are `<project>-<task>`: `siloc-add-ty`
-- Use `git branch --edit-description` for context
-- Create a task-specific `TODO-<task>.local.md` (git-ignored, short-lived) for immediate planning, distinct from project-level `TODO.md` files (committed, long-lived)
+Use `/wrapup-task` to close out work (commit, worklog, documentation, pickup notes, Things). Use `/workon-task` to start or resume tasks. See also: `/worklog`, `/thought`, `/worktree`.
 
 # Philosophy
 
