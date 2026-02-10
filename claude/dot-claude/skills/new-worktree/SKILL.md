@@ -1,5 +1,5 @@
 ---
-name: worktree
+name: new-worktree
 description: Create git worktree for a task
 disable-model-invocation: true
 argument-hint: "[task-name]"
