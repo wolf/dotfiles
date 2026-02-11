@@ -37,7 +37,7 @@ I tend to keep rolling from task to task without pausing to commit and document.
 
 Prompt when we might be done with a standalone piece of work. Completed units should be committed by themselves before moving on.
 
-Use `/new-task` to start, `/resume-task` to continue, `/wrapup-task` to close out. See also: `/worklog`, `/thought`, `/worktree`.
+Use `/new-task` to start, `/resume-task` to continue, `/wrapup-task` to close out. See also: `/log-this`, `/log-other`, `/thought`, `/worktree`.
 
 # Philosophy
 
