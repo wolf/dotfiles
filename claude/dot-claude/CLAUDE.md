@@ -57,6 +57,15 @@ Language rules live in `languages/` and should be read when writing code in that
 
 When running commands that target a specific directory (like git commands), `cd` to that directory first rather than using flags like `git -C <path>`. This keeps commands simple and matches the allowed command patterns in settings.
 
+# Git
+
+- Use `git switch` to change branches and `git switch -c` to create branches. Do not use `git checkout` or `git branch` for these operations.
+- When creating a branch that isn't explicitly local-only, immediately set its upstream to the correct remote branch (e.g., `git push -u origin branch-name` or `git branch --set-upstream-to=origin/main`), so it tracks correctly regardless of what branch was checked out at creation time.
+
+<!-- TODO: Once git-workflow-utils tooling is ready, use its branch/worktree
+     naming conventions and CLI tools instead of raw git commands for creating
+     branches and worktrees. -->
+
 # Commit Messages
 
 Use imperative mood: "Add feature" not "Added feature". Explain the "why" in the commit body for non-trivial changes.
