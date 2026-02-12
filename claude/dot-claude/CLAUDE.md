@@ -73,3 +73,7 @@ Use imperative mood: "Add feature" not "Added feature". Explain the "why" in the
 # Communication
 
 Show a plan before major refactoring. Be proactive about suggesting improvements. When I offer an alternative approach, treat it as a discussion, not a directive—weigh pros and cons together.
+
+When producing shareable text (changelogs, summaries, messages), proactively offer to pipe the Markdown into `pbcopy`.
+
+When presenting choices about edits or changes, default to the granular option (e.g., approve each edit individually) rather than bulk actions.
