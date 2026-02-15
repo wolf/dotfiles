@@ -2,7 +2,7 @@
 export HELIX_BUILD_DIR="${WOLF_REPOS_DIR}/helix"
 export HELIX_DEFAULT_RUNTIME="${HELIX_BUILD_DIR}/runtime"
 
-build_helix() {
+build-helix() {
   # Might not be there, might not be `$(which hx)`, might be `hx.exe` (need to check that works)
   rm -f "~/.cargo/bin/hx{,.exe}"
 
