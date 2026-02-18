@@ -20,6 +20,10 @@ Run `git status` and `git diff --stat` to see uncommitted changes. If there are 
 
 ### 2. Update Work Log
 
+Read `~/Vaults/Notes/0-inbox/worklog/CLAUDE.md` for the canonical worklog
+format — frontmatter schema, entry format, duration short forms, and client
+attribution rules.
+
 Add an entry to `~/Vaults/Notes/0-inbox/worklog/YYYY/MM/YYYY-MM-DD.md` (create directories as needed).
 
 **Ask the user for:**
@@ -35,6 +39,12 @@ Add an entry to `~/Vaults/Notes/0-inbox/worklog/YYYY/MM/YYYY-MM-DD.md` (create d
 Ticket: PROJ-123 - Summary of the ticket
 Duration: 2h (ClientName)
 ```
+
+Duration uses short form only: `3h`, `30m`, `1.5h`, `~2h`.
+
+When creating or appending to a daily file, **always read the existing file
+first**, then update the YAML frontmatter to reflect all entries (including the
+new one). See the worklog CLAUDE.md for the full frontmatter schema.
 
 ### 3. Check for Undocumented Patterns
 

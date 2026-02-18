@@ -1,14 +1,19 @@
 ---
 name: log-this
 description: Log current session work to daily work log
-disable-model-invocation: true
 argument-hint: "[description]"
-allowed-tools: Read, Write, Edit, mcp__things__*
+allowed-tools: Read, Write, Edit, AskUserQuestion, mcp__things__*
 ---
 
 # Add Work Log Entry
 
 Add an entry to the daily work log. Argument: `$ARGUMENTS` (task description, optional).
+
+## Conventions
+
+Read `~/Vaults/Notes/0-inbox/worklog/CLAUDE.md` for the canonical worklog
+format — frontmatter schema, entry format, duration short forms, and client
+attribution rules.
 
 ## Location
 
@@ -39,7 +44,14 @@ Duration: 2h (ClientName)
 Notes:
 - Ticket line is optional (omit if no ticket)
 - Attribution in parentheses after duration is optional (omit if personal work)
+- Duration uses short form only: `3h`, `30m`, `1.5h`, `~2h`
 - Skip ephemeral details like commit IDs that won't matter after merge
+
+## Frontmatter
+
+When creating or appending to a daily file, **always read the existing file
+first**, then update the YAML frontmatter to reflect all entries (including the
+new one). See the worklog CLAUDE.md for the full frontmatter schema.
 
 ## Things Integration
 
