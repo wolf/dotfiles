@@ -28,4 +28,4 @@ New features created on this machine typically start as commits on `local-only`.
 
 **Comparing branches:** Because commits move between branches via cherry-pick, the same change will have different commit IDs on `main` and `local-only`. When identifying which commits need to be cherry-picked, compare by commit summary — not by commit ID.
 
-**Push safety:** Git is configured with `push.default = nothing` to prevent accidentally pushing `local-only`. Always use `git push origin main` explicitly. After any work in this repo, ensure `local-only` is checked out.
+**Push safety:** Git is configured with `push.default = nothing` to prevent accidentally pushing `local-only`. Since the typical checkout is `local-only`, push with `git push origin main:main` (explicit refspec). After any work in this repo, ensure `local-only` is checked out.
