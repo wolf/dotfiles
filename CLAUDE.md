@@ -26,4 +26,6 @@ Updates pushed to `main` from other machines can be pulled and cherry-picked to 
 
 New features created on this machine typically start as commits on `local-only`. Once they've proved themselves, they are cherry-picked to `main` and pushed to the canonical repo.
 
+**Comparing branches:** Because commits move between branches via cherry-pick, the same change will have different commit IDs on `main` and `local-only`. When identifying which commits need to be cherry-picked, compare by commit summary — not by commit ID.
+
 **Push safety:** Git is configured with `push.default = nothing` to prevent accidentally pushing `local-only`. Always use `git push origin main` explicitly. After any work in this repo, ensure `local-only` is checked out.
