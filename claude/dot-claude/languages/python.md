@@ -9,6 +9,7 @@ Use the most recent stable Python version unless a project specifies otherwise.
 - **Package management**: `uv`
 - **Virtual environments**: Managed by `uv`, activated automatically via `direnv`
 - **Pre-commit**: Always use `pre-commit` for checks including linting, type-checking, basics, and usually requiring all `pytest` tests to pass
+- **Before staging**: Run `ruff format` on changed files so pre-commit hooks are a safety net, not a reformatter
 
 ## Code Quality
 
