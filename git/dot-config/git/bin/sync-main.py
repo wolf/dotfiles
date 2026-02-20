@@ -139,18 +139,30 @@ def main(
     if dry_run:
         typer.echo(f"[DRY RUN] Would cherry-pick commits from {branch}")
     elif commit_count > 0:
-        typer.echo(f"Cherry-picking {commit_count} new commit(s) from {branch}...")
-        commit_range = f"{before_sha}..{after_sha}"
+        # Filter out commits already on target branch (by patch-id).
+        # git cherry <upstream> <head> <limit> checks only <limit>..<head>.
+        result = run_git("cherry", "-v", target_branch, after_sha, before_sha, capture=True)
+        all_entries = [line.split(maxsplit=2) for line in result.stdout.strip().splitlines()]
+        to_pick = [sha for flag, sha, _ in all_entries if flag == "+"]
+        skipped = len(all_entries) - len(to_pick)
 
-        try:
-            run_git("cherry-pick", commit_range)
-            typer.echo(f"✓ Successfully cherry-picked {commit_count} commit(s)")
-        except subprocess.CalledProcessError:
-            typer.echo("Error: Cherry-pick failed. You may need to resolve conflicts.", err=True)
-            typer.echo("Run 'git cherry-pick --abort' to cancel or resolve conflicts and continue.")
-            if stashed:
-                typer.echo("Warning: Stashed changes not restored due to error. Run 'git stash pop' manually.", err=True)
-            raise typer.Exit(1)
+        if to_pick:
+            typer.echo(f"Cherry-picking {len(to_pick)} new commit(s) from {branch}...")
+            try:
+                run_git("cherry-pick", *to_pick)
+            except subprocess.CalledProcessError:
+                typer.echo("Error: Cherry-pick failed. You may need to resolve conflicts.", err=True)
+                typer.echo("Run 'git cherry-pick --abort' to cancel or resolve conflicts and continue.")
+                if stashed:
+                    typer.echo("Warning: Stashed changes not restored due to error. Run 'git stash pop' manually.", err=True)
+                raise typer.Exit(1)
+
+        parts = []
+        if to_pick:
+            parts.append(f"{len(to_pick)} applied")
+        if skipped:
+            parts.append(f"{skipped} skipped")
+        typer.echo(f"✓ Cherry-pick complete ({', '.join(parts)})")
 
     # Restore stash if we stashed
     if stashed:
