@@ -15,6 +15,7 @@
     upstream = ! git rev-parse --abbrev-ref @{u} 2>/dev/null | sed 's=origin/==' || echo '(no upstream)'
     n = ! git status -s | wc -l
     unstage = restore --staged
+    what-landed = "!f() { branch=\"${1:-$(git symbolic-ref --short HEAD)}\"; git l \"$branch@{1}..$branch\"; }; f"
     aliases = ! git config --list | grep alias
 
     ruff-fix-staged = ! git diff --name-only --staged | grep '\\.py$' | xargs ruff check --fix
