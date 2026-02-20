@@ -56,7 +56,8 @@ Use this when `$ARGUMENTS` is empty.
 Call `mcp__apple-events__calendar_events` with:
 - `action: "read"`
 - `startDate`: today's date (`YYYY-MM-DD`)
-- `endDate`: today's date (`YYYY-MM-DD`)
+- `endDate`: tomorrow's date (`YYYY-MM-DD`) — the range is exclusive, so
+  same-date start/end returns nothing
 
 If the calendar fetch fails, warn the user and offer to fall back to ad-hoc
 flow (Path A without a pre-filled title — ask for the meeting name).
