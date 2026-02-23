@@ -11,7 +11,7 @@ Clock out of the current workday segment. Argument: `$ARGUMENTS` (optional time)
 
 ## Conventions
 
-Read `~/Vaults/Notes/0-inbox/worklog/CLAUDE.md` for the canonical worklog
+Read `~/Vaults/Notes/0-log/worklog/CLAUDE.md` for the canonical worklog
 format — frontmatter schema, workday tracking rules.
 
 ## Parse Arguments
@@ -26,7 +26,7 @@ Normalize time to 24-hour `HH:MM` format.
 ## Procedure
 
 1. **Resolve time**: If no time in arguments, run `date +%H:%M` for current time.
-2. **Read daily file**: `~/Vaults/Notes/0-inbox/worklog/YYYY/MM/YYYY-MM-DD.md`
+2. **Read daily file**: `~/Vaults/Notes/0-log/worklog/YYYY/MM/YYYY-MM-DD.md`
    (today's date). Error if the file doesn't exist — nothing to clock out of.
 3. **Find open segment**: Look for a `workday` entry with no `end`.
    - If none: warn "No open workday segment to close." and stop.

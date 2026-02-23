@@ -11,13 +11,13 @@ Log work done outside this environment (meetings, documentation, tickets, merges
 
 ## Conventions
 
-Read `~/Vaults/Notes/0-inbox/worklog/CLAUDE.md` for the canonical worklog
+Read `~/Vaults/Notes/0-log/worklog/CLAUDE.md` for the canonical worklog
 format — frontmatter schema, entry format, duration short forms, and client
 attribution rules.
 
 ## Location
 
-Write to: `~/Vaults/Notes/0-inbox/worklog/YYYY/MM/YYYY-MM-DD.md`
+Write to: `~/Vaults/Notes/0-log/worklog/YYYY/MM/YYYY-MM-DD.md`
 
 Create year and month directories as needed.
 

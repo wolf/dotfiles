@@ -12,7 +12,7 @@ Record an informal thought to the daily thoughts file. Argument: `$ARGUMENTS` (t
 
 ## Location
 
-Append to: `~/Vaults/Notes/0-inbox/daily-thoughts/YYYY/MM/YYYY-MM-DD.md`
+Append to: `~/Vaults/Notes/0-log/thoughts/YYYY/MM/YYYY-MM-DD.md`
 
 Create year and month directories as needed.
 
