@@ -59,3 +59,16 @@ new one). See the worklog CLAUDE.md for the full frontmatter schema.
 ## Things Integration
 
 After adding the entry, check today's Things tasks for matches. If a matching task exists, ask if it should be marked complete or updated.
+
+## Carry Forward
+
+After the Things step, ask: "Anything to carry forward for tomorrow?"
+
+* If the user says no (or equivalent), skip.
+* If yes, take their input and append a bullet to the `## Pick-up` section
+  at the bottom of the worklog file.
+* If the section doesn't exist yet, create it (as the last `##` section in
+  the body).
+* Lead with **ticket ID** (bold) if the entry had a ticket.
+* Keep the bullet concise — next action, blocker, or context to resume.
+* Do not add to frontmatter or change hours/totals.

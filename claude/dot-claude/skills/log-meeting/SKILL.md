@@ -43,7 +43,7 @@ Use this when `$ARGUMENTS` contains a meeting name (e.g., `/log-meeting standup 
 - **Notes**: Anything worth noting? Decisions made, topics discussed. Keep brief. (Optional)
 - **Action items**: Any action items from this meeting? (Optional — freeform list)
 
-Then proceed to **Format**, **Frontmatter**, **Things Integration**, and **Loop** below.
+Then proceed to **Format**, **Frontmatter**, **Things Integration**, **Carry Forward**, and **Loop** below.
 
 ---
 
@@ -115,8 +115,9 @@ For each selected meeting, gather information and log it:
 - **Notes / action items**: Ask (optional). Since these are past meetings,
   the user may have something quick to note.
 
-Then proceed to **Format**, **Frontmatter**, and **Things Integration** below
-for each meeting.
+Then proceed to **Format**, **Frontmatter**, **Things Integration**, and
+**Carry Forward** below for each meeting (ask carry-forward immediately after
+each meeting, not deferred to the end of the batch).
 
 ### 7. After Calendar Meetings
 
@@ -163,6 +164,20 @@ The entry **must** include `event_type: meeting` in the frontmatter entries list
 After adding the entry:
 - For each action item, offer to create a Things task
 - Check today's Things tasks for matches to the meeting itself. If a matching task exists, ask if it should be marked complete or updated.
+
+## Carry Forward
+
+After the Things step (once per meeting, not per action item), ask:
+"Anything from this meeting to carry forward for tomorrow?"
+
+* If the user says no (or equivalent), skip.
+* If yes, take their input and append a bullet to the `## Pick-up` section
+  at the bottom of the worklog file.
+* If the section doesn't exist yet, create it (as the last `##` section in
+  the body).
+* Lead with **ticket ID** (bold) if the meeting had a ticket.
+* Keep the bullet concise — next action, blocker, or context to resume.
+* Do not add to frontmatter or change hours/totals.
 
 ## Loop
 
