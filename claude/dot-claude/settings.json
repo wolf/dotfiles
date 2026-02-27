@@ -29,9 +29,8 @@
       "Bash(bash:*)",
       "Write(~/Vaults/**)",
       "Edit(~/Vaults/**)",
-      "WebFetch(domain:github.com)",
-      "WebFetch(domain:raw.githubusercontent.com)",
-      "WebFetch(domain:bitbucket.org)",
+      "WebSearch",
+      "WebFetch",
       "mcp__things__*",
       "Write(~/.claude/**)",
       "Edit(~/.claude/**)"

@@ -156,7 +156,7 @@ When creating or appending to a daily file, **always read the existing file
 first**, then update the YAML frontmatter to reflect all entries (including the
 new one). See the worklog CLAUDE.md for the full frontmatter schema.
 
-The entry **must** include `type: meeting` in the frontmatter entries list.
+The entry **must** include `event_type: meeting` in the frontmatter entries list.
 
 ## Things Integration
 
