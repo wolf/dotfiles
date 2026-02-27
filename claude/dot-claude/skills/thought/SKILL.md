@@ -30,12 +30,11 @@ These are informal captures meant to preserve the raw thought.
 
 ## Format
 
-Simply append the thought text to the file, separated by a blank line from any previous content:
+Each thought is a bullet point (using `*`). Append to the file:
 
 ```
-Previous thought here...
-
-New thought goes here exactly as provided.
+* Previous thought here...
+* New thought goes here exactly as provided.
 ```
 
-If the file doesn't exist, create it with just the thought text.
+If the file doesn't exist, create it with just the bullet item.

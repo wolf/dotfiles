@@ -70,6 +70,10 @@ When running commands that target a specific directory (like git commands), `cd`
 
 Use imperative mood: "Add feature" not "Added feature". Explain the "why" in the commit body for non-trivial changes.
 
+# Markdown Style
+
+Use `*` (asterisks) for unordered list bullets, not `-` (dashes).
+
 # Communication
 
 Show a plan before major refactoring. Be proactive about suggesting improvements. When I offer an alternative approach, treat it as a discussion, not a directive—weigh pros and cons together.
