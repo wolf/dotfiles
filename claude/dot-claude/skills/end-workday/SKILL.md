@@ -36,7 +36,8 @@ Normalize time to 24-hour `HH:MM` format.
 5. **Compute duration**: `end - start` in decimal hours (e.g., 08:00→17:00 = 9h).
 6. **Write file**: Update frontmatter, preserve body.
 7. **Pick-up review**: See below.
-8. **Confirm**: "Clocked out of **{client}** at {time} ({duration})."
+8. **Accomplishment check**: After confirming clock-out, ask: "Anything from today worth logging as a notable accomplishment? (`/accomplishment`)"
+9. **Confirm**: "Clocked out of **{client}** at {time} ({duration})."
 
 ## Pick-up Review
 

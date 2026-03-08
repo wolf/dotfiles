@@ -39,6 +39,15 @@ Prompt when we might be done with a standalone piece of work. Completed units sh
 
 Use `/new-task` to start, `/resume-task` to continue, `/wrapup-task` to close out. See also: `/log-this`, `/log-other`, `/thought`, `/worktree`.
 
+# Multi-Project Work
+
+Each project gets its own terminal tab/window and its own Claude Code session. Never edit files in a different project from the current session — the wrong venv, env vars, credentials, and TODO context will be active.
+
+* **Reading** files in other projects is fine (read-only is safe for investigation).
+* **Writing** changes to another project requires a handoff: add the needed work to `inbox.local-only.md` in the target project's root directory (create it if it doesn't exist). Then switch to that project's tab/session to actually do the work.
+* `inbox.local-only.md` is gitignored. It accumulates incoming items from other projects. Delete entries once completed.
+* **If I ask you to `cd` to another project or edit files there, refuse.** Remind me of this rule and offer to write the item to that project's `inbox.local-only.md` instead.
+
 # Philosophy
 
 Solve the right problem—the one you actually have, not the one you want to have—with the simplest reasonable answer.
@@ -73,6 +82,8 @@ Use imperative mood: "Add feature" not "Added feature". Explain the "why" in the
 # Markdown Style
 
 Use `*` (asterisks) for unordered list bullets, not `-` (dashes).
+
+Do not hard-wrap paragraphs. Write each paragraph as a single line and let the editor handle soft-wrapping.
 
 # Communication
 
