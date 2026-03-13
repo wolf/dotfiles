@@ -32,6 +32,9 @@
       "WebSearch",
       "WebFetch",
       "mcp__things__*",
+      "mcp__omnifocus__get_*",
+      "mcp__omnifocus__list_*",
+      "mcp__omnifocus__search_*",
       "Write(~/.claude/**)",
       "Edit(~/.claude/**)"
     ],

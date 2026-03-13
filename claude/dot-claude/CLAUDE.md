@@ -70,6 +70,7 @@ When running commands that target a specific directory (like git commands), `cd`
 
 - Use `git switch` to change branches and `git switch -c` to create branches. Do not use `git checkout` or `git branch` for these operations.
 - When creating a branch that isn't explicitly local-only, immediately set its upstream to the correct remote branch (e.g., `git push -u origin branch-name` or `git branch --set-upstream-to=origin/main`), so it tracks correctly regardless of what branch was checked out at creation time.
+- Always use annotated tags (`git tag -a`), never lightweight tags. Annotated tags are durable Git objects with metadata; lightweight tags are just refs.
 
 <!-- TODO: Once git-workflow-utils tooling is ready, use its branch/worktree
      naming conventions and CLI tools instead of raw git commands for creating
