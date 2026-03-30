@@ -1,11 +1,11 @@
 ---
-name: log-this
+name: log
 description: Log current session work to a drop file for worklog ingestion
 argument-hint: "[description]"
 allowed-tools: Read, Write, Edit, Bash, AskUserQuestion
 ---
 
-# Log This (n11 — drop file)
+# Log Work (n11 — drop file)
 
 Log work from this session to a drop file for later ingestion into the
 worklog. Argument: `$ARGUMENTS` (task description, optional).
@@ -20,12 +20,12 @@ using `/ingest-n11`.
 accomplished in this session based on conversation context.
 
 **Confirm with the user:**
-- **Title**: Short description of the work. If ticket-related, prefix with
+* **Title**: Short description of the work. If ticket-related, prefix with
   the ticket ID (e.g., "SE-2856: Implement connection pooling").
-- **Duration**: How long did this task take? Use short form: `3h`, `30m`,
+* **Duration**: How long did this task take? Use short form: `3h`, `30m`,
   `1.5h`, `~2h`.
-- **Tickets**: Any Jira ticket IDs? (Optional.)
-- **Description**: Brief prose summary of what was done. Keep it to 2-3
+* **Tickets**: Any Jira ticket IDs? (Optional.)
+* **Description**: Brief prose summary of what was done. Keep it to 2-3
   sentences. (Optional.)
 
 Client is always `DMP` — don't ask.
@@ -48,11 +48,11 @@ description: |
 ```
 
 Fields:
-- `title`: required
-- `duration`: required, short form only (`3h`, `30m`, `1.5h`, `~2h`)
-- `client`: always `DMP`
-- `tickets`: list of ticket IDs, or empty list `[]`
-- `description`: optional prose, use YAML literal block scalar (`|`).
+* `title`: required
+* `duration`: required, short form only (`3h`, `30m`, `1.5h`, `~2h`)
+* `client`: always `DMP`
+* `tickets`: list of ticket IDs, or empty list `[]`
+* `description`: optional prose, use YAML literal block scalar (`|`).
   Omit the field entirely if there's nothing worth noting.
 
 4. Confirm: "Drop file written: `~/worklog-drop/{filename}`. Ingest on the
