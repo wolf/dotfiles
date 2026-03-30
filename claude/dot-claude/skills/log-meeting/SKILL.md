@@ -2,7 +2,7 @@
 name: log-meeting
 description: Log a meeting to daily work log
 argument-hint: "[meeting name]"
-allowed-tools: Read, Write, Edit, AskUserQuestion, mcp__things__*, mcp__apple-events__calendar_events
+allowed-tools: Read, Write, Edit, AskUserQuestion, mcp__things__*, mcp__omnifocus__*, mcp__apple-events__calendar_events
 ---
 
 # Log Meeting
@@ -43,7 +43,7 @@ Use this when `$ARGUMENTS` contains a meeting name (e.g., `/log-meeting standup 
 - **Notes**: Anything worth noting? Decisions made, topics discussed. Keep brief. (Optional)
 - **Action items**: Any action items from this meeting? (Optional — freeform list)
 
-Then proceed to **Format**, **Frontmatter**, **Things Integration**, **Carry Forward**, and **Loop** below.
+Then proceed to **Format**, **Frontmatter**, **Task Manager Integration**, **Carry Forward**, and **Loop** below.
 
 ---
 
@@ -115,7 +115,7 @@ For each selected meeting, gather information and log it:
 - **Notes / action items**: Ask (optional). Since these are past meetings,
   the user may have something quick to note.
 
-Then proceed to **Format**, **Frontmatter**, **Things Integration**, and
+Then proceed to **Format**, **Frontmatter**, **Task Manager Integration**, and
 **Carry Forward** below for each meeting (ask carry-forward immediately after
 each meeting, not deferred to the end of the batch).
 
@@ -159,15 +159,15 @@ new one). See the worklog CLAUDE.md for the full frontmatter schema.
 
 The entry **must** include `event_type: meeting` in the frontmatter entries list.
 
-## Things Integration
+## Task Manager Integration
 
 After adding the entry:
-- For each action item, offer to create a Things task
-- Check today's Things tasks for matches to the meeting itself. If a matching task exists, ask if it should be marked complete or updated.
+- For each action item, offer to create a task in OmniFocus.
+- Check OmniFocus for matching tasks to the meeting itself. If a match exists, ask if it should be marked complete or updated.
 
 ## Carry Forward
 
-After the Things step (once per meeting, not per action item), ask:
+After the task manager step (once per meeting, not per action item), ask:
 "Anything from this meeting to carry forward for tomorrow?"
 
 * If the user says no (or equivalent), skip.

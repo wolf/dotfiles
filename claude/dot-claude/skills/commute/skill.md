@@ -2,7 +2,7 @@
 name: commute
 description: Log commute time to daily work log
 argument-hint: "[direction] [start-time] [end-time | duration]"
-allowed-tools: Read, Write, Edit, Bash, AskUserQuestion, mcp__things__*
+allowed-tools: Read, Write, Edit, Bash, AskUserQuestion, mcp__things__*, mcp__omnifocus__*
 ---
 
 # Commute
@@ -74,8 +74,6 @@ The entry in the frontmatter `entries` list uses `event_type: commute`:
     tickets: []
 ```
 
-## Things Integration
+## Task Manager Integration
 
-After adding the entry, check today's Things tasks for matches (e.g.,
-"leave for work", "leave work"). If a matching task exists, ask if it should
-be marked complete or updated.
+After adding the entry, check OmniFocus for matching tasks (e.g., "leave for work", "leave work"). If a match exists, ask if it should be marked complete or updated.

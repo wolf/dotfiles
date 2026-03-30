@@ -2,7 +2,7 @@
 name: end-workday
 description: Clock out — stop tracking workday hours
 argument-hint: "[time]"
-allowed-tools: Read, Write, Edit, Bash, AskUserQuestion, mcp__mcp-atlassian__jira_search, mcp__things__*
+allowed-tools: Read, Write, Edit, Bash, AskUserQuestion, mcp__mcp-atlassian__jira_search, mcp__things__*, mcp__omnifocus__*
 ---
 
 # End Workday
