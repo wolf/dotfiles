@@ -37,7 +37,42 @@ I tend to keep rolling from task to task without pausing to commit and document.
 
 Prompt when we might be done with a standalone piece of work. Completed units should be committed by themselves before moving on.
 
-Use `/new-task` to start, `/resume-task` to continue, `/wrapup-task` to close out. See also: `/log-this`, `/log-other`, `/thought`, `/worktree`.
+Every unit of work needs a Jira ticket. Strongly discourage working without one.
+
+## Proactive Skill Invocation
+
+Don't wait for slash commands. Recognize intent and act.
+
+**Natural language → invoke immediately:**
+
+| Pattern | Skill |
+|---|---|
+| "I went to bed at...", "bedtime was..." | `/sleep` |
+| "I woke up at...", "got up at..." | `/wake` |
+| "I started work at...", "clocked in at..." | `/start-workday` |
+| "I left work at...", "done for the day" | `/end-workday` |
+| "I had a meeting...", "just got out of [meeting]" | `/log-meeting` |
+| "I commuted...", "drove in..." | `/commute` |
+| "I spent Xh on...", describes external work | `/log` |
+| Fleeting thought, reflection, observation | `/thought` |
+| "what should I work on?", "what's next?" | `/triage` |
+| "let's work on X", "I need to fix Y" | `/begin` |
+| "something came up", "pause this" | `/interrupt` |
+| "this is ready", "ship it", "PR this" | `/deliver` |
+| Multiple state updates in one message | Batch all relevant skills in parallel |
+
+**Context-aware prompting — offer at transitions:**
+
+| Transition | Prompt |
+|---|---|
+| Finished standalone work | "Want me to log this?" |
+| Session start in a project directory | Run `/triage` |
+| Tests pass, work looks complete | "Ready to deliver?" |
+| Significant achievement | "Worth an accomplishment entry?" |
+
+## Task Manager
+
+OmniFocus is the sole task manager. Do not check or reference Things.
 
 # Multi-Project Work
 
@@ -58,6 +93,8 @@ Within that framework, code must be correct, reliable, performant, and well-test
 
 No one starts with the simplest answer. It always starts complicated. Programming is like sculpting: chip away at what isn't needed until you arrive at the simple, obvious, fast version.
 
+New or changed code implies new or changed documentation. Every change to functionality, architecture, models, or public interfaces must include corresponding documentation updates — whether that's comments, docstrings, README, or dedicated docs. This is not optional; always consider what documentation a change requires.
+
 # Language-Specific Guidelines
 
 Language rules live in `languages/` and should be read when writing code in that language. Available: `languages/python.md`.
@@ -71,6 +108,7 @@ When running commands that target a specific directory (like git commands), `cd`
 - Use `git switch` to change branches and `git switch -c` to create branches. Do not use `git checkout` or `git branch` for these operations.
 - When creating a branch that isn't explicitly local-only, immediately set its upstream to the correct remote branch (e.g., `git push -u origin branch-name` or `git branch --set-upstream-to=origin/main`), so it tracks correctly regardless of what branch was checked out at creation time.
 - Always use annotated tags (`git tag -a`), never lightweight tags. Annotated tags are durable Git objects with metadata; lightweight tags are just refs.
+- Version tags (used by hatch-vcs, setuptools-scm, etc.) are **durable** — once pushed, never delete or move them. If a tag was placed on the wrong commit, create a new version tag instead.
 
 <!-- TODO: Once git-workflow-utils tooling is ready, use its branch/worktree
      naming conventions and CLI tools instead of raw git commands for creating

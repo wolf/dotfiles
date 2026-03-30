@@ -8,8 +8,8 @@ Use the most recent stable Python version unless a project specifies otherwise.
 
 - **Package management**: `uv`
 - **Virtual environments**: Managed by `uv`, activated automatically via `direnv`
-- **Pre-commit**: Always use `pre-commit` for checks including linting, type-checking, basics, and usually requiring all `pytest` tests to pass
-- **Before staging**: Run `ruff format` on changed files so pre-commit hooks are a safety net, not a reformatter
+- **Pre-commit hooks**: Always use `prek` (not `pre-commit`) for checks including linting, type-checking, basics, and usually requiring all `pytest` tests to pass. prek reads the same `.pre-commit-config.yaml` format
+- **Before staging**: Run `ruff format` on changed files so prek hooks are a safety net, not a reformatter
 
 ## Code Quality
 
@@ -35,6 +35,8 @@ Use the most recent stable Python version unless a project specifies otherwise.
 ## Style
 
 Write Pythonic code. Prefer clarity and idiom over cleverness. Use the best names possible for variables, functions, classes, and modules. Prefer double quotes (`"`) over single quotes (`'`).
+
+`__all__` should be a tuple (not a list), sorted alphabetically, with one name per line in vertical format.
 
 ## Docstrings
 
