@@ -1,6 +1,6 @@
 # Task Tracking
 
-When planning multiple steps (3+), record them in a physical file rather than relying solely on in-context tracking. Place the file in the most specific location in the current project where the tasks apply. Name the file `TODO.md` or `TODO.local.md`. When creating the file, ask whether it should be git-tracked or ignored. Suggest creating this file as soon as it's needed. Keep it up-to-date immediately as tasks are completed, added, or decided against.
+When planning multiple steps (3+), record them in a physical file rather than relying solely on in-context tracking. Place the file in the most specific location in the current project where the tasks apply. Name the file `TODO.md` (git-tracked) or `TODO.local-only.md` (git-ignored). Never use `*.local.md` — always use `*.local-only.md` for ignored files. When creating the file, ask whether it should be git-tracked or ignored. Suggest creating this file as soon as it's needed. Keep it up-to-date immediately as tasks are completed, added, or decided against.
 
 # Persisting Preferences
 

@@ -58,7 +58,29 @@ git merge --ff-only main
 git switch main
 ```
 
-### 3. Tag
+### 3. Update CHANGELOG
+
+If the project has a `CHANGELOG.md`, add an entry for the new version at the
+top of the file (below the header). Follow the existing format. Include:
+
+* **Features** — user-visible additions
+* **Bug fixes** — what broke and what was fixed
+* **Deprecations** — what to stop using and the replacement
+* **Migration** — what users need to change (if anything)
+* **Internal** — significant performance or structural changes (keep high-level)
+* **Breaking** — called out explicitly when applicable
+
+Omit empty sections. Derive content from the commits being shipped. The version
+number and date come from the tag in the next step. Use `(unreleased)` as a
+placeholder date, then update it after tagging.
+
+Commit the CHANGELOG update on the current branch before tagging:
+```bash
+git add CHANGELOG.md
+git commit -m "Update CHANGELOG for v<version>"
+```
+
+### 4. Tag
 
 Discover the current version tag and suggest the next version:
 ```bash
@@ -70,13 +92,13 @@ Report the current version and suggest patch/minor/major bumps (e.g., "Current: 
 git tag -a v<version> -m "<summary>"
 ```
 
-### 4. Push
+### 5. Push
 
 ```bash
 git push origin main release --tags
 ```
 
-### 5. Cleanup
+### 6. Cleanup
 
 * Delete local feature branch: `git branch -d <feature-branch>`
 * Delete remote feature branch: `git push origin --delete <remote-branch>`
@@ -91,14 +113,42 @@ git push origin main release --tags
 
 ## PR Path
 
-### 1. Push
+### 1. Update CHANGELOG
+
+If the project has a `CHANGELOG.md`, add an entry for the new version at the
+top of the file (below the header). Follow the existing format. Include:
+
+* **Features** — user-visible additions
+* **Bug fixes** — what broke and what was fixed
+* **Deprecations** — what to stop using and the replacement
+* **Migration** — what users need to change (if anything)
+* **Internal** — significant performance or structural changes (keep high-level)
+* **Breaking** — called out explicitly when applicable
+
+Omit empty sections. Derive content from the commits on this branch.
+
+To determine the version number, discover the current version tag and suggest
+the next version:
+```bash
+git tag --sort=-v:refname | head -5
+```
+Report the current version and suggest patch/minor/major bumps. Default
+suggestion should match the scope of the change. Use today's date.
+
+Commit the CHANGELOG update on the feature branch:
+```bash
+git add CHANGELOG.md
+git commit -m "Update CHANGELOG for v<version>"
+```
+
+### 2. Push
 
 Ensure all commits are pushed:
 ```bash
 git push origin
 ```
 
-### 2. Update Jira
+### 3. Update Jira
 
 Add notable findings to the ticket:
 * Typically as a new comment (use `jira_add_comment`)
@@ -108,7 +158,7 @@ Add notable findings to the ticket:
 Include: what the change does, any important implementation decisions, and
 things reviewers should pay attention to.
 
-### 3. Create PR
+### 4. Create PR
 
 Create a Bitbucket PR targeting **main**:
 
@@ -122,18 +172,18 @@ The PR description should:
 * Highlight salient implementation points
 * Be succinct
 
-### 4. Rename Local Branch
+### 5. Rename Local Branch
 
 Add `pr/` prefix to indicate this branch is in review:
 ```bash
 git branch -m <local-branch> pr/<local-branch>
 ```
 
-### 5. Transition Ticket
+### 6. Transition Ticket
 
 Move Jira ticket to **PR** state (use `jira_transition_issue`).
 
-### 6. Cleanup (partial)
+### 7. Cleanup (partial)
 
 * Delete matching OmniFocus task if one exists
 * Delete matching entry in `inbox.local-only.md` or TODO file if one exists

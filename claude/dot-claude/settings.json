@@ -31,7 +31,7 @@
       "Edit(~/Vaults/**)",
       "WebSearch",
       "WebFetch",
-"mcp__omnifocus__get_*",
+      "mcp__omnifocus__get_*",
       "mcp__omnifocus__list_*",
       "mcp__omnifocus__search_*",
       "mcp__mcp-atlassian__jira_get_*",
