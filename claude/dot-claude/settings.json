@@ -50,5 +50,6 @@
     "type": "command",
     "command": "~/.claude/bin/statusline.bash"
   },
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "autoUpdatesChannel": "stable"
 }

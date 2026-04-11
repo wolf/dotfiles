@@ -60,6 +60,9 @@ git switch main
 
 ### 3. Update CHANGELOG
 
+**Decide the version number before starting delivery.** The version determines
+the CHANGELOG heading and the tag.
+
 If the project has a `CHANGELOG.md`, add an entry for the new version at the
 top of the file (below the header). Follow the existing format. Include:
 
@@ -70,14 +73,19 @@ top of the file (below the header). Follow the existing format. Include:
 * **Internal** — significant performance or structural changes (keep high-level)
 * **Breaking** — called out explicitly when applicable
 
-Omit empty sections. Derive content from the commits being shipped. The version
-number and date come from the tag in the next step. Use `(unreleased)` as a
-placeholder date, then update it after tagging.
+Omit empty sections. Derive content from the commits being shipped. Use today's
+date.
 
-Commit the CHANGELOG update on the current branch before tagging:
+**Single-commit releases:** When the release is a single logical commit (still
+on the feature branch, not yet merged), include the CHANGELOG update in that
+commit — amend it or add it before merging. This keeps the release atomic: one
+commit, one tag, one entry. Do not create a separate CHANGELOG commit.
+
+**Multi-commit releases:** Commit the CHANGELOG update on the current branch
+(after merging) before tagging:
 ```bash
 git add CHANGELOG.md
-git commit -m "Update CHANGELOG for v<version>"
+git commit -m "Add v<version> changelog entry"
 ```
 
 ### 4. Tag

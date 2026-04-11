@@ -8,7 +8,7 @@ Use the most recent stable Python version unless a project specifies otherwise.
 
 - **Package management**: `uv`
 - **Virtual environments**: Managed by `uv`, activated automatically via `direnv`
-- **Pre-commit hooks**: Always use `prek` (not `pre-commit`) for checks including linting, type-checking, basics, and usually requiring all `pytest` tests to pass. prek reads the same `.pre-commit-config.yaml` format
+- **Hooks**: Always use `prek` (not `pre-commit`) for checks including linting, type-checking, basics, and usually requiring all `pytest` tests to pass. prek reads the same `.pre-commit-config.yaml` format
 - **Before staging**: Run `ruff format` on changed files so prek hooks are a safety net, not a reformatter
 
 ## Code Quality
