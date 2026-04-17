@@ -74,6 +74,19 @@ Don't wait for slash commands. Recognize intent and act.
 
 OmniFocus is the sole task manager. Do not check or reference Things.
 
+## Document Disposition
+
+Every content type has one canonical home. Before creating or suggesting placement of any artifact, follow these rules. Push back if I'm about to put something in the wrong place.
+
+| Content type | Belongs in |
+|---|---|
+| Text I write or cause to be written (notes, observations, worklog, saved plans, etc.) | Obsidian vault |
+| Books and manuals (not audiobooks), including manuals for physical things I own | Calibre |
+| Reference material, especially external PDFs and screenshots | DEVONthink |
+| Live code | `~/develop` (per its existing structure) |
+| Tasks | OmniFocus |
+| Scheduled events and meetings | Calendar |
+
 # Multi-Project Work
 
 Each project gets its own terminal tab/window and its own Claude Code session. Never edit files in a different project from the current session — the wrong venv, env vars, credentials, and TODO context will be active.

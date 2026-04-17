@@ -42,7 +42,7 @@ without one.**
 **For all tickets**:
 * Move to current sprint if not already there (use `jira_add_issues_to_sprint`)
 * Transition to **In Progress** unless already in PR or DONE state
-* Note the story points — if 4+, will suggest worktree later
+* Note the story points
 
 ## 2. Check for Existing Branch
 
@@ -81,33 +81,12 @@ git switch -c <local-branch>
 git push -u origin <local-branch>:<remote-branch>
 ```
 
-## 4. Worktree (conditional, new branches only)
-
-If the ticket has **4 or more story points**, suggest a worktree:
-
-> "This is a {N}-point ticket. Want to work in an isolated worktree?"
-
-If yes:
-* Worktree directory: sibling of current project
-  * `../<project>-<local-branch>`
-  * e.g., `../db-handles-audit-for-accidental-changes`
-* Create: `git worktree add ../<project>-<local-branch> <local-branch>`
-* Remind the user to switch to that directory
-
-Skip to **Step 6 (Ready)**.
-
-## 5. Resume (existing branch)
+## 4. Resume (existing branch)
 
 Switch to the existing branch:
 ```bash
 git switch <branch-name>
 ```
-
-Check for a worktree that uses this branch:
-```bash
-git worktree list
-```
-If a worktree exists, remind the user to switch to that directory instead.
 
 Read pickup notes from (in priority order):
 1. `TODO-<branch-name>.local.md`
@@ -116,7 +95,7 @@ Read pickup notes from (in priority order):
 
 Present context concisely. Ask: "Pick up where you left off, or reassess?"
 
-## 6. Ready
+## 5. Ready
 
 Confirm setup:
 ```
