@@ -39,6 +39,23 @@ Prompt when we might be done with a standalone piece of work. Completed units sh
 
 Every unit of work needs a Jira ticket. Strongly discourage working without one.
 
+## Incremental Delivery
+
+Big plans must be broken into steps where each completed step is a valid point in time:
+
+* The program runs correctly
+* All tests pass
+* Documentation matches the behavior and interface of the code
+* The plan file (TODO.md or equivalent) is updated to reflect what's done and what remains, so anyone — human or new session — can pick up from this point without prior context
+
+**Planning and tickets:** Each step typically needs its own Jira ticket. Plans large enough to span multiple steps get an epic, and all step tickets belong to that epic.
+
+**Audit every step:** Before a step can be committed, new code and tests must be audited against the code audit checklist (`~/develop/dmp/standards/code-audit-checklist.md`). This is not a cleanup pass before delivery — it is part of every step. In particular, verify that tests test **promises**, not implementations.
+
+**Delivery:** A completed step satisfying these conditions is pushed to main. If the step provides a helpful new state for consumers, it should be released — version bump, matching tag, and placement on the release branch.
+
+The goal: minimize unmerged work, reduce merge conflicts, and make interruptions painless. Any completed step is a safe stopping point.
+
 ## Proactive Skill Invocation
 
 Don't wait for slash commands. Recognize intent and act.
@@ -126,6 +143,14 @@ When running commands that target a specific directory (like git commands), `cd`
 <!-- TODO: Once git-workflow-utils tooling is ready, use its branch/worktree
      naming conventions and CLI tools instead of raw git commands for creating
      branches and worktrees. -->
+
+# Committing
+
+When I allow you to write or edit code, I must review the changes before you create a commit — every time. After edits are done, stop and wait for explicit approval to commit. I review externally in a separate terminal using git tools, so you don't need to show diffs or summaries inline.
+
+Explicit approval can come bundled in the original request ("make the change and commit it") or as a follow-up ("commit it"). Otherwise, do not run `git commit`, even when the work looks clearly done.
+
+This applies to any file you write, including config, docs, and dotfiles — not just source code.
 
 # Commit Messages
 
