@@ -13,6 +13,7 @@ shell = ["bash", "-c"]
 trim-final-newlines = true
 trim-trailing-whitespace = true
 true-color = true
+trust-selector = "always-trust-lsp"
 
 [editor.cursor-shape]
 insert = "bar"
