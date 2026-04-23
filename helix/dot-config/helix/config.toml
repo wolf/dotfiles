@@ -10,10 +10,10 @@ insert-final-newline = true
 rulers = [120]
 scrolloff = 1
 shell = ["bash", "-c"]
+insecure = true
 trim-final-newlines = true
 trim-trailing-whitespace = true
 true-color = true
-trust-selector = "always-trust-lsp"
 
 [editor.cursor-shape]
 insert = "bar"
