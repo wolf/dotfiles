@@ -1,0 +1,3 @@
+tabname() {
+  print -Pn "\e]0;${1}\a"
+}

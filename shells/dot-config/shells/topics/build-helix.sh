@@ -1,5 +1,5 @@
 # This must be sourced sometime **after** cdpath
-export HELIX_BUILD_DIR="${WOLF_REPOS_DIR}/helix"
+export HELIX_BUILD_DIR="${THIRDPARTY_REPOS_DIR}/helix"
 export HELIX_DEFAULT_RUNTIME="${HELIX_BUILD_DIR}/runtime"
 
 build-helix() {

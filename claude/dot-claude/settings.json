@@ -51,5 +51,6 @@
     "command": "~/.claude/bin/statusline.bash"
   },
   "autoUpdatesChannel": "latest",
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "theme": "light"
 }
