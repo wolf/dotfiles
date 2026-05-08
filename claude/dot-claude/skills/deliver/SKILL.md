@@ -3,6 +3,7 @@ name: deliver
 description: Ship completed work — direct release or PR
 argument-hint: "[release or pr]"
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, AskUserQuestion, mcp__omnifocus__*, mcp__mcp-atlassian__jira_*, mcp__atlassian-bitbucket__*
+model: opus
 ---
 
 # Deliver — Ship Completed Work

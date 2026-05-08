@@ -52,5 +52,6 @@
   },
   "autoUpdatesChannel": "latest",
   "voiceEnabled": true,
-  "theme": "light"
+  "theme": "light",
+  "model": "opusplan"
 }

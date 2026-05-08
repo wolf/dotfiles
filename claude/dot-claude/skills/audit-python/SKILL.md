@@ -3,6 +3,7 @@ name: audit-python
 description: Systematic code audit of a Python codebase against DMP standards
 argument-hint: "[scope: changes, file/dir path, or 'all']"
 allowed-tools: Read, Glob, Grep, Bash, AskUserQuestion, mcp__mcp-atlassian__jira_get_issue, mcp__mcp-atlassian__jira_search
+model: opus
 ---
 
 # Audit Python — Systematic Code Audit
