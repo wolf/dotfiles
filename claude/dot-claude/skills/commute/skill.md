@@ -36,7 +36,11 @@ Examples:
 
 Write to: `~/Vaults/Notes/0-log/worklog/YYYY/MM/YYYY-MM-DD.md`
 
-Create year and month directories as needed.
+Create year and month directories as needed. **If today's worklog file did not
+exist before this run and you just created it**, invoke `/calendar-cleanup --auto`
+immediately after writing the initial frontmatter — this fires the once-per-day
+silent calendar sweep. Continue with the rest of the procedure regardless of
+cleanup outcome.
 
 ## Entry Format
 

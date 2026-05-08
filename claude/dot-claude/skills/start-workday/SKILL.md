@@ -37,7 +37,11 @@ Normalize time to 24-hour `HH:MM` format.
 1. **Resolve time**: If no time in arguments, run `date +%H:%M` for current time.
 2. **Read daily file**: `~/Vaults/Notes/0-log/worklog/YYYY/MM/YYYY-MM-DD.md`
    (today's date). Create year/month directories and file with minimal
-   frontmatter if it doesn't exist.
+   frontmatter if it doesn't exist. **If you just created the file (it did
+   not exist before this run)**, invoke `/calendar-cleanup --auto` after
+   writing the initial frontmatter and before continuing — this fires the
+   once-per-day silent calendar sweep. Continue with the rest of the
+   procedure regardless of cleanup outcome.
 3. **Guard**: If there's already an open segment (a `workday` entry with no
    `end`), warn the user and ask whether to close it first (set its `end` to
    now) or abort.
