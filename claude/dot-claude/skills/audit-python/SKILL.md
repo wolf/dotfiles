@@ -36,9 +36,7 @@ already read them in this session, don't re-read.
 
 ### Automatic
 
-* Read `inbox.local-only.md` in the project root if it exists. Note any
-  items that relate to code quality, design issues, or audit-relevant
-  observations.
+* Read the project's vault inbox (`~/Vaults/Notes/2-projects/dmp/<project-name>/inbox.md`) and/or `inbox.local-only.md` in the project root if either exists. Note any items that relate to code quality, design issues, or audit-relevant observations.
 
 ### Prompted
 

@@ -115,7 +115,7 @@ git push origin main release --tags
   `git worktree remove ../<worktree-dir>`
 * Move Jira ticket to **DONE** (use `jira_transition_issue`)
 * Delete matching OmniFocus task if one exists
-* Delete matching entry in `inbox.local-only.md` or TODO file if one exists
+* Delete matching entry in the vault inbox (`~/Vaults/Notes/2-projects/dmp/<project-name>/inbox.md`), `inbox.local-only.md`, or TODO file if one exists
 * Log effort in worklog (trigger **log** skill)
 
 ---
@@ -195,7 +195,7 @@ Move Jira ticket to **PR** state (use `jira_transition_issue`).
 ### 7. Cleanup (partial)
 
 * Delete matching OmniFocus task if one exists
-* Delete matching entry in `inbox.local-only.md` or TODO file if one exists
+* Delete matching entry in the vault inbox (`~/Vaults/Notes/2-projects/dmp/<project-name>/inbox.md`), `inbox.local-only.md`, or TODO file if one exists
 * **Keep worktree** if one exists — it stays until the PR is merged
 * Log effort in worklog (trigger **log** skill)
 

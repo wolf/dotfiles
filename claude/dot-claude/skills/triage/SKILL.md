@@ -58,7 +58,8 @@ Show: task name, project, due date (if any), flagged status
 ### 3. Local Files
 
 Check the current project directory for:
-* `inbox.local-only.md` — cross-project incoming items
+* `~/Vaults/Notes/2-projects/dmp/<project-name>/inbox.md` — vault inbox for DMP projects (primary)
+* `inbox.local-only.md` — fallback inbox for non-DMP or non-vault projects
 * `TODO.md` or `TODO.local.md` — task list
 * `TODO-*.local.md` — branch-specific task files
 
@@ -79,7 +80,7 @@ Present a unified, prioritized list. Group by source but keep it scannable:
 3. Review dmp-bspline test coverage (flagged, due today)
 
 ## Inbox
-4. Investigate coord perf regression (from inbox.local-only.md)
+4. Investigate coord perf regression (from vault inbox)
 ```
 
 Then ask: "Which one, or something new?"

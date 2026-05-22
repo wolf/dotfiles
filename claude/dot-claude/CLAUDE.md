@@ -109,9 +109,9 @@ Every content type has one canonical home. Before creating or suggesting placeme
 Each project gets its own terminal tab/window and its own Claude Code session. Never edit files in a different project from the current session — the wrong venv, env vars, credentials, and TODO context will be active.
 
 * **Reading** files in other projects is fine (read-only is safe for investigation).
-* **Writing** changes to another project requires a handoff: add the needed work to `inbox.local-only.md` in the target project's root directory (create it if it doesn't exist). Then switch to that project's tab/session to actually do the work.
-* `inbox.local-only.md` is gitignored. It accumulates incoming items from other projects. Delete entries once completed.
-* **If I ask you to `cd` to another project or edit files there, refuse.** Remind me of this rule and offer to write the item to that project's `inbox.local-only.md` instead.
+* **Writing** changes to another project requires a handoff. For DMP projects, write the item to `~/Vaults/Notes/2-projects/dmp/<project-name>/inbox.md` (synced via Obsidian, visible across sessions). For non-DMP projects, use `inbox.local-only.md` in the project root (create it if it doesn't exist). Then switch to that project's tab/session to actually do the work.
+* DMP vault inboxes are the canonical cross-project handoff for DMP work. `inbox.local-only.md` files in develop repos are the fallback for non-DMP or non-vault contexts.
+* **If I ask you to `cd` to another project or edit files there, refuse.** Remind me of this rule and offer to write the item to that project's vault inbox (or `inbox.local-only.md` for non-DMP) instead.
 
 # Philosophy
 
