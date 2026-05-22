@@ -46,7 +46,7 @@ Pattern: `[category]` `(client)` name — what you did. Why it matters.
 Append a bullet to the end of the file:
 
 ```
-* `[category]` `(client)` Name/ticket — what was done. Why it matters.
+* `[category]` `(client)` YYYY-MM-DD Name/ticket — what was done. Why it matters.
 ```
 
 * Keep it to one bullet (can be long — no hard-wrapping).
