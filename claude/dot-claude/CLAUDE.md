@@ -50,7 +50,7 @@ Big plans must be broken into steps where each completed step is a valid point i
 
 **Planning and tickets:** Each step typically needs its own Jira ticket. Plans large enough to span multiple steps get an epic, and all step tickets belong to that epic.
 
-**Audit every step:** Before a step can be committed, new code and tests must be audited against the code audit checklist (`~/develop/dmp/standards/code-audit-checklist.md`). This is not a cleanup pass before delivery — it is part of every step. In particular, verify that tests test **promises**, not implementations.
+**Audit every step:** Before a step can be committed, new code and tests must be audited against the code audit checklist (`~/develop/dmp/dmp-coding-standards/code-audit-checklist.md`). This is not a cleanup pass before delivery — it is part of every step. In particular, verify that tests test **promises**, not implementations.
 
 **Delivery:** A completed step satisfying these conditions is pushed to main. If the step provides a helpful new state for consumers, it should be released — version bump, matching tag, and placement on the release branch.
 
