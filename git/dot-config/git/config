@@ -21,6 +21,7 @@
     ruff-fix-staged = ! git diff --name-only --staged | grep '\\.py$' | xargs ruff check --fix
     ruff-noqa-staged = ! git diff --name-only --staged | grep '\\.py$' | xargs ruff check --add-noqa
     re-add-fixes = ! git diff --name-only --staged | grep '\\.py$' | xargs git add
+    dw = ! LESS=\"${LESS/--chop-long-lines/}\" git diff
 [apply]
     whitespace = fix
 [branch]
@@ -70,6 +71,7 @@
     line-numbers = true
     navigate = true
     syntax-theme = Monokai Extended Light
+    wrap-max-lines = unlimited
 [delta]
     features = wolf-normal
 [diff]
