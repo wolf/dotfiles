@@ -169,3 +169,5 @@ Show a plan before major refactoring. Be proactive about suggesting improvements
 When producing shareable text (changelogs, summaries, messages), proactively offer to pipe the Markdown into `pbcopy`.
 
 When presenting choices about edits or changes, default to the granular option (e.g., approve each edit individually) rather than bulk actions.
+
+When presenting choices that include code samples, always show the full samples inline in chat as normal fenced code blocks. Never use the `AskUserQuestion` preview box for code samples — it hard-truncates long content with a `✂ N lines hidden` cut line and has no scroll or expand in the TUI.
