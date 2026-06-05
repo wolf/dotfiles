@@ -21,6 +21,7 @@ The skill runs automatically once per day, fired by whichever worklog-touching s
 - **Wolf calendars** — `Wolf (Shared)` and `Wolf (Unshared)`. Personal events.
 - **DMP calendar** — named exactly `Calendar` (M365). Work calendar.
 - **Wolf OoO mirror** — events titled exactly `Wolf OoO` on `Calendar`. Created and managed by this skill.
+- **Wolf PTO block** — events titled exactly `Wolf PTO` on `Calendar`. Created manually by Wolf to mark approved PTO days. Recognized but not created by this skill.
 
 ## Lookahead window
 
@@ -34,7 +35,7 @@ If `$ARGUMENTS` contains the literal token `--auto`, run in **auto** mode. Other
 
 1. Determine mode from `$ARGUMENTS`.
 2. Read events on `Wolf (Shared)` and `Wolf (Unshared)` for the lookahead window. Combine into one source list.
-3. Read events on `Calendar` for the same window. Separate into two lists: Wolf OoO mirrors (title equals `Wolf OoO`) and DMP events (everything else).
+3. Read events on `Calendar` for the same window. Separate into three lists: Wolf OoO mirrors (title equals `Wolf OoO`), Wolf PTO blocks (title equals `Wolf PTO`), and DMP events (everything else).
 4. Run **Pass 1 — OoO mirroring** (always).
 5. If interactive, run **Pass 2 — Tag-line normalization**.
 6. Run **Pass 3 — Conflict detection**:
@@ -48,9 +49,10 @@ If `$ARGUMENTS` contains the literal token `--auto`, run in **auto** mode. Other
 
 For each Wolf-calendar event whose `[startDate, endDate]` intersects ANY 8 AM – 5 PM Mon–Fri window:
 
-1. Look up the Wolf OoO mirror list (Step 3 above) for an event whose start and end exactly match the source event's window.
-2. If a matching mirror exists → skip.
-3. Otherwise, create on `Calendar` via `mcp__apple-events__calendar_events` (action: `create`):
+1. **PTO suppression**: Check if the event's start date falls within any Wolf PTO block's date range. If yes → skip (the PTO block already marks Wolf as absent; an OoO mirror would be redundant noise).
+2. Look up the Wolf OoO mirror list (Step 3 above) for an event whose start and end exactly match the source event's window.
+3. If a matching mirror exists → skip.
+4. Otherwise, create on `Calendar` via `mcp__apple-events__calendar_events` (action: `create`):
    - `targetCalendar`: `Calendar`
    - `title`: `Wolf OoO`
    - `startDate` / `endDate`: the full source-event window — do NOT clip to 8–5
