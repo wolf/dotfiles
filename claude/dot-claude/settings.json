@@ -53,5 +53,28 @@
   "autoUpdatesChannel": "latest",
   "voiceEnabled": true,
   "theme": "light",
-  "model": "opusplan"
+  "model": "opusplan",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$TTY\" ] && printf '\\033]0;%s (Claude)\\007' \"${PWD##*/}\" > \"$TTY\" || true"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$TTY\" ] && printf '\\033]0;%s (Claude)\\007' \"${PWD##*/}\" > \"$TTY\" || true"
+          }
+        ]
+      }
+    ]
+  }
 }
