@@ -80,6 +80,7 @@
   "autoUpdatesChannel": "latest",
   "voiceEnabled": true,
   "theme": "light",
+  "editorMode": "vim",
   "model": "opusplan",
   "hooks": {
     "SessionStart": [
