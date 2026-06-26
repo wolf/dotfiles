@@ -49,10 +49,11 @@ If `$ARGUMENTS` contains the literal token `--auto`, run in **auto** mode. Other
 
 For each Wolf-calendar event whose `[startDate, endDate]` intersects ANY 8 AM – 5 PM Mon–Fri window:
 
-1. **PTO suppression**: Check if the event's start date falls within any Wolf PTO block's date range. If yes → skip (the PTO block already marks Wolf as absent; an OoO mirror would be redundant noise).
-2. Look up the Wolf OoO mirror list (Step 3 above) for an event whose start and end exactly match the source event's window.
-3. If a matching mirror exists → skip.
-4. Otherwise, create on `Calendar` via `mcp__apple-events__calendar_events` (action: `create`):
+1. **Weekend exclusion**: If the event's start date falls on a Saturday or Sunday → skip. Do not create OoO mirrors for weekend events.
+2. **PTO suppression**: Check if the event's start date falls within any Wolf PTO block's date range. If yes → skip (the PTO block already marks Wolf as absent; an OoO mirror would be redundant noise).
+3. Look up the Wolf OoO mirror list (Step 3 above) for an event whose start and end exactly match the source event's window.
+4. If a matching mirror exists → skip.
+5. Otherwise, create on `Calendar` via `mcp__apple-events__calendar_events` (action: `create`):
    - `targetCalendar`: `Calendar`
    - `title`: `Wolf OoO`
    - `startDate` / `endDate`: the full source-event window — do NOT clip to 8–5
@@ -88,7 +89,7 @@ For each event on the Wolf calendars in the lookahead window:
 
 ## Pass 3 — Conflict detection
 
-For each Wolf-calendar event whose window intersects work hours:
+For each Wolf-calendar event on a weekday (Mon–Fri) whose window intersects work hours (8 AM – 5 PM):
 
 1. From the DMP-events list (Step 3 of Procedure), find any whose time window overlaps the Wolf event's window.
 2. These are conflicts.
