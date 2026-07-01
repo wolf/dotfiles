@@ -3,7 +3,71 @@
     "commit": "",
     "pr": ""
   },
+  "autoUpdatesChannel": "latest",
+  "editorMode": "vim",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "atuin hook claude-code",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "hooks": [
+          {
+            "command": "atuin hook claude-code",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "atuin hook claude-code",
+            "type": "command"
+          }
+        ],
+        "matcher": "Bash"
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "command": "[ -n \"$TTY\" ] && printf '\\033]0;%s (Claude)\\007' \"${PWD##*/}\" > \"$TTY\" || true",
+            "type": "command"
+          }
+        ],
+        "matcher": ".*"
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "command": "[ -n \"$TTY\" ] && printf '\\033]0;%s (Claude)\\007' \"${PWD##*/}\" > \"$TTY\" || true",
+            "type": "command"
+          }
+        ]
+      }
+    ]
+  },
+  "model": "opusplan",
   "permissions": {
+    "additionalDirectories": [
+      "~/develop/",
+      "~/Vaults/",
+      "~/.claude/"
+    ],
     "allow": [
       "Read",
       "Grep",
@@ -66,43 +130,12 @@
       "mcp__mcp-atlassian__jira_search_fields",
       "Write(~/.claude/**)",
       "Edit(~/.claude/**)"
-    ],
-    "additionalDirectories": [
-      "~/develop/",
-      "~/Vaults/",
-      "~/.claude/"
     ]
   },
   "statusLine": {
-    "type": "command",
-    "command": "~/.claude/bin/statusline.bash"
+    "command": "~/.claude/bin/statusline.bash",
+    "type": "command"
   },
-  "autoUpdatesChannel": "latest",
-  "voiceEnabled": true,
   "theme": "light",
-  "editorMode": "vim",
-  "model": "opusplan",
-  "hooks": {
-    "SessionStart": [
-      {
-        "matcher": ".*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "[ -n \"$TTY\" ] && printf '\\033]0;%s (Claude)\\007' \"${PWD##*/}\" > \"$TTY\" || true"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "[ -n \"$TTY\" ] && printf '\\033]0;%s (Claude)\\007' \"${PWD##*/}\" > \"$TTY\" || true"
-          }
-        ]
-      }
-    ]
-  }
+  "voiceEnabled": true
 }
