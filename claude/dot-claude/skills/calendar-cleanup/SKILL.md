@@ -50,7 +50,8 @@ If `$ARGUMENTS` contains the literal token `--auto`, run in **auto** mode. Other
 For each Wolf-calendar event whose `[startDate, endDate]` intersects ANY 8 AM – 5 PM Mon–Fri window:
 
 1. **Weekend exclusion**: If the event's start date falls on a Saturday or Sunday → skip. Do not create OoO mirrors for weekend events.
-2. **PTO suppression**: Check if the event's start date falls within any Wolf PTO block's date range. If yes → skip (the PTO block already marks Wolf as absent; an OoO mirror would be redundant noise).
+2. **Free all-day exclusion**: If the event is all-day and has `availability: free` → skip. All-day free events are informational markers or planned days off where Wolf is simply not working — no OoO mirror is needed because there is no work to interrupt.
+3. **PTO suppression**: Check if the event's start date falls within any Wolf PTO block's date range. If yes → skip (the PTO block already marks Wolf as absent; an OoO mirror would be redundant noise).
 3. Look up the Wolf OoO mirror list (Step 3 above) for an event whose start and end exactly match the source event's window.
 4. If a matching mirror exists → skip.
 5. Otherwise, create on `Calendar` via `mcp__apple-events__calendar_events` (action: `create`):
