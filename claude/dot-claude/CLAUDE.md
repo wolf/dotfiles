@@ -133,6 +133,13 @@ Language rules live in `languages/` and should be read when writing code in that
 
 When running commands that target a specific directory (like git commands), `cd` to that directory first rather than using flags like `git -C <path>`. This keeps commands simple and matches the allowed command patterns in settings.
 
+The shell working directory persists between commands, so a `cd` done for a one-off task silently changes the base directory of every later command. Two rules prevent wrong-directory mistakes:
+
+* One-off work in another directory (inspecting another repo, checking a file tree) runs in a subshell — `(cd /other/path && ...)` — so the session's working directory never changes.
+* Any command that depends on the working directory establishes it explicitly (`cd <intended-dir> && ...`) instead of assuming the previous command left it correct.
+
+Commands run under zsh, where an unquoted word starting with `=` triggers equals expansion (`=foo` → path of command `foo`). A bare `echo ===` separator therefore fails with `== not found` and kills the rest of the command chain. Quote such words (`echo "==="`) or use a separator that isn't special, like `---`.
+
 # Git
 
 - Use `git switch` to change branches and `git switch -c` to create branches. Do not use `git checkout` or `git branch` for these operations.
@@ -155,6 +162,10 @@ This applies to any file you write, including config, docs, and dotfiles — not
 # Commit Messages
 
 Use imperative mood: "Add feature" not "Added feature". Explain the "why" in the commit body for non-trivial changes.
+
+# Licensing
+
+My standard license for personal projects is MIT (Copyright Wolf). When creating a project or adding a LICENSE, default to MIT unless a more specific CLAUDE.md or the project itself says otherwise.
 
 # Markdown Style
 

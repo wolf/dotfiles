@@ -3,71 +3,7 @@
     "commit": "",
     "pr": ""
   },
-  "autoUpdatesChannel": "latest",
-  "editorMode": "vim",
-  "hooks": {
-    "PostToolUse": [
-      {
-        "hooks": [
-          {
-            "command": "atuin hook claude-code",
-            "type": "command"
-          }
-        ],
-        "matcher": "Bash"
-      }
-    ],
-    "PostToolUseFailure": [
-      {
-        "hooks": [
-          {
-            "command": "atuin hook claude-code",
-            "type": "command"
-          }
-        ],
-        "matcher": "Bash"
-      }
-    ],
-    "PreToolUse": [
-      {
-        "hooks": [
-          {
-            "command": "atuin hook claude-code",
-            "type": "command"
-          }
-        ],
-        "matcher": "Bash"
-      }
-    ],
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "command": "[ -n \"$TTY\" ] && printf '\\033]0;%s (Claude)\\007' \"${PWD##*/}\" > \"$TTY\" || true",
-            "type": "command"
-          }
-        ],
-        "matcher": ".*"
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "command": "[ -n \"$TTY\" ] && printf '\\033]0;%s (Claude)\\007' \"${PWD##*/}\" > \"$TTY\" || true",
-            "type": "command"
-          }
-        ]
-      }
-    ]
-  },
-  "model": "opusplan",
   "permissions": {
-    "additionalDirectories": [
-      "~/develop/",
-      "~/Vaults/",
-      "~/.claude/"
-    ],
     "allow": [
       "Read",
       "Grep",
@@ -130,12 +66,76 @@
       "mcp__mcp-atlassian__jira_search_fields",
       "Write(~/.claude/**)",
       "Edit(~/.claude/**)"
+    ],
+    "additionalDirectories": [
+      "~/develop/",
+      "~/Vaults/",
+      "~/.claude/"
+    ]
+  },
+  "model": "fable",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "atuin hook claude-code"
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "atuin hook claude-code"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "atuin hook claude-code"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$TTY\" ] && printf '\\033]0;%s (Claude)\\007' \"${PWD##*/}\" > \"$TTY\" || true"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -n \"$TTY\" ] && printf '\\033]0;%s (Claude)\\007' \"${PWD##*/}\" > \"$TTY\" || true"
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
-    "command": "~/.claude/bin/statusline.bash",
-    "type": "command"
+    "type": "command",
+    "command": "~/.claude/bin/statusline.bash"
   },
+  "autoUpdatesChannel": "latest",
   "theme": "light",
+  "editorMode": "vim",
   "voiceEnabled": true
 }
