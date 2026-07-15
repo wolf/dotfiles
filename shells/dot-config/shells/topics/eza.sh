@@ -7,8 +7,8 @@ unset EZA_COLORS
 export EZA_CONFIG_DIR="${HOME}/.config/eza"
 
 alias ls=eza
-alias ll="eza -alF"
+alias ll="eza -al --classify=auto"
 
 wll() { # wll <command> : find <command> (using which) and list it as with ls -l
-    which "$@" | xargs eza -alF
+    which "$@" | xargs eza -al --classify=auto
 }
