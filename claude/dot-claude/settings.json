@@ -27,7 +27,6 @@
       "Bash(pytest:*)",
       "Bash(pixi run pytest:*)",
       "Bash(bash:*)",
-      "Write(~/Vaults/**)",
       "Edit(~/Vaults/**)",
       "WebSearch",
       "WebFetch",
@@ -64,7 +63,6 @@
       "mcp__mcp-atlassian__jira_get_worklog",
       "mcp__mcp-atlassian__jira_search",
       "mcp__mcp-atlassian__jira_search_fields",
-      "Write(~/.claude/**)",
       "Edit(~/.claude/**)"
     ],
     "additionalDirectories": [

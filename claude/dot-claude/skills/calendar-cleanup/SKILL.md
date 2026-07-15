@@ -7,7 +7,7 @@ allowed-tools: Read, Write, Edit, AskUserQuestion, mcp__apple-events__calendar_e
 
 # Calendar Cleanup
 
-Periodic maintenance sweep across personal (`Wolf (Shared)`, `Wolf (Unshared)`) and DMP (`Calendar`) calendars.
+Periodic maintenance sweep across personal (`Wolf (Shared)`, `Wolf (Private)`) and DMP (`Calendar`) calendars.
 
 Two modes, depending on argument:
 
@@ -18,7 +18,7 @@ The skill runs automatically once per day, fired by whichever worklog-touching s
 
 ## Calendars
 
-- **Wolf calendars** — `Wolf (Shared)` and `Wolf (Unshared)`. Personal events.
+- **Wolf calendars** — `Wolf (Shared)` and `Wolf (Private)`. Personal events.
 - **DMP calendar** — named exactly `Calendar` (M365). Work calendar.
 - **Wolf OoO mirror** — events titled exactly `Wolf OoO` on `Calendar`. Created and managed by this skill.
 - **Wolf PTO block** — events titled exactly `Wolf PTO` on `Calendar`. Created manually by Wolf to mark approved PTO days. Recognized but not created by this skill.
@@ -34,7 +34,7 @@ If `$ARGUMENTS` contains the literal token `--auto`, run in **auto** mode. Other
 ## Procedure
 
 1. Determine mode from `$ARGUMENTS`.
-2. Read events on `Wolf (Shared)` and `Wolf (Unshared)` for the lookahead window. Combine into one source list.
+2. Read events on `Wolf (Shared)` and `Wolf (Private)` for the lookahead window. Combine into one source list.
 3. Read events on `Calendar` for the same window. Separate into three lists: Wolf OoO mirrors (title equals `Wolf OoO`), Wolf PTO blocks (title equals `Wolf PTO`), and DMP events (everything else).
 4. Run **Pass 1 — OoO mirroring** (always).
 5. If interactive, run **Pass 2 — Tag-line normalization**.
