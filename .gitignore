@@ -1,3 +1,4 @@
 tags
 TODO.md
 .mypy_cache/
+*.local-only.*
