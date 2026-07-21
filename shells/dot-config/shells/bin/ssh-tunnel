@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# ssh-tunnel <host-alias> [start|stop|restart|status] : manage a persistent SSH tunnel.
+# <host-alias> must be a Host block in ~/.ssh/config.d/*.conf with its own
+# LocalForward, ExitOnForwardFailure yes, SessionType none, and
+# ServerAliveInterval/ServerAliveCountMax.
+# autossh supervises ssh and respawns it if the tunnel drops; -M 0 disables
+# autossh's own monitor port since ServerAliveInterval/CountMax already
+# detect a dead connection. ControlMaster/ControlPath are forced off here
+# because the global `Host *` block in ~/.ssh/config sets them first, and
+# ssh's "first obtained value wins" rule means a Host block's own overrides
+# are otherwise ignored -- without this, the tunnel silently rides the
+# shared control socket and dies with it when that socket's ControlPersist
+# expires. See the note in ~/.ssh/config next to `Include config.d/*.conf`.
+
+HOST="${1:?Usage: $(basename "$0") <host-alias> [start|stop|restart|status]}"
+ACTION="${2:-start}"
+PATTERN="autossh.*${HOST}"
+LOG="$HOME/.ssh/logs/${HOST}.log"
+
+status() {
+  if pgrep -f "$PATTERN" >/dev/null; then
+    echo "$HOST up: $(pgrep -fl "$PATTERN")"
+    return 0
+  else
+    echo "$HOST is not running"
+    return 1
+  fi
+}
+
+stop() {
+  if pkill -f "$PATTERN" 2>/dev/null; then
+    echo "$HOST stopped"
+  else
+    echo "$HOST was not running"
+  fi
+}
+
+start() {
+  if pgrep -f "$PATTERN" >/dev/null; then
+    status
+    return 0
+  fi
+  mkdir -p "$HOME/.ssh/logs"
+  AUTOSSH_LOGFILE="$LOG" AUTOSSH_LOGLEVEL=1 \
+    autossh -M 0 -f -o ControlMaster=no -o ControlPath=none "$HOST" \
+    && sleep 1 && status
+}
+
+case "$ACTION" in
+  start) start ;;
+  stop) stop ;;
+  restart) stop; sleep 1; start ;;
+  status) status ;;
+  *) echo "Usage: $(basename "$0") <host-alias> [start|stop|restart|status]" >&2; exit 1 ;;
+esac
