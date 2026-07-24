@@ -1,15 +1,49 @@
-*~
+# OS garbage
 .DS_Store
+.Spotlight-V100
+.Trashes
+._*
+
+# Editor garbage
+*~
 .*.sw?
-.python-version
-__pycache__/
+tags
+
+# IDE garbage
+.idea/
+.vscode/
+
+# Node
+node_modules/
+
+# Python ephemeral stuff
+*.egg-info/
+.coverage
+.coverage.*
+htmlcov/
 .mypy_cache/
+.pixi/
+__pycache__/
 .pytest_cache/
 .ruff_cache/
-node_modules/
 *venv/
-.idea/
-tags
-LOCAL-*
+wheels/
 
+# Rust
+target/
+
+# Various languages
+build/
+
+# Stuff to be kept private
+*.local-only.*
+.envrc
+.envrc.local
+.env
+.env.*
+!.env.sample
+!.env.example
 **/.claude/settings.local.json
+
+# In general, don't ignore lockfiles, e.g., `uv.lock`.
+# Adding an exclusion rule here doesn't help (e.g., !*.lock) because the local `.gitignore` wins.
