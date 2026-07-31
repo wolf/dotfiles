@@ -71,7 +71,7 @@
       "~/.claude/"
     ]
   },
-  "model": "fable",
+  "model": "claude-fable-5[1m]",
   "hooks": {
     "PostToolUse": [
       {
