@@ -1,6 +1,6 @@
 ---
 name: calendar-cleanup
-description: Sweep Wolf calendars and the DMP calendar for OoO mirroring, tag-line normalization, and DMP conflict detection. Auto mode is silent and runs once per day, fired by the first worklog-touching skill that creates today's worklog file. Interactive mode (default) does the full sweep.
+description: Sweep Wolf calendars and the DMP calendar for OoO mirroring, tag-line normalization, and DMP conflict detection. Auto mode is silent and runs once per day as part of /daily-checks. Interactive mode (default) does the full sweep.
 argument-hint: "[--auto]"
 allowed-tools: Read, Write, Edit, AskUserQuestion, mcp__apple-events__calendar_events, mcp__apple-events__calendar_calendars
 ---
@@ -14,7 +14,7 @@ Two modes, depending on argument:
 - **`--auto`**: Silent run. Mirrors out-of-office events to the DMP calendar. Surfaces a one-line summary of conflicts. **No prompts. No tag work.**
 - **No argument (interactive)**: Full sweep — Pass 1 OoO mirroring + Pass 2 tag normalization (with prompts) + Pass 3 conflict resolution (with prompts).
 
-The skill runs automatically once per day, fired by whichever worklog-touching skill first creates today's worklog file. It can also be invoked manually at any time.
+The skill runs automatically once per day as one of the checks fired by `/daily-checks`. It can also be invoked manually at any time.
 
 ## Calendars
 
