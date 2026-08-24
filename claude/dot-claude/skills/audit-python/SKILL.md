@@ -21,16 +21,17 @@ Audit Python code against the DMP code audit checklist. Argument:
 Read the canonical checklist — do not hardcode rules:
 
 ```
-~/develop/dmp/standards/code-audit-checklist.md
+~/develop/dmp/dmp-coding-standards/code-audit-checklist.md
 ```
 
 This file defines every section and check item. If it has changed since you
 last saw it, the audit reflects the current version automatically.
 
-The checklist references several standards documents (WHAT-MATTERS-MOST.md,
-STANDARDS-FOR-SHARED-PROJECTS.md, DMP-PYTHON-STANDARDS.md, etc.). Read these
-once if they are not already in the current conversation context. If you've
-already read them in this session, don't re-read.
+The checklist references several standards documents, all siblings of it in
+`~/develop/dmp/dmp-coding-standards/` — WHAT-MATTERS-MOST.md,
+STANDARDS-FOR-SHARED-PROJECTS.md, DMP-PYTHON-STANDARDS.md, and others. Read
+these once if they are not already in the current conversation context. If
+you've already read them in this session, don't re-read.
 
 ## Step 2: Gather Inputs
 

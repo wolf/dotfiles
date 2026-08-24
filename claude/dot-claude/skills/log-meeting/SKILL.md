@@ -42,6 +42,7 @@ Use this when `$ARGUMENTS` contains a meeting name (e.g., `/log-meeting standup 
 
 **Ask the user for:**
 - **Duration**: How long was the meeting?
+- **Value**: Was the full duration worth attending, or only part of it? If partial, get the valuable portion as a short-form duration (see Format below).
 - **Attribution**: Who is this for? Check for project-specific CLAUDE.md attribution rules first. If none exist and it's not obvious, ask.
 - **Ticket**: Is this related to a ticket? (Optional)
 - **Notes**: Anything worth noting? Decisions made, topics discussed. Keep brief. (Optional)
@@ -115,6 +116,7 @@ For each selected meeting, gather information and log it:
   name hasn't been mapped to a client before in this session, ask the user
   for the mapping (e.g., "Calendar 'Work' → which client?"). Apply CLAUDE.md
   attribution rules.
+- **Value**: Was the full duration worth attending, or only part of it? If partial, get the valuable portion as a short-form duration.
 - **Ticket**: Ask (optional).
 - **Notes / action items**: Ask (optional). Since these are past meetings,
   the user may have something quick to note.
@@ -140,6 +142,7 @@ Append to the file (create if needed):
 
 Ticket: PROJ-123 - Brief ticket summary
 Duration: 1h (ClientName)
+Value: 20m
 
 Brief notes about the meeting.
 
@@ -152,6 +155,7 @@ Notes:
 - Ticket line is optional (omit if no ticket)
 - Attribution in parentheses after duration is optional (omit if personal)
 - Duration uses short form only: `3h`, `30m`, `1.5h`, `~2h`
+- **Value line is optional — omit entirely when the full duration was valuable.** Only include it when only part of the meeting was worth attending (maps to frontmatter `value_duration`, see worklog CLAUDE.md)
 - Body text is optional — only include if the user provides notes
 - Action items section is optional — only include if the user provides them
 
@@ -161,7 +165,7 @@ When creating or appending to a daily file, **always read the existing file
 first**, then update the YAML frontmatter to reflect all entries (including the
 new one). See the worklog CLAUDE.md for the full frontmatter schema.
 
-The entry **must** include `event_type: meeting` in the frontmatter entries list.
+The entry **must** include `event_type: meeting` in the frontmatter entries list. If the meeting was only partially valuable, also include `value_duration` (short form, e.g. `20m`) — omit entirely when the full duration was valuable.
 
 ## Task Manager Integration
 
