@@ -2,6 +2,10 @@
 
 When planning multiple steps (3+), record them in a physical file rather than relying solely on in-context tracking. Place the file in the most specific location in the current project where the tasks apply. Name the file `TODO.md` (git-tracked) or `TODO.local-only.md` (git-ignored). Never use `*.local.md` — always use `*.local-only.md` for ignored files. When creating the file, ask whether it should be git-tracked or ignored. Suggest creating this file as soon as it's needed. Keep it up-to-date immediately as tasks are completed, added, or decided against.
 
+# Referencing Local-Only Files
+
+Never reference a gitignored or otherwise untracked file (`*.local-only.md`, `TODO.local-only.md`, scratch notes, etc.) from a document that is itself committed/shared (README, ARCHITECTURE, ROADMAP, a doc site, a PR description). The reference will be dead for every reader except the one machine that has the file — it was never pushed, and never will be. Point a shared document at another shared, tracked artifact instead (a ticket, a CHANGELOG entry, a committed doc), even if that means summarizing the local-only content rather than linking to it.
+
 # Persisting Preferences
 
 When I suggest a specific behavior that could reasonably be saved in settings or a CLAUDE.md file, ask whether this should be a permanent change. If so, help me decide the appropriate location: global settings, project settings, global CLAUDE.md, or project-specific instructions.
@@ -139,6 +143,16 @@ The shell working directory persists between commands, so a `cd` done for a one-
 * Any command that depends on the working directory establishes it explicitly (`cd <intended-dir> && ...`) instead of assuming the previous command left it correct.
 
 Commands run under zsh, where an unquoted word starting with `=` triggers equals expansion (`=foo` → path of command `foo`). A bare `echo ===` separator therefore fails with `== not found` and kills the rest of the command chain. Quote such words (`echo "==="`) or use a separator that isn't special, like `---`.
+
+## Shebangs
+
+First decide what the script actually needs, then declare exactly that. Most scripts written `#!/bin/bash` out of habit are pure POSIX and never touch a bash feature.
+
+* **Needs bash** — arrays, `[[ ]]`, `pipefail`, `PIPESTATUS`, `local`, `source` (vs `.`), process substitution `<(...)`, `+=`, `declare`/`mapfile`: write `#!/usr/bin/env bash`. Never `#!/bin/bash` — a hardcoded path silently picks whatever the system shipped, which on macOS is bash 3.2 from 2007 even when a modern bash is first on `PATH`.
+* **Pure POSIX** — write `#!/bin/sh`. This is the one case where hardcoding is right: POSIX guarantees `/bin/sh` exists, and `env sh` buys nothing while reading oddly.
+* **Same rule for other interpreters**: `#!/usr/bin/env python3`, not `#!/usr/bin/python3`.
+
+The trap in the other direction is worse than an over-broad `bash`: writing `#!/bin/sh` and then *using* bashisms. It works wherever `/bin/sh` happens to be bash and breaks on Debian/Ubuntu, where it's dash. So match the shebang to what the script actually uses — check, don't assume. Over-declaring bash for a POSIX script is merely imprecise; under-declaring it is a latent portability bug.
 
 # Git
 
