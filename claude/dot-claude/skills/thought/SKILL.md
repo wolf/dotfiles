@@ -1,7 +1,6 @@
 ---
 name: thought
-description: Capture a daily thought
-disable-model-invocation: true
+description: Capture a daily thought — a fleeting reflection or observation in the user's own words, appended to today's daily note. Invoke proactively when the user shares a reflection worth keeping, or on /thought.
 argument-hint: "[thought text]"
 allowed-tools: Read, Write, Edit
 ---
