@@ -1,5 +1,5 @@
 # This must be sourced sometime **after** cdpath
-export HELIX_BUILD_DIR="${THIRDPARTY_REPOS_DIR}/helix"
+export HELIX_BUILD_DIR="${THIRDPARTY_REPOS_DIR}/helix-with-steel"
 export HELIX_DEFAULT_RUNTIME="${HELIX_BUILD_DIR}/runtime"
 
 build-helix() {
@@ -11,11 +11,11 @@ build-helix() {
   fi
 
   cd "${HELIX_BUILD_DIR}"
-  git switch master
+  git switch steel-event-system
   git fetch --all
   git pull
-  git pull upstream master
-  cargo install --path helix-term --locked
+  git pull upstream steel-event-system
+  cargo xtask steel
 
   hx --grammar fetch
   hx --grammar build

@@ -1,0 +1,10 @@
+(require "helix/keymaps.scm")
+
+(keymap (global)
+        (normal (backspace (f ":reflow 120")
+                            (d ":set-option inline-diagnostics.cursor-line disable")
+                            (D ":set-option inline-diagnostics.cursor-line warning")
+                            (a ":set line-number absolute")
+                            (r ":set line-number relative")
+                            (w ":set whitespace.render none")
+                            (W ":set whitespace.render all"))))
