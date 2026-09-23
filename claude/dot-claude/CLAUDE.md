@@ -19,6 +19,14 @@ I always start Claude Code from the project directory I intend to work in. At se
 3. Defer deeper investigation (reading many files, understanding architecture) until we actually start working on a problem
 4. When starting a brand new task, strongly suggest we enter "planning mode"
 
+# Planning Mode
+
+For a new planning task, ask which model I want to plan in before doing anything else — don't assume the session's current default (e.g., an "opusplan" preset's Opus) is what I want this time; I sometimes want a different model (e.g. Fable) for a specific task. Offer the available models plus "keep current." Skip this gate if we're already mid-planning-conversation, or if I've already told you which model to use for this task.
+
+**Call `EnterPlanMode` immediately after that question, before anything else** — regardless of whether a switch is needed, using whatever model is currently active. Plan mode's read-only restriction must be in force before any model switch, never after: switching outside plan mode leaves a window where the freshly-active model runs with full write permissions before anything confines it, which is a bigger risk than the switch itself. Only once safely inside plan mode do you check whether the model I picked differs from the one that's now active. If it does, stop there: tell me to run `/model <name>` myself — there's no tool that can switch the session's model for me — and wait for me to confirm the switch is done before doing any actual exploration or design work.
+
+`/plan-with-model` exists as an explicit, deliberate way to invoke this same gate — check for it — but the behavior above applies automatically either way; the command is just an alias for discoverability, not different logic.
+
 # Workflow
 
 Sustainable productivity requires both reducing friction and maintaining discipline.
