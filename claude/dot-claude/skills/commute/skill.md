@@ -1,7 +1,7 @@
 ---
 name: commute
 description: Log commute time to daily work log
-argument-hint: "[direction] [start-time] [end-time | duration]"
+argument-hint: "[direction] [start-time] [end-time | duration] [date]"
 allowed-tools: Read, Write, Edit, Bash, AskUserQuestion, mcp__things__*, mcp__omnifocus__*
 ---
 
@@ -17,7 +17,8 @@ attribution rules.
 
 ## Parse Arguments
 
-Extract **direction** and **time/duration** from `$ARGUMENTS`:
+Extract **direction**, **time/duration**, and optional **date** from
+`$ARGUMENTS`:
 
 - **Direction**: `in`, `to work`, `to livonia`, `to office` → morning commute.
   `home`, `back`, `return` → evening commute. Default: ask.
@@ -25,22 +26,27 @@ Extract **direction** and **time/duration** from `$ARGUMENTS`:
   delta.
 - **Single duration**: `1h15m`, `45m`, `~1h` → use directly.
 - If neither is provided, ask.
+- **Date**: `yesterday`, `2026-02-25`, `monday`, etc. Default: **today**.
 
 Examples:
-- `/commute in 7:15am 8:30am` → "Commute to Livonia", 1h15m
-- `/commute home 45m` → "Commute home", 45m
-- `/commute to work 1h` → "Commute to Livonia", 1h
+- `/commute in 7:15am 8:30am` → "Commute to Livonia", 1h15m, today
+- `/commute home 45m` → "Commute home", 45m, today
+- `/commute to work 1h` → "Commute to Livonia", 1h, today
+- `/commute home 30m yesterday` → "Commute home", 30m, yesterday
 - `/commute` → ask direction and duration
+
+Resolve date to `YYYY-MM-DD`.
 
 ## Location
 
-Write to: `~/Vaults/Notes/0-log/worklog/YYYY/MM/YYYY-MM-DD.md`
+Write to: `~/Vaults/Notes/0-log/worklog/YYYY/MM/YYYY-MM-DD.md` (resolved date).
 
-Create year and month directories as needed. **If today's worklog file did not
-exist before this run and you just created it**, invoke `/daily-checks`
-immediately after writing the initial frontmatter — this fires the once-per-day
-silent housekeeping checks. Continue with the rest of the procedure regardless of
-their outcome.
+Create year and month directories as needed. **If that file did not exist
+before this run and you just created it, and the resolved date is today**,
+invoke `/daily-checks` immediately after writing the initial frontmatter —
+this fires the once-per-day silent housekeeping checks. Continue with the
+rest of the procedure regardless of their outcome. A past-dated file never
+triggers this.
 
 ## Entry Format
 

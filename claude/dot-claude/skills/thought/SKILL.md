@@ -1,7 +1,7 @@
 ---
 name: thought
 description: Capture a daily thought — a fleeting reflection or observation in the user's own words, appended to today's daily note. Invoke proactively when the user shares a reflection worth keeping, or on /thought.
-argument-hint: "[thought text]"
+argument-hint: "[--date=date] [thought text]"
 allowed-tools: Read, Write, Edit
 ---
 
@@ -9,15 +9,29 @@ allowed-tools: Read, Write, Edit
 
 Record an informal thought to the daily thoughts file. Argument: `$ARGUMENTS` (the thought to capture).
 
+## Parse Date
+
+Extract an optional leading `--date=VALUE` token from `$ARGUMENTS`
+(`--date=yesterday`, `--date=2026-02-25`, `--date=monday`) and remove it
+(plus any single space right after it) from `$ARGUMENTS` before anything
+below reads it. Default: **today**. Resolve to `YYYY-MM-DD`.
+
+A flag, not a bare trailing word — everything else in `$ARGUMENTS` is the
+thought itself and must survive untouched (see Content below). Only ever
+strip this one recognized flag token; never touch anything else in the
+argument even if part of it looks date-shaped.
+
 ## Location
 
-Append to: `~/Vaults/Notes/0-log/thoughts/YYYY/MM/YYYY-MM-DD.md`
+Append to: `~/Vaults/Notes/0-log/thoughts/YYYY/MM/YYYY-MM-DD.md` (resolved
+date).
 
 Create year and month directories as needed.
 
 ## Content
 
-Use `$ARGUMENTS` as the thought content.
+Use `$ARGUMENTS` (with the `--date=` token already removed) as the thought
+content.
 
 **Important:** Preserve the user's words exactly. Do not:
 - Edit or reformat the text

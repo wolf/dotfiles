@@ -1,13 +1,22 @@
 ---
 name: log
 description: Log work to daily work log — session work or external activity
-argument-hint: "[description]"
+argument-hint: "[description] [--date=date]"
 allowed-tools: Read, Write, Edit, AskUserQuestion, mcp__omnifocus__*
 ---
 
 # Log Work
 
 Add an entry to the daily work log. Argument: `$ARGUMENTS` (description, optional).
+
+## Parse Date
+
+Extract an optional `--date=VALUE` token from `$ARGUMENTS` (`--date=yesterday`,
+`--date=2026-02-25`, `--date=monday`) and remove it from `$ARGUMENTS` before
+anything below reads it. Default: **today**. Resolve to `YYYY-MM-DD`.
+
+A flag, not a bare trailing word, because the description is free text — a
+bare date-shaped word could be part of the real description.
 
 Handles both **session work** (done in this Claude session) and **external
 activity** (done outside this environment). Infer which from context:
@@ -27,13 +36,15 @@ attribution rules.
 
 ## Location
 
-Write to: `~/Vaults/Notes/0-log/worklog/YYYY/MM/YYYY-MM-DD.md`
+Write to: `~/Vaults/Notes/0-log/worklog/YYYY/MM/YYYY-MM-DD.md` (resolved
+date).
 
-Create year and month directories as needed. **If today's worklog file did not
-exist before this run and you just created it**, invoke `/daily-checks`
-immediately after writing the initial frontmatter — this fires the once-per-day
-silent housekeeping checks. Continue with the rest of the procedure regardless of
-their outcome.
+Create year and month directories as needed. **If that file did not exist
+before this run and you just created it, and the resolved date is today**,
+invoke `/daily-checks` immediately after writing the initial frontmatter —
+this fires the once-per-day silent housekeeping checks. Continue with the
+rest of the procedure regardless of their outcome. A past-dated file never
+triggers this.
 
 ## Gather Information
 
@@ -81,6 +92,8 @@ ask if it should be marked complete or updated.
 ## Carry Forward
 
 After the task manager step, ask: "Anything to carry forward for tomorrow?"
+(when the resolved date isn't today, ask instead about carrying forward from
+that date, e.g. "Anything to carry forward from {date}?")
 
 * If the user says no (or equivalent), skip.
 * If yes, take their input and append a bullet to the `## Pick-up` section

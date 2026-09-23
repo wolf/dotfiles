@@ -1,7 +1,7 @@
 ---
 name: log-meeting
 description: Log a meeting to daily work log
-argument-hint: "[meeting name]"
+argument-hint: "[meeting name] [--date=date]"
 allowed-tools: Read, Write, Edit, AskUserQuestion, mcp__things__*, mcp__omnifocus__*, mcp__apple-events__calendar_events
 ---
 
@@ -15,30 +15,42 @@ Read `~/Vaults/Notes/0-log/worklog/CLAUDE.md` for the canonical worklog
 format — frontmatter schema, entry format, duration short forms, client
 attribution rules, entry types, and calendar integration rules.
 
+## Parse Date
+
+Extract an optional `--date=VALUE` token from `$ARGUMENTS` (`--date=yesterday`,
+`--date=2026-02-25`, `--date=monday`) and remove it from `$ARGUMENTS` before
+anything below reads it. Default: **today**. Resolve to `YYYY-MM-DD`.
+
+A flag, not a bare trailing word, because the meeting-name argument is free
+text — a bare date-shaped word could be part of a real meeting name (e.g. a
+meeting actually called "Monday retro").
+
 ## Location
 
-Write to: `~/Vaults/Notes/0-log/worklog/YYYY/MM/YYYY-MM-DD.md`
+Write to: `~/Vaults/Notes/0-log/worklog/YYYY/MM/YYYY-MM-DD.md` (resolved
+date).
 
-Create year and month directories as needed. **If today's worklog file did not
-exist before this run and you just created it**, invoke `/daily-checks`
-immediately after writing the initial frontmatter — this fires the once-per-day
-silent housekeeping checks. Continue with the rest of the procedure regardless of
-their outcome.
+Create year and month directories as needed. **If that file did not exist
+before this run and you just created it, and the resolved date is today**,
+invoke `/daily-checks` immediately after writing the initial frontmatter —
+this fires the once-per-day silent housekeeping checks. Continue with the
+rest of the procedure regardless of their outcome. A past-dated file never
+triggers this.
 
 ## Routing
 
-- **`$ARGUMENTS` is non-empty** → Ad-hoc flow (Path A)
-- **`$ARGUMENTS` is empty** → Calendar flow (Path B)
+- **`$ARGUMENTS` (after removing `--date=`) is non-empty** → Ad-hoc flow (Path A)
+- **`$ARGUMENTS` (after removing `--date=`) is empty** → Calendar flow (Path B)
 
 ---
 
 ## Path A — Ad-hoc Flow
 
-Use this when `$ARGUMENTS` contains a meeting name (e.g., `/log-meeting standup with Dave`).
+Use this when `$ARGUMENTS` (after removing `--date=`) contains a meeting name (e.g., `/log-meeting standup with Dave`).
 
 ### Gather Information
 
-**Title**: Use `$ARGUMENTS`.
+**Title**: Use `$ARGUMENTS` (with `--date=` already removed).
 
 **Ask the user for:**
 - **Duration**: How long was the meeting?
@@ -54,15 +66,15 @@ Then proceed to **Format**, **Frontmatter**, **Task Manager Integration**, **Car
 
 ## Path B — Calendar Flow
 
-Use this when `$ARGUMENTS` is empty.
+Use this when `$ARGUMENTS` (after removing `--date=`) is empty.
 
-### 1. Fetch Today's Events
+### 1. Fetch the Resolved Date's Events
 
 Call `mcp__apple-events__calendar_events` with:
 - `action: "read"`
-- `startDate`: today's date (`YYYY-MM-DD`)
-- `endDate`: tomorrow's date (`YYYY-MM-DD`) — the range is exclusive, so
-  same-date start/end returns nothing
+- `startDate`: the resolved date (`YYYY-MM-DD`)
+- `endDate`: the day after the resolved date (`YYYY-MM-DD`) — the range is
+  exclusive, so same-date start/end returns nothing
 
 If the calendar fetch fails, warn the user and offer to fall back to ad-hoc
 flow (Path A without a pre-filled title — ask for the meeting name).
@@ -84,14 +96,16 @@ only if **all** of the following are true:
 
 ### 3. Check Already-Logged Entries
 
-Read today's worklog file. Compare calendar event titles against logged entry
-titles using fuzzy matching (calendar title may differ slightly from logged
-title). Mark calendar events that already have a matching log entry.
+Read the resolved date's worklog file. Compare calendar event titles against
+logged entry titles using fuzzy matching (calendar title may differ slightly
+from logged title). Mark calendar events that already have a matching log
+entry.
 
 ### 4. Present Unlogged Meetings
 
 If no unlogged meetings remain, say: "No unlogged meetings on your calendar
-today. Want to log an ad-hoc meeting instead?" If yes, switch to Path A
+{today|on {date}}. Want to log an ad-hoc meeting instead?" (use "today" when
+the resolved date is today, otherwise name the date). If yes, switch to Path A
 (ask for meeting name). If no, end.
 
 Otherwise, show a numbered list of unlogged meetings. For each, show:
