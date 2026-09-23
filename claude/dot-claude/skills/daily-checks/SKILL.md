@@ -8,7 +8,7 @@ argument-hint: ""
 
 Single entry point for the once-per-day auto checks. No interactive/auto distinction — this skill is always the silent dispatcher.
 
-The worklog-touching skills (`commute`, `log-meeting`, `log`, `start-workday`) invoke `/daily-checks` once, immediately after creating today's worklog file. This skill fans out to the individual checks so those four call sites never need to change again — adding a new daily check means adding a line here, nowhere else.
+The worklog-touching skills (`commute`, `log-meeting`, `log`, `start-workday`, `triage-jpr`) invoke `/daily-checks` once, immediately after creating today's worklog file. This skill fans out to the individual checks so those five call sites never need to change again — adding a new daily check means adding a line here, nowhere else.
 
 ## Procedure
 
@@ -19,4 +19,4 @@ The worklog-touching skills (`commute`, `log-meeting`, `log`, `start-workday`) i
 
 ## Adding a new daily check
 
-Add a step here that invokes the new skill's `--auto` mode and folds its summary into the combined line. Do not touch the four worklog-skill call sites — they only ever call `/daily-checks`.
+Add a step here that invokes the new skill's `--auto` mode and folds its summary into the combined line. Do not touch the five worklog-skill call sites — they only ever call `/daily-checks`.

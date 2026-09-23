@@ -1,0 +1,50 @@
+# Tool configuration only — no [project] table. jpr-recordings.py declares its
+# own runtime dependencies inline (PEP 723); this file exists so ruff, ty, and
+# pytest have one shared place to read settings from, not to define a venv.
+
+[tool.ruff]
+target-version = "py314"
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "B",  # flake8-bugbear
+    "D",  # pydocstyle
+    "E",  # pycodestyle errors
+    "F",  # pyflakes
+    "I",  # isort
+    "UP", # pyupgrade
+    "W",  # pycodestyle warnings
+]
+ignore = [
+    "D203", # conflicts with D211
+    "D212", # conflicts with D213
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D"]
+
+[tool.ruff.lint.isort]
+split-on-trailing-comma = true
+
+[tool.ruff.lint.flake8-bugbear]
+# typer's whole API is built on calling Option()/Argument() as parameter
+# defaults; B008 doesn't know that pattern is safe unless told.
+extend-immutable-calls = ["typer.Argument", "typer.Option"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--cov=. --cov-report=term-missing --cov-fail-under=80"
+
+[tool.coverage.run]
+omit = ["tests/*"]
+
+[tool.coverage.report]
+precision = 2
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+]

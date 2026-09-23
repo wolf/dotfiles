@@ -80,6 +80,7 @@ Don't wait for slash commands. Recognize intent and act.
 | "let's work on X", "I need to fix Y" | `/begin` |
 | "something came up", "pause this" | `/interrupt` |
 | "this is ready", "ship it", "PR this" | `/deliver` |
+| "triage/process my voice notes", "go through my JPR recordings" | `/triage-jpr` |
 | Multiple state updates in one message | Batch all relevant skills in parallel |
 
 **Context-aware prompting — offer at transitions:**
