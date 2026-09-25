@@ -104,6 +104,18 @@ Don't wait for slash commands. Recognize intent and act.
 
 OmniFocus is the sole task manager. Do not check or reference Things.
 
+All projects and plans — including tentative or possible ones — live in OmniFocus, since it can organize, categorize, break down, and manage them. Some plans have significant content (e.g., Runtime Arguments episodes); those also get a matching representation in the Notes vault, linked in both directions. See the Notes vault's `CLAUDE.md` for the linking convention.
+
+Things worth knowing about — a book, an algorithm, a language, a tool — surfaced during any search or investigation belong in OmniFocus too. Default to a project (or an item in an existing one) unless there's a clearer home.
+
+Archive completed OmniFocus items at least weekly; a recurring "Archive OmniFocus" task in the Routines project exists for this. If it looks like archiving has lapsed, say so.
+
+## Continuous Reorganization
+
+Nothing about organization is fixed — hierarchy, tagging, ordering, or an item's existence. Change it the moment reality no longer matches it. Preserving history can be useful; preserving structure for its own sake is not.
+
+When reviewing any list, plan, or piece of work — OmniFocus, the vault, code, anything — and something doesn't fit (wrong order, dead item, wrong grouping), say so and fix it in the moment rather than deferring it. A stitch in time: fixing it now costs a fraction of continuing to work around it.
+
 ## Document Disposition
 
 Every content type has one canonical home. Before creating or suggesting placement of any artifact, follow these rules. Push back if I'm about to put something in the wrong place.

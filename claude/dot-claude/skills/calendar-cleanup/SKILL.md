@@ -35,7 +35,7 @@ If `$ARGUMENTS` contains the literal token `--auto`, run in **auto** mode. Other
 
 1. Determine mode from `$ARGUMENTS`.
 2. Read events on `Wolf (Shared)` and `Wolf (Private)` for the lookahead window. Combine into one source list.
-3. Read events on `Calendar` for the same window. Separate into three lists: Wolf OoO mirrors (title equals `Wolf OoO`), Wolf PTO blocks (title equals `Wolf PTO`), and DMP events (everything else).
+3. Read events on `Calendar` for the same window. Separate into four lists: Wolf OoO mirrors (title equals `Wolf OoO`), Wolf PTO blocks (title equals `Wolf PTO`), other-employee OoO markers (title ends in ` OoO` but isn't exactly `Wolf OoO`, e.g. `CJ OoO`), and DMP events (everything else).
 4. Run **Pass 1 — OoO mirroring** (always).
 5. If interactive, run **Pass 2 — Tag-line normalization**.
 6. Run **Pass 3 — Conflict detection**:
@@ -94,6 +94,8 @@ For each Wolf-calendar event on a weekday (Mon–Fri) whose window intersects wo
 
 1. From the DMP-events list (Step 3 of Procedure), find any whose time window overlaps the Wolf event's window.
 2. These are conflicts.
+
+Other-employee OoO markers (see Procedure step 3) are informational only — a colleague being out doesn't block or conflict with anything on Wolf's calendar. They are never counted as conflicts, regardless of overlap.
 
 ### Auto mode
 

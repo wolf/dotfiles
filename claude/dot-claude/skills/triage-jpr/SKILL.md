@@ -80,7 +80,11 @@ Log the triage itself via `/log` as a `Triage N Just Press Record voice notes` e
 * the timestamps of any recordings left in the `downloading`, `untranscribed`, or `unreadable` buckets
 * for any recording kept because one of its topics is still undecided: its timestamp, which topics were already filed, and which one is pending — this is what step 1 reads back on the next run to avoid re-filing
 
-## 9. Non-goals
+## 9. Gap audit
+
+Immediately after logging the triage entry in step 8, invoke `/log-audit --auto`. If it returns a non-empty line, surface it as-is. This is the one point in the worklog-skill family that runs *after* new times have landed rather than before, so it's the natural place to catch gaps a live `/wake`/`/commute`/`/start-workday` call can't see yet — see `log-audit/SKILL.md` for what it checks and why it isn't wired to `/daily-checks` instead.
+
+## 10. Non-goals
 
 * Don't parse the `sd` word-timing array — it isn't in `scan`'s output at all.
 * Don't rely on the JPR app's own export feature — it's broken; `scan` reads the `.m4a` files directly.
