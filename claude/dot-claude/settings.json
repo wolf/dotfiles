@@ -84,7 +84,6 @@
       "~/.claude/"
     ]
   },
-  "model": "claude-fable-5[1m]",
   "hooks": {
     "PostToolUse": [
       {
@@ -148,5 +147,6 @@
   "autoUpdatesChannel": "latest",
   "theme": "light",
   "editorMode": "vim",
-  "voiceEnabled": true
+  "voiceEnabled": true,
+  "model": "opusplan"
 }
