@@ -60,7 +60,7 @@ Use this when `$ARGUMENTS` (after removing `--date=`) contains a meeting name (e
 - **Notes**: Anything worth noting? Decisions made, topics discussed. Keep brief. (Optional)
 - **Action items**: Any action items from this meeting? (Optional — freeform list)
 
-Then proceed to **Format**, **Frontmatter**, **Task Manager Integration**, **Carry Forward**, and **Loop** below.
+Then proceed to **Format**, **Frontmatter**, **Task Manager Integration**, and **Loop** below.
 
 ---
 
@@ -135,9 +135,8 @@ For each selected meeting, gather information and log it:
 - **Notes / action items**: Ask (optional). Since these are past meetings,
   the user may have something quick to note.
 
-Then proceed to **Format**, **Frontmatter**, **Task Manager Integration**, and
-**Carry Forward** below for each meeting (ask carry-forward immediately after
-each meeting, not deferred to the end of the batch).
+Then proceed to **Format**, **Frontmatter**, and **Task Manager Integration**
+below for each meeting.
 
 ### 7. After Calendar Meetings
 
@@ -187,14 +186,12 @@ After adding the entry:
 - For each action item, offer to create a task in OmniFocus.
 - Check OmniFocus for matching tasks to the meeting itself. If a match exists, ask if it should be marked complete or updated.
 
-## Carry Forward
+## Pick-up Notes
 
-After the task manager step (once per meeting, not per action item), ask:
-"Anything from this meeting to carry forward for tomorrow?"
+Do not ask about carrying anything forward. Pick-up notes are rare and
+critical (see the worklog CLAUDE.md). Add a bullet to the `## Pick-up` section
+only when the user volunteers one:
 
-* If the user says no (or equivalent), skip.
-* If yes, take their input and append a bullet to the `## Pick-up` section
-  at the bottom of the worklog file.
 * If the section doesn't exist yet, create it (as the last `##` section in
   the body).
 * Lead with **ticket ID** (bold) if the meeting had a ticket.

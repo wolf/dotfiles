@@ -22,7 +22,6 @@ Extract optional **time**, optional **date**, and **flags** from
 - **Time**: `5pm`, `17:00`, `5:30pm`, etc. Default: current time via
   `date +%H:%M`.
 - **Date**: `yesterday`, `2026-02-25`, a weekday name. Default: **today**.
-- **`--no-pickup`** or **`--quick`**: Skip the pick-up review phase entirely.
 
 Normalize time to 24-hour `HH:MM` format. Resolve date to `YYYY-MM-DD`.
 
@@ -39,34 +38,18 @@ Normalize time to 24-hour `HH:MM` format. Resolve date to `YYYY-MM-DD`.
 5. **Close segment**: Set `end` on the open segment.
 6. **Compute duration**: `end - start` in decimal hours (e.g., 08:00→17:00 = 9h).
 7. **Write file**: Update frontmatter, preserve body.
-8. **Pick-up review**: See below.
+8. **Pick-up check**: See below (does nothing unless a pick-up section exists).
 9. **Accomplishment check**: After confirming clock-out, ask: "Anything from today worth logging as a notable accomplishment? (`/accomplishment`)"
 10. **Confirm**: "Clocked out of **{client}** at {time} ({duration})" (add "on
     {date}" when the date isn't today).
 
-## Pick-up Review
+## Pick-up Check
 
-### Gate check
+Pick-up notes are rare and critical (see the worklog CLAUDE.md). This phase
+never creates or drafts one — no Jira supplement, no prompt to add.
 
-Skip this entire phase if any of these are true:
-* `--no-pickup` or `--quick` flag was passed
-* The closed segment's client is not DMP
-
-### Jira supplement
-
-1. Search Jira:
-   `assignee = currentUser() AND status = "In Progress" AND sprint in openSprints()`
-2. Compare returned tickets against existing `## Pick-up` bullets
-3. For any in-progress ticket NOT already mentioned in pick-up, draft a
-   bullet: `* **SE-XXXX**: [summary] — in progress, not worked on today`
-4. If there are new bullets, append them to the `## Pick-up` section
-   (create the section if it doesn't exist)
-
-### Review
-
-1. Read the full `## Pick-up` section (including anything added during the
-   day and the Jira supplement)
-2. Present it to the user: "Here's tomorrow's pick-up. Edit, approve, or
+1. If the day's file has no `## Pick-up` section, skip this phase silently.
+2. If it has one, present it: "Here's tomorrow's pick-up. Edit, approve, or
    skip?"
 3. If the user edits, apply changes and rewrite the section
 4. If approved, leave as-is

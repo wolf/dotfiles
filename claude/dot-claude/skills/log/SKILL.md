@@ -89,15 +89,12 @@ new one). See the worklog CLAUDE.md for the full frontmatter schema.
 After adding the entry, check OmniFocus for matching tasks. If a match exists,
 ask if it should be marked complete or updated.
 
-## Carry Forward
+## Pick-up Notes
 
-After the task manager step, ask: "Anything to carry forward for tomorrow?"
-(when the resolved date isn't today, ask instead about carrying forward from
-that date, e.g. "Anything to carry forward from {date}?")
+Do not ask about carrying anything forward. Pick-up notes are rare and
+critical (see the worklog CLAUDE.md). Add a bullet to the `## Pick-up` section
+only when the user volunteers one:
 
-* If the user says no (or equivalent), skip.
-* If yes, take their input and append a bullet to the `## Pick-up` section
-  at the bottom of the worklog file.
 * If the section doesn't exist yet, create it (as the last `##` section in
   the body).
 * Lead with **ticket ID** (bold) if the entry had a ticket.

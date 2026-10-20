@@ -27,7 +27,6 @@ For each existing file in the window, in frontmatter:
 3. **`wake` with no prior night's `sleep`** — the file has `wake` set; the previous calendar day's file (if it exists) has no `sleep` field. Skip this check if the previous day's file doesn't exist at all (nothing to compare against).
 4. **`duration: "unknown"` entries** — any entry whose duration literal is `"unknown"`.
 5. **Unpaired commute leg** — exactly one `event_type: commute` entry on a day that also has a `workday` segment (suggesting an office day with only one leg logged). Informational only — plenty of real days are legitimately one-way (half-day, WFH switch mid-day).
-6. **Stale `## Pick-up` section** — a `## Pick-up` section present on two or more consecutive days in the window without being cleared, suggesting carried-forward items aren't getting resolved.
 
 ## Auto output
 
