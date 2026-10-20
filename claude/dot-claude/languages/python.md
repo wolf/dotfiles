@@ -18,6 +18,17 @@ Use the most recent stable Python version unless a project specifies otherwise.
 - **Testing**: `pytest` - tests are vital; always write them; tests should be independent and not rely on execution order
 - **Coverage**: Maintain >80% coverage; always have the ability to calculate it
 
+## Command-Line Tools and Logging
+
+Personal projects follow the DMP standards here too: `~/develop/dmp/dmp-coding-standards/DMP-PYTHON-STANDARDS.md` (CLI and Logging sections), audited with `code-audit-checklist.md` in the same repo.
+
+* **CLI framework**: `typer`, never `argparse` or `click` directly. Options declared with `Annotated`, with good names, sensible order, and a help string on every option, argument, and command.
+* **Required global options**: `--help`; `--version`/`-V` from `importlib.metadata`; `--log-level` (default `WARNING`, or `INFO` when the tool's purpose calls for it); `--log-file`. Put them on the app callback.
+* **Output**: results on stdout, logs and diagnostics on stderr, so the tool pipes cleanly. Offer `--json` when the output is machine-consumable; otherwise `rich` (already a typer dependency) for tables.
+* **Exit codes**: 0 success, 1 error, 2 usage error. Inside typer, `raise typer.Exit(code)`; never `sys.exit()`.
+* **Logging**: `loguru`, never stdlib `logging`. Only the application configures sinks (in the app callback: `logger.remove()`, then `logger.add(sys.stderr, level=...)`). Library code stays silent by default and binds `library=<name>`.
+* **Model tools**: copy an existing DMP CLI rather than inventing conventions. `~/develop/dmp/fsspec-file-cache/src/fsspec_file_cache/cli.py` and its `tests/test_cli.py` follow the standard exactly (including `CliRunner` tests grouped in classes whose docstrings state the promise under test).
+
 ## Type Annotations
 
 - Annotate all function signatures (parameters and return type)
