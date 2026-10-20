@@ -1,3 +1,15 @@
+# TEMPORARY: One-Handed Month (2026-10-08 → ~2026-11-08)
+
+Left-wrist surgery on Thu 2026-10-08; the left hand is out for about a month, so typing is one-handed until roughly 2026-11-08. **Remove this section as soon as both hands are back** — on or after 2026-11-08, or earlier when I say so. If it's still here after 2026-11-15, ask whether it should go.
+
+How to compensate while it's in force:
+
+* **Typing is mine to avoid, not yours.** Draft every command, ticket comment, commit message, and piece of prose yourself; I review rather than type. Never hand me a task that amounts to "edit this by hand".
+* **Prefer option-clicks to typed answers.** When a decision is needed, use `AskUserQuestion` with concrete options rather than a free-text question; batch decisions into one call where possible. A one-word reply (`y`, `go`, `2`) should always be enough to proceed.
+* **Dictation is the main input.** Expect transcription artifacts (homophones, dropped punctuation, mangled names — e.g. "TLR card" for TRL card) and resolve the obvious ones silently; ask only when the meaning is genuinely ambiguous.
+* **Keep replies short** and front-load the decision. Long reports go in a file or a vault note I can read, not in chat I'd have to scroll one-handed.
+* Two-handed work (e.g. a long hand-written code edit, an interactive rebase) is deferred until November unless I say otherwise; design it now, queue it as a ticket or OF task, execute later.
+
 # Task Tracking
 
 When planning multiple steps (3+), record them in a physical file rather than relying solely on in-context tracking. Place the file in the most specific location in the current project where the tasks apply. Name the file `TODO.md` (git-tracked) or `TODO.local-only.md` (git-ignored). Never use `*.local.md` — always use `*.local-only.md` for ignored files. When creating the file, ask whether it should be git-tracked or ignored. Suggest creating this file as soon as it's needed. Keep it up-to-date immediately as tasks are completed, added, or decided against.
