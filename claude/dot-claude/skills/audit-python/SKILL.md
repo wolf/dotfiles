@@ -100,6 +100,15 @@ Work through each section of the checklist against the scoped code.
   * **Question** — something that might be wrong but needs human judgment
   * **Note** — an observation worth recording (including positive ones)
 
+### Upgrade report (every audit, whatever the scope)
+
+The Interpreter and Dependencies section of the checklist requires every audit to report available upgrades, even for "changes" scope and even when nothing is urgent. Gather the facts, don't guess from memory:
+
+* **Interpreter.** Find the project's Python (`.python-version`, `requires-python`, the lock or environment) and compare it with the newest Python available (`uv python list --only-downloads`, and the security-release list in `DMP-PYTHON-STANDARDS.md` § Version Policy). Report a newer security release of its minor and a newer minor.
+* **Ready for the newest Python.** Check that the code compiles and the tests pass under the newest Python available (for example `uv run --python <newest> pytest`, or look for CI that does this). If you can't run it, say so rather than assuming.
+* **Dependencies.** Preview what an upgrade would pick up, honoring the 4-day floor and without changing the lockfile: `uv lock --upgrade --dry-run --exclude-newer "4 days"` (for pixi, `pixi update --dry-run`). A project that resolves from the internal devpi skips `--exclude-newer`. List direct dependencies that are behind, and any transitive one with a security fix. Note anything blocked, and by what.
+* **Suggest, don't do.** The audit never edits `pyproject.toml`, the lockfile, or the interpreter pin. Upgrades are suggestions for the user to approve.
+
 ### Pace yourself
 
 For large codebases, work module by module. After each module, briefly
@@ -121,6 +130,18 @@ checklist section. For each section with findings:
 * **Note** `path/good.py:helper_func` — Nice use of protocol conformance
   here
 ```
+
+Always include an **Upgrades Available** section, even when it only says everything is current:
+
+```
+## Upgrades Available
+
+* **Python** 3.14.8 → 3.14.10 (security release); 3.15.2 is also available. Code passes tests on 3.15.2 / not yet tried.
+* **Dependency** `loguru` 0.7.2 → 0.7.3 (no blocker)
+* **Blocked** `somelib` stays at 2.x: consumer X requires it
+```
+
+Mark upgrades that are overdue (a security release, a full minor or major behind with no stated blocker) as **Issue**, the rest as **Note**. Flag a lockfile that is months old.
 
 End with a brief overall assessment: what's the general health of this code?
 What are the most important things to address?
