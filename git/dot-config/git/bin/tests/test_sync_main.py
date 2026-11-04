@@ -1,706 +1,412 @@
-"""Tests for sync-main.py script."""
+#!/usr/bin/env -S uv run --no-project --script --quiet
+# /// script
+# requires-python = ">=3.15"
+# dependencies = [
+#     "pytest",
+#     "typer",
+#     "git-workflow-utils @ git+https://github.com/wolf/git-workflow-utils.git@v1.4.0",
+# ]
+#
+# [tool.uv]
+# exclude-newer = "4 days"
+# ///
+"""
+Tests for sync-main.py, written as promises about what the user ends up with.
+
+Standalone: run it directly (`./test_sync_main.py`) or through pytest. Each test
+builds its own throwaway repositories under `tmp_path`.
+
+"""
+
+from __future__ import annotations
+
 import importlib.util
+import itertools
 import subprocess
+import sys
+from collections.abc import Callable
 from pathlib import Path
-from unittest.mock import Mock, patch
 
 import pytest
 import typer
-import typer.testing
+from git_workflow_utils import current_branch, run_git
 
-from conftest import run_script_with_coverage
-
-# Import sync-main.py using importlib (can't use regular import due to hyphen)
-SCRIPT_PATH = Path(__file__).parent.parent / "sync-main.py"
-spec = importlib.util.spec_from_file_location("sync_main", SCRIPT_PATH)
-sync_main = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(sync_main)
-
-# Extract functions for easier access
-run_git = sync_main.run_git
-current_branch = sync_main.current_branch
-has_uncommitted_changes = sync_main.has_uncommitted_changes
-fetch_all = sync_main.fetch_all
+SCRIPT = Path(__file__).resolve().parent.parent / "sync-main.py"
+_spec = importlib.util.spec_from_file_location("sync_main", SCRIPT)
+assert _spec is not None
+assert _spec.loader is not None
+sync_main = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(sync_main)
 main = sync_main.main
+resolve_shared_branch = sync_main.resolve_shared_branch
 
-# Create CLI runner for direct function testing
-runner = typer.testing.CliRunner()
 
+# Fixtures and helpers
 
-# Unit tests for helper functions
 
+def git(*args: str, repo: Path | None = None) -> str:
+    """Return the stripped stdout of a git command."""
+    return run_git(*args, repo=repo, capture=True).stdout.strip()
 
-def test_run_git_success(git_repo, monkeypatch):
-    """Test that run_git executes commands successfully."""
-    monkeypatch.chdir(git_repo)
-    result = run_git("status", capture=True)
-    assert result.returncode == 0
-    assert "On branch" in result.stdout
 
+def _identify(repo: Path) -> None:
+    """Give `repo` a committer identity, so tests never depend on the machine's git config."""
+    run_git("config", "user.email", "test@example.com", repo=repo)
+    run_git("config", "user.name", "Test User", repo=repo)
 
-def test_run_git_failure():
-    """Test that run_git handles failures appropriately."""
-    with pytest.raises(subprocess.CalledProcessError):
-        run_git("not-a-real-command", check=True)
 
+@pytest.fixture
+def local_repo(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    """A repo on branch `main` with one commit and no remote; the current directory."""
+    path = tmp_path / "work"
+    path.mkdir()
+    run_git("init", "--quiet", "-b", "main", repo=path)
+    _identify(path)
+    (path / "README.md").write_text("# Test Repo\n")
+    run_git("add", "README.md", repo=path)
+    run_git("commit", "--quiet", "-m", "Initial commit", repo=path)
+    monkeypatch.chdir(path)
+    return path
 
-def test_current_branch(git_repo, monkeypatch):
-    """Test that current_branch returns the active branch."""
-    monkeypatch.chdir(git_repo)
-    # We should be on main initially
-    branch = current_branch()
-    assert branch == "main"
 
+@pytest.fixture
+def remote(tmp_path: Path) -> Path:
+    """An empty bare repository to act as `origin`."""
+    path = tmp_path / "remote.git"
+    run_git("init", "--quiet", "--bare", "-b", "main", str(path))
+    return path
 
-def test_has_uncommitted_changes_clean(git_repo, monkeypatch):
-    """Test that has_uncommitted_changes returns False for clean repo."""
-    monkeypatch.chdir(git_repo)
-    assert not has_uncommitted_changes()
 
+@pytest.fixture
+def work(local_repo: Path, remote: Path) -> Path:
+    """`local_repo` wired to `remote` the way a clone is, with `main` pushed and `origin/HEAD` set."""
+    run_git("remote", "add", "origin", str(remote), repo=local_repo)
+    run_git("push", "--quiet", "-u", "origin", "main", repo=local_repo)
+    run_git("remote", "set-head", "origin", "main", repo=local_repo)
+    return local_repo
 
-def test_has_uncommitted_changes_dirty(git_repo, monkeypatch):
-    """Test that has_uncommitted_changes returns True when there are changes."""
-    monkeypatch.chdir(git_repo)
-    # Create a new file
-    (git_repo / "test.txt").write_text("test content\n")
-
-    assert has_uncommitted_changes()
 
+@pytest.fixture
+def local_only(work: Path) -> Path:
+    """`work`, switched to a `local-only` branch like the one this tool exists to serve."""
+    run_git("switch", "--quiet", "-c", "local-only", repo=work)
+    return work
 
-# CLI Tests - Integration tests
-
-
-def test_cli_help():
-    """Test that --help works and shows usage information."""
-    result = run_script_with_coverage(
-        SCRIPT_PATH,
-        ["--help"],
-        capture_output=True,
-        text=True
-    )
-    assert result.returncode == 0
-    assert "Pull updates from a shared branch" in result.stdout
-    assert "--branch" in result.stdout
-    assert "--stash" in result.stdout
-    assert "--dry-run" in result.stdout
-
-
-def test_cli_dry_run(git_repo_with_remote):
-    """Test that --dry-run shows what would be done without doing it."""
-    git_repo, remote_repo = git_repo_with_remote
-
-    # Create a local-only branch
-    subprocess.run(["git", "checkout", "-b", "local-only"], cwd=git_repo, check=True, capture_output=True)
-
-    # Go back to main, create a commit, and push
-    subprocess.run(["git", "checkout", "main"], cwd=git_repo, check=True, capture_output=True)
-    (git_repo / "new.txt").write_text("new content\n")
-    subprocess.run(["git", "add", "new.txt"], cwd=git_repo, check=True, capture_output=True)
-    subprocess.run(["git", "commit", "-m", "Add new file"], cwd=git_repo, check=True, capture_output=True)
-    subprocess.run(["git", "push"], cwd=git_repo, check=True, capture_output=True)
-
-    # Switch back to local-only
-    subprocess.run(["git", "checkout", "local-only"], cwd=git_repo, check=True, capture_output=True)
-
-    # Run sync-main with --dry-run
-    result = run_script_with_coverage(
-        SCRIPT_PATH,
-        ["--dry-run"],
-        cwd=git_repo,
-        capture_output=True,
-        text=True
-    )
-
-    assert result.returncode == 0
-    assert "[DRY RUN]" in result.stdout
-    assert "Would run: git fetch" in result.stdout
-    assert "Would run: git switch main" in result.stdout
-    assert "Would run: git pull" in result.stdout
-
-
-def test_sync_main_no_new_commits(git_repo_with_remote):
-    """Test that syncing when there are no new commits works correctly."""
-    git_repo, remote_repo = git_repo_with_remote
-
-    # Create a local-only branch
-    subprocess.run(["git", "checkout", "-b", "local-only"], cwd=git_repo, check=True, capture_output=True)
-
-    # Run sync-main (should find no new commits)
-    result = run_script_with_coverage(
-        SCRIPT_PATH,
-        [],
-        cwd=git_repo,
-        capture_output=True,
-        text=True
-    )
-
-    assert result.returncode == 0
-    assert "No new commits pulled from main" in result.stdout
-
-    # Should still be on local-only branch
-    branch_result = subprocess.run(
-        ["git", "branch", "--show-current"],
-        cwd=git_repo,
-        capture_output=True,
-        text=True,
-        check=True
-    )
-    assert branch_result.stdout.strip() == "local-only"
-
-
-def test_sync_main_with_new_commits(git_repo_with_remote, tmp_path):
-    """Test that syncing pulls and cherry-picks new commits."""
-    git_repo, remote_repo = git_repo_with_remote
-
-    # Create a local-only branch
-    subprocess.run(["git", "checkout", "-b", "local-only"], cwd=git_repo, check=True, capture_output=True)
-
-    # Clone the repo to simulate another developer
-    other_dev = tmp_path / "other-dev"
-    subprocess.run(
-        ["git", "clone", str(remote_repo), str(other_dev)],
-        check=True,
-        capture_output=True
-    )
-    subprocess.run(["git", "config", "user.email", "other@example.com"], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "config", "user.name", "Other Dev"], cwd=other_dev, check=True, capture_output=True)
-
-    # Other dev creates a commit and pushes
-    (other_dev / "new.txt").write_text("new content\n")
-    subprocess.run(["git", "add", "new.txt"], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "commit", "-m", "Add new file"], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "push"], cwd=other_dev, check=True, capture_output=True)
-
-    # Now run sync-main on our repo
-    result = run_script_with_coverage(
-        SCRIPT_PATH,
-        [],
-        cwd=git_repo,
-        capture_output=True,
-        text=True
-    )
-
-    assert result.returncode == 0
-    assert "Fetching all remotes" in result.stdout
-    assert "Switching to main" in result.stdout
-    assert "Switching back to local-only" in result.stdout
-    assert "Cherry-picking 1 new commit(s)" in result.stdout
-    assert "Successfully cherry-picked" in result.stdout
-
-    # Should still be on local-only branch
-    branch_result = subprocess.run(
-        ["git", "branch", "--show-current"],
-        cwd=git_repo,
-        capture_output=True,
-        text=True,
-        check=True
-    )
-    assert branch_result.stdout.strip() == "local-only"
-
-    # The new file should exist
-    assert (git_repo / "new.txt").exists()
-    assert (git_repo / "new.txt").read_text() == "new content\n"
-
-
-def test_sync_main_with_multiple_commits(git_repo_with_remote, tmp_path):
-    """Test that syncing handles multiple commits correctly."""
-    git_repo, remote_repo = git_repo_with_remote
-
-    # Create a local-only branch
-    subprocess.run(["git", "checkout", "-b", "local-only"], cwd=git_repo, check=True, capture_output=True)
-
-    # Clone the repo to simulate another developer
-    other_dev = tmp_path / "other-dev"
-    subprocess.run(
-        ["git", "clone", str(remote_repo), str(other_dev)],
-        check=True,
-        capture_output=True
-    )
-    subprocess.run(["git", "config", "user.email", "other@example.com"], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "config", "user.name", "Other Dev"], cwd=other_dev, check=True, capture_output=True)
-
-    # Other dev creates multiple commits
-    (other_dev / "file1.txt").write_text("content 1\n")
-    subprocess.run(["git", "add", "file1.txt"], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "commit", "-m", "Add file1"], cwd=other_dev, check=True, capture_output=True)
-
-    (other_dev / "file2.txt").write_text("content 2\n")
-    subprocess.run(["git", "add", "file2.txt"], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "commit", "-m", "Add file2"], cwd=other_dev, check=True, capture_output=True)
-
-    subprocess.run(["git", "push"], cwd=other_dev, check=True, capture_output=True)
-
-    # Now run sync-main
-    result = run_script_with_coverage(
-        SCRIPT_PATH,
-        [],
-        cwd=git_repo,
-        capture_output=True,
-        text=True
-    )
-
-    assert result.returncode == 0
-    assert "Cherry-picking 2 new commit(s)" in result.stdout
-    assert "Successfully cherry-picked" in result.stdout
-
-    # Both files should exist
-    assert (git_repo / "file1.txt").exists()
-    assert (git_repo / "file2.txt").exists()
-
-
-def test_sync_main_already_on_main(git_repo_with_remote, tmp_path):
-    """Test that syncing when already on main branch works correctly."""
-    git_repo, remote_repo = git_repo_with_remote
-
-    # Clone the repo to simulate another developer
-    other_dev = tmp_path / "other-dev"
-    subprocess.run(
-        ["git", "clone", str(remote_repo), str(other_dev)],
-        check=True,
-        capture_output=True
-    )
-    subprocess.run(["git", "config", "user.email", "other@example.com"], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "config", "user.name", "Other Dev"], cwd=other_dev, check=True, capture_output=True)
-
-    # Other dev creates a commit and pushes
-    (other_dev / "new.txt").write_text("new content\n")
-    subprocess.run(["git", "add", "new.txt"], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "commit", "-m", "Add new file"], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "push"], cwd=other_dev, check=True, capture_output=True)
-
-    # We're already on main, just run sync-main
-    result = run_script_with_coverage(
-        SCRIPT_PATH,
-        [],
-        cwd=git_repo,
-        capture_output=True,
-        text=True
-    )
-
-    assert result.returncode == 0
-    assert "Already on main" in result.stdout
-    assert "fetching and pulling" in result.stdout
-
-    # Should still be on main branch
-    branch_result = subprocess.run(
-        ["git", "branch", "--show-current"],
-        cwd=git_repo,
-        capture_output=True,
-        text=True,
-        check=True
-    )
-    assert branch_result.stdout.strip() == "main"
-
-    # The new file should exist
-    assert (git_repo / "new.txt").exists()
-
-
-def test_sync_main_with_stash(git_repo_with_remote, tmp_path):
-    """Test that --stash option handles uncommitted changes."""
-    git_repo, remote_repo = git_repo_with_remote
-
-    # Create a local-only branch
-    subprocess.run(["git", "checkout", "-b", "local-only"], cwd=git_repo, check=True, capture_output=True)
-
-    # Create uncommitted changes
-    (git_repo / "uncommitted.txt").write_text("uncommitted work\n")
-
-    # Clone the repo to simulate another developer
-    other_dev = tmp_path / "other-dev"
-    subprocess.run(
-        ["git", "clone", str(remote_repo), str(other_dev)],
-        check=True,
-        capture_output=True
-    )
-    subprocess.run(["git", "config", "user.email", "other@example.com"], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "config", "user.name", "Other Dev"], cwd=other_dev, check=True, capture_output=True)
-
-    # Other dev creates a commit and pushes
-    (other_dev / "new.txt").write_text("new content\n")
-    subprocess.run(["git", "add", "new.txt"], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "commit", "-m", "Add new file"], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "push"], cwd=other_dev, check=True, capture_output=True)
-
-    # Run sync-main with --stash
-    result = run_script_with_coverage(
-        SCRIPT_PATH,
-        ["--stash"],
-        cwd=git_repo,
-        capture_output=True,
-        text=True
-    )
-
-    assert result.returncode == 0
-    assert "Stashing uncommitted changes" in result.stdout
-    assert "Successfully cherry-picked" in result.stdout
-    assert "Restoring stashed changes" in result.stdout
-    assert "Stashed changes restored" in result.stdout
-
-    # The uncommitted file should still exist
-    assert (git_repo / "uncommitted.txt").exists()
-    assert (git_repo / "uncommitted.txt").read_text() == "uncommitted work\n"
-
-    # The new file from main should also exist
-    assert (git_repo / "new.txt").exists()
-
-
-def test_sync_main_different_branch_name(git_repo_with_remote, tmp_path):
-    """Test syncing from a branch other than main."""
-    git_repo, remote_repo = git_repo_with_remote
-
-    # Create a develop branch and push it
-    subprocess.run(["git", "checkout", "-b", "develop"], cwd=git_repo, check=True, capture_output=True)
-    (git_repo / "develop.txt").write_text("develop content\n")
-    subprocess.run(["git", "add", "develop.txt"], cwd=git_repo, check=True, capture_output=True)
-    subprocess.run(["git", "commit", "-m", "Add develop file"], cwd=git_repo, check=True, capture_output=True)
-    subprocess.run(["git", "push", "-u", "origin", "develop"], cwd=git_repo, check=True, capture_output=True)
-
-    # Create a feature branch
-    subprocess.run(["git", "checkout", "-b", "feature"], cwd=git_repo, check=True, capture_output=True)
-
-    # Clone the repo to simulate another developer
-    other_dev = tmp_path / "other-dev"
-    subprocess.run(
-        ["git", "clone", str(remote_repo), str(other_dev)],
-        check=True,
-        capture_output=True
-    )
-    subprocess.run(["git", "config", "user.email", "other@example.com"], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "config", "user.name", "Other Dev"], cwd=other_dev, check=True, capture_output=True)
-
-    # Other dev modifies develop and pushes
-    subprocess.run(["git", "checkout", "develop"], cwd=other_dev, check=True, capture_output=True)
-    (other_dev / "new-develop.txt").write_text("new develop content\n")
-    subprocess.run(["git", "add", "new-develop.txt"], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "commit", "-m", "Add new develop file"], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "push"], cwd=other_dev, check=True, capture_output=True)
-
-    # Sync from develop
-    result = run_script_with_coverage(
-        SCRIPT_PATH,
-        ["--branch", "develop"],
-        cwd=git_repo,
-        capture_output=True,
-        text=True
-    )
-
-    assert result.returncode == 0
-    assert "Switching to develop" in result.stdout
-    assert "Successfully cherry-picked" in result.stdout
-
-    # The new file should exist in feature branch
-    assert (git_repo / "new-develop.txt").exists()
-
-
-def test_sync_main_run_twice_no_duplicates(git_repo_with_remote, tmp_path):
-    """Test that running sync-main twice doesn't cherry-pick commits twice."""
-    git_repo, remote_repo = git_repo_with_remote
-
-    # Create a local-only branch
-    subprocess.run(["git", "checkout", "-b", "local-only"], cwd=git_repo, check=True, capture_output=True)
-
-    # Clone the repo to simulate another developer
-    other_dev = tmp_path / "other-dev"
-    subprocess.run(
-        ["git", "clone", str(remote_repo), str(other_dev)],
-        check=True,
-        capture_output=True
-    )
-    subprocess.run(["git", "config", "user.email", "other@example.com"], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "config", "user.name", "Other Dev"], cwd=other_dev, check=True, capture_output=True)
-
-    # Other dev creates a commit and pushes
-    (other_dev / "new.txt").write_text("new content\n")
-    subprocess.run(["git", "add", "new.txt"], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "commit", "-m", "Add new file"], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "push"], cwd=other_dev, check=True, capture_output=True)
-
-    # First sync
-    result1 = run_script_with_coverage(
-        SCRIPT_PATH,
-        [],
-        cwd=git_repo,
-        capture_output=True,
-        text=True
-    )
-    assert result1.returncode == 0
-    assert "Cherry-picking 1 new commit(s)" in result1.stdout
-
-    # Get the commit count before second sync
-    log_result = subprocess.run(
-        ["git", "log", "--oneline"],
-        cwd=git_repo,
-        capture_output=True,
-        text=True,
-        check=True
-    )
-    commit_count_before = len(log_result.stdout.strip().split("\n"))
-
-    # Second sync (no new commits on main)
-    result2 = run_script_with_coverage(
-        SCRIPT_PATH,
-        [],
-        cwd=git_repo,
-        capture_output=True,
-        text=True
-    )
-    assert result2.returncode == 0
-    assert "No new commits pulled from main" in result2.stdout
-
-    # Commit count should be the same (no duplicate cherry-picks)
-    log_result = subprocess.run(
-        ["git", "log", "--oneline"],
-        cwd=git_repo,
-        capture_output=True,
-        text=True,
-        check=True
-    )
-    commit_count_after = len(log_result.stdout.strip().split("\n"))
-    assert commit_count_before == commit_count_after
-
-
-# Direct function tests for improved coverage
-# These tests call main() directly to ensure in-process coverage tracking
-
-
-def test_main_stash_path_no_changes(git_repo_with_remote, monkeypatch, capsys):
-    """Test stash code path when there are no uncommitted changes."""
-    git_repo, remote_repo = git_repo_with_remote
-    monkeypatch.chdir(git_repo)
-    subprocess.run(["git", "checkout", "-b", "test-branch"], cwd=git_repo, check=True, capture_output=True)
-
-    # Call main directly with stash=True but no changes
-    try:
-        main(branch="main", target="", stash=True, dry_run=False)
-    except SystemExit:
-        pass  # typer.Exit is expected
-
-    captured = capsys.readouterr()
-    # Should not stash since there are no changes
-    assert "Stashing" not in captured.out
-
-
-def test_main_stash_path_with_changes(git_repo_with_remote, monkeypatch, capsys):
-    """Test stash code path with uncommitted changes."""
-    git_repo, remote_repo = git_repo_with_remote
-    monkeypatch.chdir(git_repo)
-
-    # Create a branch and uncommitted changes
-    subprocess.run(["git", "checkout", "-b", "test-branch"], cwd=git_repo, check=True, capture_output=True)
-    (git_repo / "test.txt").write_text("test")
-
-    # Call main with stash=True
-    try:
-        main(branch="main", target="", stash=True, dry_run=False)
-    except SystemExit:
-        pass
-
-    captured = capsys.readouterr()
-    assert "Stashing uncommitted changes" in captured.out
-    assert "Restoring stashed changes" in captured.out
-
-
-def test_main_target_branch_specified(git_repo_with_remote, monkeypatch, capsys):
-    """Test specifying an explicit target branch."""
-    git_repo, remote_repo = git_repo_with_remote
-    monkeypatch.chdir(git_repo)
-
-    # Create two branches
-    subprocess.run(["git", "checkout", "-b", "feature"], cwd=git_repo, check=True, capture_output=True)
-    subprocess.run(["git", "checkout", "main"], cwd=git_repo, check=True, capture_output=True)
-    subprocess.run(["git", "checkout", "-b", "current-branch"], cwd=git_repo, check=True, capture_output=True)
-
-    # Sync main into feature (not current branch)
-    try:
-        main(branch="main", target="feature", stash=False, dry_run=False)
-    except SystemExit:
-        pass
-
-    captured = capsys.readouterr()
-    assert "Switching back to feature" in captured.out
-
-
-def test_main_dry_run_all_paths(git_repo_with_remote, monkeypatch, capsys):
-    """Test dry-run shows all planned operations."""
-    git_repo, remote_repo = git_repo_with_remote
-    monkeypatch.chdir(git_repo)
-    subprocess.run(["git", "checkout", "-b", "test-branch"], cwd=git_repo, check=True, capture_output=True)
-
-    # Call main with dry_run=True
-    try:
-        main(branch="main", target="", stash=False, dry_run=True)
-    except SystemExit:
-        pass
-
-    captured = capsys.readouterr()
-    assert "[DRY RUN]" in captured.out
-    assert "Would run: git fetch" in captured.out
-    assert "Would run: git switch main" in captured.out
-    assert "Would run: git pull" in captured.out
-
-
-def test_main_cherry_pick_error_handling(git_repo_with_remote, tmp_path, monkeypatch, capsys):
-    """Test error handling when cherry-pick fails."""
-    git_repo, remote_repo = git_repo_with_remote
-    monkeypatch.chdir(git_repo)
-
-    # Create local-only branch with a conflicting change
-    subprocess.run(["git", "checkout", "-b", "local-only"], cwd=git_repo, check=True, capture_output=True)
-    (git_repo / "conflict.txt").write_text("local version\n")
-    subprocess.run(["git", "add", "."], cwd=git_repo, check=True, capture_output=True)
-    subprocess.run(["git", "commit", "-m", "Local change"], cwd=git_repo, check=True, capture_output=True)
-
-    # Other dev creates conflicting change
-    other_dev = tmp_path / "other"
-    subprocess.run(["git", "clone", str(remote_repo), str(other_dev)], check=True, capture_output=True)
-    subprocess.run(["git", "config", "user.email", "test@test.com"], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "config", "user.name", "Test"], cwd=other_dev, check=True, capture_output=True)
-    (other_dev / "conflict.txt").write_text("remote version\n")
-    subprocess.run(["git", "add", "."], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "commit", "-m", "Remote change"], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "push"], cwd=other_dev, check=True, capture_output=True)
-
-    # Try to sync - should fail on cherry-pick
-    with pytest.raises((SystemExit, typer.Exit)) as exc_info:
-        main(branch="main", target="", stash=False, dry_run=False)
-
-    assert exc_info.value.exit_code == 1 if hasattr(exc_info.value, 'exit_code') else exc_info.value.code == 1
-    captured = capsys.readouterr()
-    assert "Error: Cherry-pick failed" in captured.err or "Cherry-picking" in captured.out
-
-    # Clean up the cherry-pick state
-    subprocess.run(["git", "cherry-pick", "--abort"], cwd=git_repo, capture_output=True)
-
-
-def test_main_stash_restore_failure(git_repo_with_remote, monkeypatch, capsys):
-    """Test warning when stash pop fails."""
-    git_repo, remote_repo = git_repo_with_remote
-    monkeypatch.chdir(git_repo)
-
-    # Create local branch with uncommitted changes
-    subprocess.run(["git", "checkout", "-b", "local-only"], cwd=git_repo, check=True, capture_output=True)
-    (git_repo / "stashed.txt").write_text("stashed content\n")
-
-    # Manually stash to set up for testing stash pop failure
-    # (We'll modify the stashed file to cause a conflict on pop)
-    subprocess.run(["git", "stash", "push", "-m", "test stash"], cwd=git_repo, check=True, capture_output=True)
-
-    # Create a conflicting file
-    (git_repo / "stashed.txt").write_text("conflicting content\n")
-    subprocess.run(["git", "add", "."], cwd=git_repo, check=True, capture_output=True)
-    subprocess.run(["git", "commit", "-m", "Conflicting commit"], cwd=git_repo, check=True, capture_output=True)
-
-    # Mock has_uncommitted_changes to return True initially
-    original_has_changes = has_uncommitted_changes
-
-    def mock_has_changes():
-        # First call returns True (to trigger stash), subsequent calls use real function
-        if not hasattr(mock_has_changes, 'called'):
-            mock_has_changes.called = True
-            return True
-        return original_has_changes()
-
-    monkeypatch.setattr(sync_main, "has_uncommitted_changes", mock_has_changes)
-
-    # Try to sync - stash pop should warn about failure
-    try:
-        main(branch="main", target="", stash=True, dry_run=False)
-    except SystemExit:
-        pass
-
-    captured = capsys.readouterr()
-    # Should show warning about failed stash restore
-    # (Actual conflict handling varies, but we're testing the code path)
-
-
-def test_main_already_on_target_branch_direct(git_repo_with_remote, monkeypatch, capsys):
-    """Test the early-return path when already on the target branch."""
-    git_repo, remote_repo = git_repo_with_remote
-    monkeypatch.chdir(git_repo)
-
-    # We're on main, sync main (should take early-return path)
-    try:
-        main(branch="main", target="", stash=False, dry_run=False)
-    except SystemExit:
-        pass
-
-    captured = capsys.readouterr()
-    assert "Already on main" in captured.out
-    assert "fetching and pulling" in captured.out
-
-
-def test_main_already_on_branch_with_stash(git_repo_with_remote, monkeypatch, capsys):
-    """Test early-return path when already on branch with stash."""
-    git_repo, remote_repo = git_repo_with_remote
-    monkeypatch.chdir(git_repo)
-
-    # Create uncommitted changes
-    (git_repo / "test.txt").write_text("test")
-
-    # We're on main, sync main with stash
-    try:
-        main(branch="main", target="", stash=True, dry_run=False)
-    except SystemExit:
-        pass
-
-    captured = capsys.readouterr()
-    assert "Already on main" in captured.out
-    assert "Stashing uncommitted changes" in captured.out
-    assert "Restoring stashed changes" in captured.out
-
-
-def test_main_dry_run_with_stash_and_changes(git_repo_with_remote, monkeypatch, capsys):
-    """Test dry-run with stash flag and uncommitted changes."""
-    git_repo, remote_repo = git_repo_with_remote
-    monkeypatch.chdir(git_repo)
-
-    # Create a branch and uncommitted changes
-    subprocess.run(["git", "checkout", "-b", "test-branch"], cwd=git_repo, check=True, capture_output=True)
-    (git_repo / "test.txt").write_text("test")
-
-    # Dry run with stash
-    try:
-        main(branch="main", target="", stash=True, dry_run=True)
-    except SystemExit:
-        pass
-
-    captured = capsys.readouterr()
-    assert "Stashing uncommitted changes" in captured.out
-    assert "[DRY RUN] Would run: git stash push --include-untracked --message 'sync-main autostash'" in captured.out
-    # Note: stash pop message won't appear in dry-run because stashed=False
-
-
-def test_main_cherry_pick_with_stash_failure(git_repo_with_remote, tmp_path, monkeypatch, capsys):
-    """Test cherry-pick failure when we have stashed changes."""
-    git_repo, remote_repo = git_repo_with_remote
-    monkeypatch.chdir(git_repo)
-
-    # Create local-only branch with uncommitted changes
-    subprocess.run(["git", "checkout", "-b", "local-only"], cwd=git_repo, check=True, capture_output=True)
-    (git_repo / "uncommitted.txt").write_text("uncommitted\n")
-
-    # Create a conflicting committed change
-    (git_repo / "conflict.txt").write_text("local version\n")
-    subprocess.run(["git", "add", "conflict.txt"], cwd=git_repo, check=True, capture_output=True)
-    subprocess.run(["git", "commit", "-m", "Local change"], cwd=git_repo, check=True, capture_output=True)
-
-    # Other dev creates conflicting change
-    other_dev = tmp_path / "other"
-    subprocess.run(["git", "clone", str(remote_repo), str(other_dev)], check=True, capture_output=True)
-    subprocess.run(["git", "config", "user.email", "test@test.com"], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "config", "user.name", "Test"], cwd=other_dev, check=True, capture_output=True)
-    (other_dev / "conflict.txt").write_text("remote version\n")
-    subprocess.run(["git", "add", "."], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "commit", "-m", "Remote change"], cwd=other_dev, check=True, capture_output=True)
-    subprocess.run(["git", "push"], cwd=other_dev, check=True, capture_output=True)
-
-    # Try to sync with stash - should fail and warn about stash
-    with pytest.raises((SystemExit, typer.Exit)):
-        main(branch="main", target="", stash=True, dry_run=False)
-
-    captured = capsys.readouterr()
-    # Should warn about stashed changes not being restored
-    assert "Stashed changes not restored" in captured.err or "Warning" in captured.err
-
-    # Clean up
-    subprocess.run(["git", "cherry-pick", "--abort"], cwd=git_repo, capture_output=True)
+
+@pytest.fixture
+def push_upstream(tmp_path: Path, remote: Path) -> Callable[..., None]:
+    """Return a function that, as another developer, pushes one commit per named file."""
+    clones = itertools.count()
+
+    def push(*names: str, branch: str = "main") -> None:
+        clone = tmp_path / f"upstream-{next(clones)}"
+        run_git("clone", "--quiet", "--branch", branch, str(remote), str(clone))
+        _identify(clone)
+        for name in names:
+            (clone / name).write_text(f"{name} from upstream\n")
+            run_git("add", name, repo=clone)
+            run_git("commit", "--quiet", "-m", f"Add {name}", repo=clone)
+        run_git("push", "--quiet", "origin", branch, repo=clone)
+
+    return push
+
+
+# Syncing
+
+
+class TestSync:
+    """Promise: new commits on the shared branch arrive on your branch, and you keep your place."""
+
+    @pytest.mark.parametrize("names", [("new.txt",), ("a.txt", "b.txt")])
+    def test_new_commits_land_on_the_working_branch(self, local_only, push_upstream, capsys, names):
+        """Every upstream commit is applied, and you end on the branch you started on."""
+        push_upstream(*names)
+
+        main()
+
+        assert current_branch() == "local-only"
+        for name in names:
+            assert (local_only / name).read_text() == f"{name} from upstream\n"
+        assert f"Cherry-pick complete ({len(names)} applied)" in capsys.readouterr().err
+
+    def test_nothing_new_changes_nothing(self, local_only, capsys):
+        """With no upstream change the branch tip does not move."""
+        before = git("rev-parse", "HEAD")
+
+        main()
+
+        assert git("rev-parse", "HEAD") == before
+        assert "No new commits pulled from main" in capsys.readouterr().err
+
+    def test_running_twice_does_not_duplicate(self, local_only, push_upstream):
+        """A second run after a sync finds nothing to apply."""
+        push_upstream("new.txt")
+        main()
+        after_first = git("rev-parse", "HEAD")
+
+        main()
+
+        assert git("rev-parse", "HEAD") == after_first
+
+    def test_commit_already_present_is_skipped(self, local_only, push_upstream, capsys):
+        """A change you already carry (same patch, different commit) is not applied twice."""
+        (local_only / "new.txt").write_text("new.txt from upstream\n")
+        run_git("add", "new.txt", repo=local_only)
+        run_git("commit", "--quiet", "-m", "Same change, made locally", repo=local_only)
+        before = git("rev-parse", "HEAD")
+        push_upstream("new.txt")
+
+        main()
+
+        assert git("rev-parse", "HEAD") == before
+        assert "Cherry-pick complete (1 skipped)" in capsys.readouterr().err
+
+    def test_already_on_the_shared_branch_just_pulls(self, work, push_upstream, capsys):
+        """On the shared branch itself there is nothing to cherry-pick; it is simply updated."""
+        push_upstream("new.txt")
+
+        main()
+
+        assert (work / "new.txt").exists()
+        err = capsys.readouterr().err
+        assert "Already on main" in err
+        assert "Cherry-pick" not in err
+
+    def test_explicit_shared_branch(self, work, push_upstream):
+        """`--branch` syncs from that branch instead of the default."""
+        run_git("switch", "--quiet", "-c", "develop", repo=work)
+        run_git("push", "--quiet", "-u", "origin", "develop", repo=work)
+        run_git("switch", "--quiet", "-c", "feature", repo=work)
+        push_upstream("develop-only.txt", branch="develop")
+
+        main(branch="develop")
+
+        assert (work / "develop-only.txt").exists()
+
+    def test_explicit_target_receives_the_commits(self, work, push_upstream):
+        """`--target` cherry-picks into that branch rather than the current one."""
+        run_git("switch", "--quiet", "-c", "feature", repo=work)
+        run_git("switch", "--quiet", "-c", "elsewhere", repo=work)
+        push_upstream("new.txt")
+
+        main(target="feature")
+
+        assert git("show", "feature:new.txt") == "new.txt from upstream"
+
+    def test_follows_origin_head(self, work, capsys):
+        """The shared branch is whatever `origin/HEAD` names, not a hardcoded `main`."""
+        run_git("branch", "release", repo=work)
+        run_git("push", "--quiet", "origin", "release", repo=work)
+        run_git("remote", "set-head", "origin", "release", repo=work)
+        run_git("switch", "--quiet", "-c", "local-only", repo=work)
+
+        main(dry_run=True)
+
+        assert "Would run: git switch release" in capsys.readouterr().err
+
+
+class TestStash:
+    """Promise: with `--stash`, your uncommitted work comes through a sync untouched."""
+
+    def test_uncommitted_work_survives(self, local_only, push_upstream, capsys):
+        """Untracked work is set aside, the sync happens, and the work comes back."""
+        (local_only / "uncommitted.txt").write_text("precious\n")
+        push_upstream("new.txt")
+
+        main(stash=True)
+
+        assert (local_only / "uncommitted.txt").read_text() == "precious\n"
+        assert (local_only / "new.txt").exists()
+        assert git("stash", "list") == ""
+        assert "Stashed changes restored" in capsys.readouterr().err
+
+    def test_nothing_to_stash_stashes_nothing(self, local_only, capsys):
+        """A clean tree is not stashed."""
+        main(stash=True)
+
+        assert "Stashing" not in capsys.readouterr().err
+        assert git("stash", "list") == ""
+
+    def test_failed_fetch_restores_the_stash(self, local_only, remote, tmp_path):
+        """If the remote is unreachable the work comes back and the exit is a clean 1."""
+        (local_only / "uncommitted.txt").write_text("precious\n")
+        remote.rename(tmp_path / "remote-gone")
+
+        with pytest.raises(typer.Exit) as raised:
+            main(stash=True)
+
+        assert raised.value.exit_code == 1
+        assert (local_only / "uncommitted.txt").read_text() == "precious\n"
+        assert git("stash", "list") == ""
+
+    def test_failed_pull_returns_you_to_your_branch_with_your_work(self, local_only, push_upstream, capsys):
+        """A pull that cannot fast-forward leaves you where you started, stash restored."""
+        run_git("config", "pull.ff", "only", repo=local_only)
+        run_git("switch", "--quiet", "main", repo=local_only)
+        (local_only / "diverged.txt").write_text("unpushed\n")
+        run_git("add", "diverged.txt", repo=local_only)
+        run_git("commit", "--quiet", "-m", "Unpushed local commit on main", repo=local_only)
+        run_git("switch", "--quiet", "local-only", repo=local_only)
+        (local_only / "uncommitted.txt").write_text("precious\n")
+        push_upstream("new.txt")
+
+        with pytest.raises(typer.Exit) as raised:
+            main(stash=True)
+
+        assert raised.value.exit_code == 1
+        assert current_branch() == "local-only"
+        assert (local_only / "uncommitted.txt").read_text() == "precious\n"
+        assert git("stash", "list") == ""
+        err = capsys.readouterr().err
+        assert "failed (exit" in err
+        assert "Traceback" not in err
+
+    def test_conflict_keeps_the_stash_and_says_how_to_get_it(self, local_only, push_upstream, capsys):
+        """On a cherry-pick conflict the stash is deliberately left alone, and the user is told."""
+        (local_only / "conflict.txt").write_text("local version\n")
+        run_git("add", "conflict.txt", repo=local_only)
+        run_git("commit", "--quiet", "-m", "Local change", repo=local_only)
+        (local_only / "uncommitted.txt").write_text("precious\n")
+        push_upstream("conflict.txt")
+
+        with pytest.raises(typer.Exit) as raised:
+            main(stash=True)
+
+        assert raised.value.exit_code == 1
+        assert git("stash", "list") != ""
+        err = capsys.readouterr().err
+        assert "Cherry-pick failed" in err
+        assert "git stash pop" in err
+
+
+class TestConflict:
+    """Promise: a cherry-pick that cannot apply stops cleanly and tells you what to do."""
+
+    def test_conflict_exits_1_with_instructions(self, local_only, push_upstream, capsys):
+        """The exit is a clean 1 and the cherry-pick is left for the user to resolve or abort."""
+        (local_only / "conflict.txt").write_text("local version\n")
+        run_git("add", "conflict.txt", repo=local_only)
+        run_git("commit", "--quiet", "-m", "Local change", repo=local_only)
+        push_upstream("conflict.txt")
+
+        with pytest.raises(typer.Exit) as raised:
+            main()
+
+        assert raised.value.exit_code == 1
+        assert "git cherry-pick --abort" in capsys.readouterr().err
+        assert (local_only / ".git" / "CHERRY_PICK_HEAD").exists()
+
+
+class TestDryRun:
+    """Promise: `--dry-run` shows the plan and changes nothing."""
+
+    def test_nothing_changes_and_the_plan_is_shown(self, local_only, push_upstream, capsys):
+        """Branch, tip, working tree and stash are all as they were; the planned commands are printed."""
+        (local_only / "uncommitted.txt").write_text("precious\n")
+        push_upstream("new.txt")
+        before = git("rev-parse", "HEAD")
+
+        main(stash=True, dry_run=True)
+
+        assert current_branch() == "local-only"
+        assert git("rev-parse", "HEAD") == before
+        assert (local_only / "uncommitted.txt").read_text() == "precious\n"
+        assert not (local_only / "new.txt").exists()
+        assert git("stash", "list") == ""
+        err = capsys.readouterr().err
+        for planned in (
+            "Would run: git stash push --include-untracked --message 'sync-main autostash'",
+            "Would run: git fetch",
+            "Would run: git switch main",
+            "Would run: git pull",
+            "Would run: git stash pop",
+        ):
+            assert planned in err
+
+
+class TestOutputStreams:
+    """Promise: the tool's own messages go to stderr; stdout stays clean for pipes."""
+
+    def test_our_messages_are_not_on_stdout(self, local_only, push_upstream, capfd):
+        """Narration appears on stderr only (git's own output may appear on stdout)."""
+        push_upstream("new.txt")
+
+        main()
+
+        out, err = capfd.readouterr()
+        assert "Cherry-pick complete" in err
+        for ours in ("Fetching all remotes", "Switching to", "Cherry-pick"):
+            assert ours not in out
+
+
+# Finding the shared branch
+
+
+class TestResolveSharedBranch:
+    """Promise: the shared branch is found without the caller naming it."""
+
+    def test_explicit_request_wins(self, work):
+        """An explicit name is returned as given, even if it doesn't exist."""
+        assert resolve_shared_branch("develop") == "develop"
+
+    def test_follows_origin_head(self, work):
+        """The remote's default branch beats the candidate list."""
+        run_git("branch", "trunk", repo=work)
+        run_git("push", "--quiet", "origin", "trunk", repo=work)
+        run_git("branch", "release", repo=work)
+        run_git("remote", "set-head", "origin", "trunk", repo=work)
+
+        assert resolve_shared_branch() == "trunk"
+
+    def test_falls_back_to_first_candidate_in_list_order(self, local_repo):
+        """Without origin/HEAD, the first candidate that exists is used, in list order."""
+        assert resolve_shared_branch() == "main"
+        run_git("branch", "release", repo=local_repo)
+        assert resolve_shared_branch() == "release"
+
+    def test_fallback_sees_a_remote_only_branch(self, local_repo):
+        """A candidate that exists only as `origin/<name>` counts."""
+        run_git("branch", "-m", "main", "work", repo=local_repo)
+        run_git("update-ref", "refs/remotes/origin/master", "HEAD", repo=local_repo)
+
+        assert resolve_shared_branch() == "master"
+
+    def test_no_candidate_is_an_error(self, local_repo, capsys):
+        """With nothing to go on, exit 1 and tell the user to pass --branch."""
+        run_git("branch", "-m", "main", "work", repo=local_repo)
+
+        with pytest.raises(typer.Exit) as raised:
+            resolve_shared_branch()
+
+        assert raised.value.exit_code == 1
+        assert "--branch" in capsys.readouterr().err
+
+
+# The script as a user runs it
+
+
+class TestCommandLine:
+    """Promise: the script runs as `./sync-main.py` through its own PEP 723 block."""
+
+    def test_help_lists_the_options(self):
+        """`--help` works and names every option."""
+        result = subprocess.run([str(SCRIPT), "--help"], capture_output=True, text=True, check=False)
+
+        assert result.returncode == 0
+        for option in ("--branch", "--target", "--stash", "--dry-run"):
+            assert option in result.stdout
+
+    def test_end_to_end_sync(self, local_only, push_upstream):
+        """A real invocation syncs, exits 0, and keeps its narration off stdout."""
+        push_upstream("new.txt")
+
+        result = subprocess.run([str(SCRIPT)], cwd=local_only, capture_output=True, text=True, check=False)
+
+        assert result.returncode == 0
+        assert (local_only / "new.txt").exists()
+        assert "Cherry-pick complete (1 applied)" in result.stderr
+        assert "Cherry-pick complete" not in result.stdout
+
+
+if __name__ == "__main__":
+    sys.exit(pytest.main([__file__]))

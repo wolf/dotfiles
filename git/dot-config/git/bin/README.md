@@ -52,10 +52,12 @@ Sync updates from a shared branch into your working branch via cherry-pick.
 - Cherry-picks new commits (if any were pulled)
 - Optional --stash to handle uncommitted changes
 - --dry-run to preview actions
+- If a git step fails, returns you to your branch and restores any stash, then exits 1
+- All of its own messages go to stderr; stdout stays clean (git's output passes through)
 
 **Usage:**
 ```bash
-# Pull main and cherry-pick to current branch
+# Pull the shared branch and cherry-pick to current branch
 sync-main.py
 
 # Pull a different branch
@@ -71,8 +73,14 @@ sync-main.py --dry-run
 sync-main.py --target feature-branch
 ```
 
+**Running and testing:** both the script and `tests/test_sync_main.py` are standalone PEP 723 scripts: run `./sync-main.py` or `./tests/test_sync_main.py` and `uv` supplies Python 3.15+ and the dependencies (`git-workflow-utils` is pinned to a release tag; new packages must be at least 4 days old).
+
+**Editor type information:** `ty` ignores the project environment and config for PEP 723 scripts and falls back to the system Python, which lacks their dependencies. It does honor `VIRTUAL_ENV`, so start your editor from this directory (direnv's `layout uv` sets it to `.venv`) after `uv sync`; `pyproject.toml` keeps `.venv` on the same pins as the scripts.
+
 **Typical use case:**
-Repos with a shared branch (e.g., 'main') and a local-only branch (e.g., 'local-only' with secrets that should never be pushed).
+Repos with a shared branch (e.g., 'main' or 'release') and a local-only branch (e.g., 'local-only' with secrets that should never be pushed).
+
+**Finding the shared branch:** unless `--branch` is given, the remote's default branch (`origin/HEAD`) is used; if that isn't recorded, the first of `release`, `main`, `master` that exists locally or on `origin`; otherwise the script exits with an error. After changing a repo's default branch on the remote, refresh the cached value with `git remote set-head origin -a`.
 
 ### make-clone.py
 

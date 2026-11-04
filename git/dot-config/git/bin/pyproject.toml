@@ -11,8 +11,11 @@ dependencies = [
 dev = [
     "pytest",
     "pytest-cov",
-    "git-workflow-utils @ git+https://github.com/wolf/git-workflow-utils.git",
+    "git-workflow-utils @ git+https://github.com/wolf/git-workflow-utils.git@v1.4.0",
 ]
+
+[tool.uv]
+exclude-newer = "4 days"
 
 [tool.coverage.run]
 source = ["."]
