@@ -27,6 +27,18 @@ The skill runs automatically once per day as one of the checks fired by `/daily-
 
 All passes scan events from today through 14 days ahead.
 
+## Time zones
+
+`calendar_events` renders each event's `startDate`/`endDate` in **that event's own `timeZone`**, not in Wolf's local zone (`America/Detroit`). DMP events are often scheduled in another zone — the Siloc Daily Standup is `Europe/Berlin`, so its listed `16:30` is a morning meeting for Wolf. Comparing the raw strings across events produces false conflicts and wrong work-hours checks.
+
+Before any pass compares, filters or windows an event's times, convert every event (Wolf calendars, DMP events, existing mirrors) to a real instant in its own zone, then to `America/Detroit`:
+
+* A missing/null `timeZone` means local (`America/Detroit`).
+* Use `zoneinfo`, never fixed offsets — Europe and the US change clocks on different dates (Europe ends DST the last Sunday of October, the US the first Sunday of November), so the offset between Berlin and Michigan is 6 hours for most of the year and 5 hours in between.
+* Run the conversion in a script (`python3 -I`, `datetime` + `zoneinfo`) over the saved JSON; don't convert by eye.
+* All "8 AM – 5 PM", "Mon–Fri", weekend, and overlap tests below use the converted local times.
+* When reporting an event to the user, show its local time (and its source zone if it differs).
+
 ## Argument parsing
 
 If `$ARGUMENTS` contains the literal token `--auto`, run in **auto** mode. Otherwise run in **interactive** mode.
@@ -47,7 +59,7 @@ If `$ARGUMENTS` contains the literal token `--auto`, run in **auto** mode. Other
 
 ## Pass 1 — OoO mirroring (both modes; silent)
 
-For each Wolf-calendar event whose `[startDate, endDate]` intersects ANY 8 AM – 5 PM Mon–Fri window:
+For each Wolf-calendar event whose `[startDate, endDate]` intersects ANY 8 AM – 5 PM Mon–Fri window (local time; see [Time zones](#time-zones)):
 
 1. **Weekend exclusion**: If the event's start date falls on a Saturday or Sunday → skip. Do not create OoO mirrors for weekend events.
 2. **Free all-day exclusion**: If the event is all-day and has `availability: free` → skip. All-day free events are informational markers or planned days off where Wolf is simply not working — no OoO mirror is needed because there is no work to interrupt.
@@ -58,6 +70,7 @@ For each Wolf-calendar event whose `[startDate, endDate]` intersects ANY 8 AM �
    - `targetCalendar`: `Calendar`
    - `title`: `Wolf OoO`
    - `startDate` / `endDate`: the full source-event window — do NOT clip to 8–5
+   - `timezone`: the source event's `timeZone` (or `America/Detroit` if none), so the mirror lands on the same instant
    - `availability`: `unavailable` (renders as Out of Office in M365)
    - **Omit** `note`, `location`, `url`, attendees, alarms — no detail leaks.
 
@@ -92,7 +105,7 @@ For each event on the Wolf calendars in the lookahead window:
 
 For each Wolf-calendar event on a weekday (Mon–Fri) whose window intersects work hours (8 AM – 5 PM):
 
-1. From the DMP-events list (Step 3 of Procedure), find any whose time window overlaps the Wolf event's window.
+1. From the DMP-events list (Step 3 of Procedure), find any whose time window overlaps the Wolf event's window. Compare **converted instants** (see [Time zones](#time-zones)), never the raw `startDate`/`endDate` strings — two events that both read `16:30` can be hours apart.
 2. These are conflicts.
 
 Other-employee OoO markers (see Procedure step 3) are informational only — a colleague being out doesn't block or conflict with anything on Wolf's calendar. They are never counted as conflicts, regardless of overlap.

@@ -27,6 +27,7 @@ For each existing file in the window, in frontmatter:
 3. **`wake` with no prior night's `sleep`** — the file has `wake` set; the previous calendar day's file (if it exists) has no `sleep` field. Skip this check if the previous day's file doesn't exist at all (nothing to compare against).
 4. **`duration: "unknown"` entries** — any entry whose duration literal is `"unknown"`.
 5. **Unpaired commute leg** — exactly one `event_type: commute` entry on a day that also has a `workday` segment (suggesting an office day with only one leg logged). Informational only — plenty of real days are legitimately one-way (half-day, WFH switch mid-day).
+6. **DMP work with no envelope** — at least one entry whose client contains `DMP` and is not `event_type: commute`, and no `workday` segment with a DMP client. The ADP timecard is the sum of DMP segments (worklog CLAUDE.md, "Envelope coverage"), so this is work that will never be reported. Name the uncovered total: `2026-10-25 DMP work logged with no envelope (7:15)`. Mirrors the dashboard's amber Timecard cell; fix with `/start-workday` + `/end-workday` on that date.
 
 ## Auto output
 

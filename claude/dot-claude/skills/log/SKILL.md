@@ -84,6 +84,28 @@ When creating or appending to a daily file, **always read the existing file
 first**, then update the YAML frontmatter to reflect all entries (including the
 new one). See the worklog CLAUDE.md for the full frontmatter schema.
 
+## Envelope Coverage
+
+A DMP entry (client contains `DMP`) must lie inside a DMP `workday` segment
+on its day — the ADP timecard is the sum of those segments, so uncovered work
+is never reported. Apply the "Envelope coverage" rule in the worklog
+CLAUDE.md after writing the entry:
+
+* The resolved date is today, a DMP segment is open, and the work ran up to
+  now → covered, say nothing.
+* The resolved date is today, the workday is under way and no DMP segment
+  is open → ask when the workday started (one `AskUserQuestion`, with an
+  "out-of-hours work" option) and open `{client: DMP, start}` from then,
+  absorbing later closed DMP segments. Never fit a closed segment around
+  the entry during a workday: the envelope does not shrink to fit the work.
+* Otherwise (out-of-hours or a past day) ask for the window with one `AskUserQuestion`: "ended just now,
+  started `duration` ago" (session work default), "give start and end", or
+  "already inside an envelope". Round to the quarter hour.
+* Extend an overlapping or abutting DMP segment, or append a closed one
+  `{client: DMP, start, end}`; then rewrite the frontmatter.
+
+Personal entries skip this step entirely.
+
 ## Task Manager Integration
 
 After adding the entry, check OmniFocus for matching tasks. If a match exists,

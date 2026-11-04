@@ -180,6 +180,27 @@ new one). See the worklog CLAUDE.md for the full frontmatter schema.
 
 The entry **must** include `event_type: meeting` in the frontmatter entries list. If the meeting was only partially valuable, also include `value_duration` (short form, e.g. `20m`) — omit entirely when the full duration was valuable.
 
+## Envelope Coverage
+
+A DMP meeting must lie inside a DMP `workday` segment on its day — the ADP
+timecard is the sum of those segments. Apply the "Envelope coverage" rule in
+the worklog CLAUDE.md after writing the entry:
+
+- First, during today's workday with no DMP segment open: ask when the
+  workday started (with an "out-of-hours" option) and open
+  `{client: DMP, start}` from then, absorbing later closed DMP segments. The
+  envelope never shrinks to fit the work; the fitted windows below are for
+  out-of-hours meetings and past days only.
+- Path B: the calendar event's start and end are the window; wrap silently
+  (extend an overlapping or abutting DMP segment, or append a closed one
+  `{client: DMP, start, end}`, quarter-hour rounded) when no segment covers it.
+- Path A: if the resolved date is today and an open DMP segment covers now,
+  nothing to do; otherwise ask for the window with one `AskUserQuestion`
+  ("ended just now, started `duration` ago" / "give start and end" /
+  "already inside an envelope") and wrap as above.
+
+Non-DMP meetings skip this step.
+
 ## Task Manager Integration
 
 After adding the entry:

@@ -67,6 +67,9 @@ Duration: 45m (DMP)
 - Always attributed to **DMP** — commute is a cost of going to the office.
 - `event_type: commute` in frontmatter entries.
 - No body text needed unless the user provides details.
+- Never wrapped in a `workday` segment and never counted toward the ADP
+  timecard: a commute is not work accomplished (the "Envelope coverage"
+  rule in the worklog CLAUDE.md excludes it).
 
 ## Frontmatter
 

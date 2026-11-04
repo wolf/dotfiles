@@ -74,7 +74,7 @@ Big plans must be broken into steps where each completed step is a valid point i
 
 **Planning and tickets:** Each step typically needs its own Jira ticket. Plans large enough to span multiple steps get an epic, and all step tickets belong to that epic.
 
-**Audit every step:** Before a step can be committed, new code and tests must be audited against the code audit checklist (`~/develop/dmp/dmp-coding-standards/code-audit-checklist.md`). This is not a cleanup pass before delivery — it is part of every step. In particular, verify that tests test **promises**, not implementations.
+**Audit every step:** Before a step can be committed, new code and tests must be audited against the code audit checklist (`~/develop/dmp/coding-standards/code-audit-checklist.md`). This is not a cleanup pass before delivery — it is part of every step. In particular, verify that tests test **promises**, not implementations.
 
 **Delivery:** A completed step satisfying these conditions is pushed to main. If the step provides a helpful new state for consumers, it should be released — version bump, matching tag, and placement on the release branch.
 
@@ -162,6 +162,24 @@ No one starts with the simplest answer. It always starts complicated. Programmin
 
 New or changed code implies new or changed documentation. Every change to functionality, architecture, models, or public interfaces must include corresponding documentation updates — whether that's comments, docstrings, README, or dedicated docs. This is not optional; always consider what documentation a change requires.
 
+# Supply Chain: Python Patch Floor and Dependency Quarantine
+
+## Python: only the latest security releases
+
+Only the newest security release of each supported minor is acceptable — as of 2026-10-28: **3.15.2, 3.14.10, 3.13.18, 3.12.16, 3.11.18**. Anything older (including 3.15.0/3.15.1 and every 3.8–3.10) is out of policy. When a project's interpreter is older than that, write an inbox note (see Multi-Project Work) rather than carrying on silently. When a new security release ships, this list is the thing to update. uv's bundled catalog lags python-build-standalone by days: if `uv python install <ver>` says "No download found", build a one-entry `--python-downloads-json-url` file from the python-build-standalone release's `SHA256SUMS` (done for 3.15.2 on 2026-10-28).
+
+## Dependencies: nothing newer than 4 days
+
+Never resolve to a package release uploaded in the last 4 days; a fresh upload is where a hijacked or malicious release lives, and a few days is usually enough for it to be pulled or flagged. Every dependency resolution or upgrade through uv passes the cutoff:
+
+* One-off: `uv lock --exclude-newer "4 days"`, `uv lock --upgrade --exclude-newer "4 days"`, `uv sync ...`, `uv add ...`, `uv pip install --exclude-newer "4 days" ...`. The duration is relative to now and is recorded in `uv.lock` as `exclude-newer-span = "P4D"`, so later re-locks keep honouring it.
+* Standing: `[tool.uv]` in `pyproject.toml` gets `exclude-newer = "4 days"`. A project without it gets it added before its next lock or upgrade.
+* The rule covers every resolver, not just uv. A pixi project puts `exclude-newer = "4 days"` under `[workspace]` in `pixi.toml` (conda and PyPI sides; verified on pixi 0.83.0). Adding it to an existing project re-solves every environment, so expect a full upgrade. pixi's documented `[workspace.exclude-newer]` `exemptions` table did not lift the cutoff for a conda package in my test on 0.83.0; check before relying on it.
+* The interpreter floor beats the cutoff (decided 2026-11-04): when the 4 days would hide the CPython security release the floor above requires, take the release. uv installs Python outside resolution, so this only bites pixi; there, exempt `python` if the exemption works, else re-lock once with `cutoff` set just after the upload and restore `"4 days"`.
+* Exceptions only for **our own packages while we are working on that package** (e.g. a just-released `db-handles` that a consumer needs now): `exclude-newer-package = { db-handles = false }` under `[tool.uv]`, or one-off `--exclude-newer-package "db-handles=false"`. Name the package; never loosen the global cutoff. Remove the exception when the work is done.
+* A third-party package is never an exception on my say-so alone: if a security fix is that new, ask first and say what the release is.
+* **Projects that resolve from the internal devpi (`pypi.ushrauto.com`) skip the cutoff entirely.** Our devpi's API gives no upload times, so `exclude-newer` filters out every package it serves (even `hatchling`) and the lock fails. Lock and install those projects without `--exclude-newer` and without `[tool.uv] exclude-newer`, and remove the setting where one was added. This holds until devpi reports upload times (INX-256, devpi 7.x). Decided 2026-10-30.
+
 # Language-Specific Guidelines
 
 Language rules live in `languages/` and should be read when writing code in that language. Available: `languages/python.md`.
@@ -176,6 +194,8 @@ The shell working directory persists between commands, so a `cd` done for a one-
 * Any command that depends on the working directory establishes it explicitly (`cd <intended-dir> && ...`) instead of assuming the previous command left it correct.
 
 Commands run under zsh, where an unquoted word starting with `=` triggers equals expansion (`=foo` → path of command `foo`). A bare `echo ===` separator therefore fails with `== not found` and kills the rest of the command chain. Quote such words (`echo "==="`) or use a separator that isn't special, like `---`.
+
+`sed` here is GNU sed (Homebrew `gnu-sed`'s `gnubin` is first on `PATH`), not the macOS BSD one. The `-i` flag is the trap: BSD needs a backup-suffix argument (`sed -i '' 's/a/b/' file`), but GNU takes the suffix glued to the flag or not at all. Under GNU sed the BSD form reads `''` as the script and the real script as a file name, so it fails with `can't read s|a|b|g: No such file or directory`. Write `sed -i 's/a/b/' file` (no empty-string argument). For a command that must work with either flavor, use `perl -pi -e` instead. Check with `sed --version` if in doubt.
 
 ## Shebangs
 

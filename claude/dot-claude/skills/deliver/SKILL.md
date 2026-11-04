@@ -45,6 +45,11 @@ git rebase origin/main
 
 Run tests again after rebase to confirm nothing broke.
 
+**Repo with no `main`** (an informational artifact such as dmp-coding-standards:
+one branch, `release`, no tags, no CHANGELOG): rebase onto `origin/release`
+instead, fast-forward `release` to the feature branch, push, and skip steps
+3 and 4 (CHANGELOG, tag). Then continue with Cleanup.
+
 ### 2. Merge
 
 ```bash

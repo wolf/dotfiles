@@ -14,13 +14,13 @@ Use the most recent stable Python version unless a project specifies otherwise.
 ## Code Quality
 
 - **Linting**: `ruff`
-- **Type checking**: `ty`
+- **Type checking**: `ty`. An importable package also gates on its consumers' checkers (mypy, basedpyright, ty) in pre-push and CI; see `~/develop/dmp/coding-standards/DMP-PYTHON-STANDARDS.md` § ...Is a Library
 - **Testing**: `pytest` - tests are vital; always write them; tests should be independent and not rely on execution order
 - **Coverage**: Maintain >80% coverage; always have the ability to calculate it
 
 ## Command-Line Tools and Logging
 
-Personal projects follow the DMP standards here too: `~/develop/dmp/dmp-coding-standards/DMP-PYTHON-STANDARDS.md` (CLI and Logging sections), audited with `code-audit-checklist.md` in the same repo.
+Personal projects follow the DMP standards here too: `~/develop/dmp/coding-standards/DMP-PYTHON-STANDARDS.md` (CLI and Logging sections), audited with `code-audit-checklist.md` in the same repo.
 
 * **CLI framework**: `typer`, never `argparse` or `click` directly. Options declared with `Annotated`, with good names, sensible order, and a help string on every option, argument, and command.
 * **Required global options**: `--help`; `--version`/`-V` from `importlib.metadata`; `--log-level` (default `WARNING`, or `INFO` when the tool's purpose calls for it); `--log-file`. Put them on the app callback.
@@ -48,6 +48,10 @@ Personal projects follow the DMP standards here too: `~/develop/dmp/dmp-coding-s
 Write Pythonic code. Prefer clarity and idiom over cleverness. Use the best names possible for variables, functions, classes, and modules. Prefer double quotes (`"`) over single quotes (`'`).
 
 `__all__` should be a tuple (not a list), sorted alphabetically, with one name per line in vertical format.
+
+### Imports and import-time cost
+
+Put an import where it logically belongs: at the top of the module, unless only one function uses it, in which case it goes inside that function. Never move an import into a function just to make startup faster. On Python 3.15+, handle import-time cost with PEP 810 lazy imports instead (`lazy import x`, `lazy from x import y`). In particular, a package `__init__.py` that re-exports its modules' names should do so with `lazy from`, so that importing the package, or any one module in it, loads nothing else until a name is used. One consequence: a missing optional dependency then raises its `ImportError` at the first use of a name, not at import. Say so in the package docstring. To guard startup, write a test that runs the import in a fresh interpreter and asserts the heavy modules are absent from `sys.modules`; no timing ceilings. Example: dmp-traffic-behavior's `tests/test_cli.py::TestStartup` (INX-234, 2026-10-30).
 
 ## Docstrings
 

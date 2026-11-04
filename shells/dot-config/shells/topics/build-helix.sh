@@ -14,7 +14,6 @@ build-helix() {
   git switch steel-event-system
   git fetch --all
   git pull
-  git pull upstream steel-event-system
   cargo xtask steel
 
   hx --grammar fetch
