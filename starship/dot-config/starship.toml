@@ -12,6 +12,7 @@ ${custom.drive_label}\
 $directory\
 $git_branch\
 $git_status\
+${custom.gitversion}\
 ${custom.pixi_env}\
 $python\
 $rust\
@@ -72,6 +73,15 @@ up_to_date = "="
 
 [git_state]
 style = "bold blue"
+
+[custom.gitversion]
+# Latest reachable tag; a trailing "+" means HEAD is past that tag.
+# (hatch-vcs projects have no static version for the `package` module to read.)
+command = 'git describe --tags --exact-match 2>/dev/null || echo "$(git describe --tags --abbrev=0)+"'
+when = 'git describe --tags --abbrev=0'
+format = "[$output]($style) "
+style = "bold yellow"
+description = "Show the latest git tag, with + when past it"
 
 [custom.pixi_env]
 # because the conda module doesn't seem to work with pixi
